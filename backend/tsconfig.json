@@ -42,5 +42,6 @@
        PERFORMANCE
     ========================== */
     "skipLibCheck": true
-  }
+  },
+  "include": ["src/**/*"]
 }
