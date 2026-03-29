@@ -1,0 +1,25 @@
+{
+  "name": "crickverse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debasish1452003/CrickVerse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/debasish1452003/CrickVerse/issues"
+  },
+  "homepage": "https://github.com/debasish1452003/CrickVerse#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
