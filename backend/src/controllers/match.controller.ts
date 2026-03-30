@@ -1,18 +1,66 @@
 import type { Request, Response } from "express";
-import { redisClient } from "../config/redis.config.js";
+import {
+  fetchMatches,
+  smartFetchMatches,
+} from "../services/cricket.service.js";
+import { Match } from "../models/match.model.js";
+import { scrapeCricinfoLink } from "../services/scraper.services.js";
 
-export const getLiveMatches = async (req: Request, res: Response) => {
+export const getMatches = async (req: Request, res: Response) => {
   try {
-    // Read directly from Redis. This takes ~2ms instead of MongoDB's ~50ms.
-    const cachedData = await redisClient.get("live_matches_cache");
+    // Grab the latest matches from your database
+    const matches = await Match.find({});
 
-    if (cachedData) {
-      return res.status(200).json(JSON.parse(cachedData));
-    }
-
-    return res.status(200).json([]); // Return empty if cache is missing
+    // Send them back to React!
+    res.status(200).json(matches);
   } catch (error) {
-    console.error("Error fetching from cache:", error);
-    res.status(500).json({ error: "Server Error" });
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ message: "Failed to fetch matches" });
   }
+};
+
+export const updateMatches = async () => {
+  const data = await fetchMatches();
+
+  for (const match of data.matches) {
+    await Match.findOneAndUpdate(
+      { matchId: match.id },
+      {
+        team1: match.team1,
+        team2: match.team2,
+        score: match.score,
+        status: match.status,
+        lastUpdated: new Date(),
+      },
+      {
+        upsert: true,
+      },
+    );
+  }
+  console.log("✅ Matches updated in DB");
+};
+
+export const updateScrapedMatches = async () => {
+  const matches = await scrapeCricinfoLink(
+    "https://www.espncricinfo.com/live-cricket-score",
+  );
+  const iplData = await scrapeCricinfoLink(
+    "https://www.espncricinfo.com/series/ipl-2026-1510719/match-schedule-fixtures-and-results",
+  );
+
+  for (const m of matches) {
+    await Match.findOneAndUpdate(
+      { matchId: m.teams }, // Note: Using m.teams as matchId might cause issues if team names change slightly, but it works for now.
+      {
+        team1: m.teams,
+        score: m.score,
+        lastUpdated: new Date(),
+      },
+      { upsert: true },
+    );
+  }
+  console.log("✅ Scraped data stored");
+
+  // ADD THIS LINE to pass the data back to startScraper
+  return matches;
 };
