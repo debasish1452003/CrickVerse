@@ -49,27 +49,29 @@ export const parseLiveScores = (jsonData: any) => {
   const matchesData =
     jsonData?.props?.appPageProps?.data?.content?.matches || [];
 
-  return matchesData
-    .filter((m: any) => m.series?.longName === "Indian Premier League")
-    .map((m: any) => {
-      const team1Data = m.teams?.[0];
-      const team2Data = m.teams?.[1];
+  return (
+    matchesData
+      // .filter((m: any) => m.series?.longName === "Indian Premier League")
+      .map((m: any) => {
+        const team1Data = m.teams?.[0];
+        const team2Data = m.teams?.[1];
 
-      return {
-        matchId: m.id,
-        seriesName: m.series?.longName,
-        matchTitle: m.title,
-        status: m.statusText,
-        team1: {
-          name: team1Data?.team?.longName,
-          score: team1Data?.score || "",
-        },
-        team2: {
-          name: team2Data?.team?.longName,
-          score: team2Data?.score || "",
-        },
-      };
-    });
+        return {
+          matchId: m.id,
+          seriesName: m.series?.longName,
+          matchTitle: m.title,
+          status: m.statusText,
+          team1: {
+            name: team1Data?.team?.longName,
+            score: team1Data?.score || "",
+          },
+          team2: {
+            name: team2Data?.team?.longName,
+            score: team2Data?.score || "",
+          },
+        };
+      })
+  );
 };
 
 // Parser B: For a Specific Series "Fixtures & Results" page

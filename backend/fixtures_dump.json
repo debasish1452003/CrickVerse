@@ -2,7 +2,7 @@
   "props": {
     "appNextJsContext": {
       "lang": "en",
-      "country": "in",
+      "country": "np",
       "edition": "in",
       "device": {
         "screen": "DESKTOP_LG",
@@ -10,8 +10,7 @@
         "isTouchDevice": false,
         "isMobile": false,
         "isSSR": true
-      },
-      "hip": "4b2301ef1348357330bea8c2ff16f7c0"
+      }
     },
     "globalDetails": {
       "followItems": [
@@ -4420,12 +4419,6 @@
                 "displayType": null
               },
               {
-                "title": "New Zealand vs South Africa",
-                "url": "/series/south-africa-in-new-zealand-2025-26-1491685",
-                "altText": "South Africa tour of New Zealand 2025/26",
-                "displayType": null
-              },
-              {
                 "title": "NZ Women vs SA Women",
                 "url": "/series/south-africa-women-in-new-zealand-2025-26-1491692",
                 "altText": "South Africa tour of New Zealand 2025/26",
@@ -4820,8 +4813,8 @@
             "objectId": 1527676,
             "scribeId": 1527676,
             "slug": "rajasthan-royals-vs-chennai-super-kings-3rd-match",
-            "stage": "SCHEDULED",
-            "state": "PRE",
+            "stage": "RUNNING",
+            "state": "LIVE",
             "internationalClassId": null,
             "generalClassId": 6,
             "subClassId": null,
@@ -4832,6 +4825,254 @@
             "startDate": "2026-03-30T00:00:00.000Z",
             "endDate": "2026-03-30T00:00:00.000Z",
             "startTime": "2026-03-30T14:00:00.000Z",
+            "timePublished": true,
+            "scheduleNote": "",
+            "isCancelled": false,
+            "coverage": "Y",
+            "coverageNote": "",
+            "liveStreamUrl": null,
+            "countryLiveStreamUrl": {},
+            "highlightsUrl": null,
+            "countryHighlightsUrl": {},
+            "status": "Live",
+            "statusText": "RR need 29 runs in 70 balls.",
+            "statusEng": "Live",
+            "internationalNumber": null,
+            "generalNumber": null,
+            "winnerTeamId": null,
+            "tossWinnerTeamId": 4345,
+            "tossWinnerChoice": 2,
+            "tiebreakerTeamId": null,
+            "resultStatus": null,
+            "liveInning": 2,
+            "liveInningPredictions": {
+              "inningNumber": 2,
+              "oversUnique": 8.02,
+              "score": 194,
+              "winProbability": 99.62
+            },
+            "liveOvers": 8.02,
+            "liveOversPending": null,
+            "liveBalls": 48,
+            "liveRecentBalls": null,
+            "livePlayers": null,
+            "ballsPerOver": 6,
+            "series": {
+              "id": 17740,
+              "objectId": 1510719,
+              "scribeId": 8048,
+              "slug": "ipl-2026",
+              "name": "IPL",
+              "longName": "Indian Premier League",
+              "alternateName": "IPL",
+              "longAlternateName": null,
+              "unofficialName": null,
+              "broadcastName": null,
+              "seoName": "IPL 2026",
+              "year": 2026,
+              "typeId": 3,
+              "trophyId": 117,
+              "isTrophy": true,
+              "description": "in India",
+              "season": "2026",
+              "startDate": "2026-03-28T00:00:00.000Z",
+              "endDate": "2026-05-31T00:00:00.000Z",
+              "hasStandings": true,
+              "standingsType": 2,
+              "classSubClasses": [
+                {
+                  "classId": 6,
+                  "subClassId": null
+                }
+              ],
+              "totalVideos": 80,
+              "totalSquads": 10,
+              "gamePlayWatch": false
+            },
+            "ground": {
+              "id": 2865,
+              "objectId": 680295,
+              "name": "Barsapara Cricket Stadium, Guwahati",
+              "smallName": "Guwahati",
+              "longName": "Barsapara Cricket Stadium, Guwahati",
+              "slug": "barsapara-cricket-stadium-guwahati",
+              "location": "",
+              "image": null,
+              "town": {
+                "id": 605,
+                "objectId": 58111,
+                "name": "Guwahati",
+                "area": "",
+                "timezone": "Asia/Kolkata"
+              },
+              "country": {
+                "id": 6,
+                "objectId": 6,
+                "name": "India",
+                "shortName": "India",
+                "abbreviation": "IND",
+                "slug": "india"
+              },
+              "capacity": "40000"
+            },
+            "teams": [
+              {
+                "team": {
+                  "id": 4343,
+                  "objectId": 335974,
+                  "scribeId": 335974,
+                  "slug": "chennai-super-kings",
+                  "name": "CSK",
+                  "longName": "Chennai Super Kings",
+                  "abbreviation": "CSK",
+                  "unofficialName": "Chennai",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/313400/313421.logo.png",
+                  "isCountry": false,
+                  "primaryColor": "#F5AE0C",
+                  "image": {
+                    "id": 313421,
+                    "objectId": 1241880,
+                    "slug": "chennai-super-kings-logo",
+                    "url": "/lsci/db/PICTURES/CMS/313400/313421.logo.png",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Chennai Super Kings logo",
+                    "longCaption": "Chennai Super Kings logo",
+                    "credit": null,
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 6,
+                    "objectId": 6,
+                    "name": "India",
+                    "shortName": "India",
+                    "abbreviation": "IND",
+                    "slug": "india"
+                  }
+                },
+                "isHome": false,
+                "isLive": false,
+                "score": "127",
+                "scoreInfo": null,
+                "inningNumbers": [
+                  1
+                ],
+                "points": null,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": {
+                  "odds": "OFF",
+                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104198~OFF&bet=1"
+                }
+              },
+              {
+                "team": {
+                  "id": 4345,
+                  "objectId": 335977,
+                  "scribeId": 335977,
+                  "slug": "rajasthan-royals",
+                  "name": "RR",
+                  "longName": "Rajasthan Royals",
+                  "abbreviation": "RR",
+                  "unofficialName": "Rajasthan",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                  "isCountry": false,
+                  "primaryColor": "#c511e8",
+                  "image": {
+                    "id": 400406,
+                    "objectId": 1485132,
+                    "slug": "rajasthan-royals-without-background-2025",
+                    "url": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Rajasthan Royals without background 2025",
+                    "longCaption": "Rajasthan Royals without background 2025",
+                    "credit": "Rajasthan Royals",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 6,
+                    "objectId": 6,
+                    "name": "India",
+                    "shortName": "India",
+                    "abbreviation": "IND",
+                    "slug": "india"
+                  }
+                },
+                "isHome": true,
+                "isLive": true,
+                "score": "99/1",
+                "scoreInfo": "8.2/20 ov, T:128",
+                "inningNumbers": [
+                  2
+                ],
+                "points": null,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": {
+                  "odds": "OFF",
+                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104189~OFF&bet=1"
+                }
+              }
+            ],
+            "dayType": "SINGLE",
+            "format": "T20",
+            "headToHeadSource": "feedback",
+            "previewStoryId": 345272,
+            "reportStoryId": null,
+            "liveBlogStoryId": 345298,
+            "fantasyPickStoryId": null,
+            "reportStory": null,
+            "liveBlogStory": {
+              "storyId": 345298,
+              "day": null
+            },
+            "drawOdds": null,
+            "isSuperOver": false,
+            "isScheduledInningsComplete": false,
+            "insightsEnabled": false,
+            "hasMatchPlayers": true,
+            "hasCommentary": true,
+            "hasScorecard": true,
+            "hasStandings": true,
+            "hasSuperStats": true,
+            "hasGameboard": true,
+            "hasFanRatings": false,
+            "hasGalleries": false,
+            "hasImages": true,
+            "hasVideos": true,
+            "hasStories": true,
+            "languages": [
+              "hi"
+            ],
+            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "scorecardSource": "feedback",
+            "ballByBallSource": "feedback"
+          },
+          {
+            "_uid": 124851,
+            "id": 124851,
+            "objectId": 1527677,
+            "scribeId": 1527677,
+            "slug": "punjab-kings-vs-gujarat-titans-4th-match",
+            "stage": "SCHEDULED",
+            "state": "PRE",
+            "internationalClassId": null,
+            "generalClassId": 6,
+            "subClassId": null,
+            "season": "2026",
+            "finalType": 0,
+            "title": "4th Match",
+            "floodlit": "night",
+            "startDate": "2026-03-31T00:00:00.000Z",
+            "endDate": "2026-03-31T00:00:00.000Z",
+            "startTime": "2026-03-31T14:00:00.000Z",
             "timePublished": true,
             "scheduleNote": "",
             "isCancelled": false,
@@ -4887,24 +5128,36 @@
                   "subClassId": null
                 }
               ],
-              "totalVideos": 78,
+              "totalVideos": 80,
               "totalSquads": 10,
               "gamePlayWatch": false
             },
             "ground": {
-              "id": 2865,
-              "objectId": 680295,
-              "name": "Barsapara Cricket Stadium, Guwahati",
-              "smallName": "Guwahati",
-              "longName": "Barsapara Cricket Stadium, Guwahati",
-              "slug": "barsapara-cricket-stadium-guwahati",
+              "id": 3585,
+              "objectId": 1290799,
+              "name": "Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",
+              "smallName": "New Chandigarh",
+              "longName": "Maharaja Yadavindra Singh International Cricket Stadium, New Chandigarh",
+              "slug": "maharaja-yadavindra-singh-international-cricket-stadium-new-chandigarh",
               "location": "",
-              "image": null,
+              "image": {
+                "id": 378271,
+                "objectId": 1426232,
+                "slug": "a-general-view-of-the-maharaja-yadavindra-singh-international-cricket-stadium-in-mullanpur",
+                "url": "/lsci/db/PICTURES/CMS/378200/378271.jpg",
+                "width": 1400,
+                "height": 933,
+                "caption": "A general view of the Maharaja Yadavindra Singh International Cricket Stadium in Mullanpur",
+                "longCaption": "A general view of the Maharaja Yadavindra Singh International Cricket Stadium in Mullanpur, Punjab Kings vs Delhi Capitals, IPL 2024, Mullanpur, March 23, 2024",
+                "credit": "BCCI",
+                "photographer": "Arjun Singh",
+                "peerUrls": null
+              },
               "town": {
-                "id": 605,
-                "objectId": 58111,
-                "name": "Guwahati",
-                "area": "",
+                "id": 1707,
+                "objectId": 1488239,
+                "name": "New Chandigarh",
+                "area": "Chandigarh",
                 "timezone": "Asia/Kolkata"
               },
               "country": {
@@ -4915,32 +5168,32 @@
                 "abbreviation": "IND",
                 "slug": "india"
               },
-              "capacity": "40000"
+              "capacity": "38000"
             },
             "teams": [
               {
                 "team": {
-                  "id": 4345,
-                  "objectId": 335977,
-                  "scribeId": 335977,
-                  "slug": "rajasthan-royals",
-                  "name": "RR",
-                  "longName": "Rajasthan Royals",
-                  "abbreviation": "RR",
-                  "unofficialName": "Rajasthan",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                  "id": 4342,
+                  "objectId": 335973,
+                  "scribeId": 335973,
+                  "slug": "punjab-kings",
+                  "name": "PBKS",
+                  "longName": "Punjab Kings",
+                  "abbreviation": "PBKS",
+                  "unofficialName": "Punjab",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/414800/414846.png",
                   "isCountry": false,
-                  "primaryColor": "#c511e8",
+                  "primaryColor": "#B3181E",
                   "image": {
-                    "id": 400406,
-                    "objectId": 1485132,
-                    "slug": "rajasthan-royals-without-background-2025",
-                    "url": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "id": 414846,
+                    "objectId": 1528739,
+                    "slug": "punjab-kings-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/414800/414846.png",
                     "width": 500,
                     "height": 500,
-                    "caption": "Rajasthan Royals without background 2025",
-                    "longCaption": "Rajasthan Royals without background 2025",
-                    "credit": "Rajasthan Royals",
+                    "caption": "Punjab Kings team logo",
+                    "longCaption": "Punjab Kings IPL 2026 team logo",
+                    "credit": "IPL",
                     "photographer": null,
                     "peerUrls": null
                   },
@@ -4963,34 +5216,31 @@
                 "sideBatsmen": null,
                 "sideFielders": null,
                 "captain": null,
-                "teamOdds": {
-                  "odds": "869/1000",
-                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175359~869/1000&bet=1"
-                }
+                "teamOdds": null
               },
               {
                 "team": {
-                  "id": 4343,
-                  "objectId": 335974,
-                  "scribeId": 335974,
-                  "slug": "chennai-super-kings",
-                  "name": "CSK",
-                  "longName": "Chennai Super Kings",
-                  "abbreviation": "CSK",
-                  "unofficialName": "Chennai",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/313400/313421.logo.png",
+                  "id": 6904,
+                  "objectId": 1298769,
+                  "scribeId": 1298769,
+                  "slug": "gujarat-titans",
+                  "name": "GT",
+                  "longName": "Gujarat Titans",
+                  "abbreviation": "GT",
+                  "unofficialName": "Gujarat",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/334700/334707.png",
                   "isCountry": false,
-                  "primaryColor": "#F5AE0C",
+                  "primaryColor": "#334779",
                   "image": {
-                    "id": 313421,
-                    "objectId": 1241880,
-                    "slug": "chennai-super-kings-logo",
-                    "url": "/lsci/db/PICTURES/CMS/313400/313421.logo.png",
+                    "id": 334707,
+                    "objectId": 1302048,
+                    "slug": "gujarat-titans-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/334700/334707.png",
                     "width": 500,
                     "height": 500,
-                    "caption": "Chennai Super Kings logo",
-                    "longCaption": "Chennai Super Kings logo",
-                    "credit": null,
+                    "caption": "Gujarat Titans team logo",
+                    "longCaption": "Gujarat Titans team logo",
+                    "credit": "Gujarat Titans",
                     "photographer": null,
                     "peerUrls": null
                   },
@@ -5013,16 +5263,13 @@
                 "sideBatsmen": null,
                 "sideFielders": null,
                 "captain": null,
-                "teamOdds": {
-                  "odds": "869/1000",
-                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175365~869/1000&bet=1"
-                }
+                "teamOdds": null
               }
             ],
             "dayType": "SINGLE",
             "format": "T20",
             "headToHeadSource": null,
-            "previewStoryId": 345272,
+            "previewStoryId": 345305,
             "reportStoryId": null,
             "liveBlogStoryId": null,
             "fantasyPickStoryId": null,
@@ -5041,285 +5288,33 @@
             "hasFanRatings": false,
             "hasGalleries": false,
             "hasImages": false,
-            "hasVideos": true,
+            "hasVideos": false,
             "hasStories": true,
             "languages": [
               "hi"
             ],
-            "generatedAt": "2026-03-30T07:50:39.280Z",
+            "generatedAt": "2026-03-30T16:45:42.140Z",
             "scorecardSource": null,
             "ballByBallSource": null
           },
           {
-            "_uid": 124849,
-            "id": 124849,
-            "objectId": 1527675,
-            "scribeId": 1527675,
-            "slug": "mumbai-indians-vs-kolkata-knight-riders-2nd-match",
-            "stage": "FINISHED",
-            "state": "POST",
-            "internationalClassId": null,
-            "generalClassId": 6,
-            "subClassId": null,
-            "season": "2026",
-            "finalType": 0,
-            "title": "2nd Match",
-            "floodlit": "night",
-            "startDate": "2026-03-29T00:00:00.000Z",
-            "endDate": "2026-03-29T00:00:00.000Z",
-            "startTime": "2026-03-29T14:00:00.000Z",
-            "timePublished": true,
-            "scheduleNote": "",
-            "isCancelled": false,
-            "coverage": "Y",
-            "coverageNote": "",
-            "liveStreamUrl": null,
-            "countryLiveStreamUrl": {},
-            "highlightsUrl": null,
-            "countryHighlightsUrl": {},
-            "status": "RESULT",
-            "statusText": "MI won by 6 wickets (with 5 balls remaining)",
-            "statusEng": "RESULT",
-            "internationalNumber": null,
-            "generalNumber": null,
-            "winnerTeamId": 4346,
-            "tossWinnerTeamId": 4346,
-            "tossWinnerChoice": 2,
-            "tiebreakerTeamId": null,
-            "resultStatus": 1,
-            "liveInning": 2,
-            "liveInningPredictions": null,
-            "liveOvers": 19.01,
-            "liveOversPending": null,
-            "liveBalls": 114,
-            "liveRecentBalls": null,
-            "livePlayers": null,
-            "ballsPerOver": 6,
-            "series": {
-              "id": 17740,
-              "objectId": 1510719,
-              "scribeId": 8048,
-              "slug": "ipl-2026",
-              "name": "IPL",
-              "longName": "Indian Premier League",
-              "alternateName": "IPL",
-              "longAlternateName": null,
-              "unofficialName": null,
-              "broadcastName": null,
-              "seoName": "IPL 2026",
-              "year": 2026,
-              "typeId": 3,
-              "trophyId": 117,
-              "isTrophy": true,
-              "description": "in India",
-              "season": "2026",
-              "startDate": "2026-03-28T00:00:00.000Z",
-              "endDate": "2026-05-31T00:00:00.000Z",
-              "hasStandings": true,
-              "standingsType": 2,
-              "classSubClasses": [
-                {
-                  "classId": 6,
-                  "subClassId": null
-                }
-              ],
-              "totalVideos": 78,
-              "totalSquads": 10,
-              "gamePlayWatch": false
-            },
-            "ground": {
-              "id": 713,
-              "objectId": 58324,
-              "name": "Wankhede Stadium, Mumbai",
-              "smallName": "Wankhede",
-              "longName": "Wankhede Stadium, Mumbai",
-              "slug": "wankhede-stadium-mumbai",
-              "location": "",
-              "image": {
-                "id": 128755,
-                "objectId": 502224,
-                "slug": "the-wankhede-stadium-under-lights",
-                "url": "/lsci/db/PICTURES/CMS/128700/128755.jpg",
-                "width": 900,
-                "height": 585,
-                "caption": "The Wankhede Stadium under lights",
-                "longCaption": "The Wankhede Stadium under lights, Mumbai, February 20, 2011",
-                "credit": "AFP",
-                "photographer": null,
-                "peerUrls": null
-              },
-              "town": {
-                "id": 665,
-                "objectId": 58316,
-                "name": "Mumbai",
-                "area": "",
-                "timezone": "Asia/Kolkata"
-              },
-              "country": {
-                "id": 6,
-                "objectId": 6,
-                "name": "India",
-                "shortName": "India",
-                "abbreviation": "IND",
-                "slug": "india"
-              },
-              "capacity": "32,000"
-            },
-            "teams": [
-              {
-                "team": {
-                  "id": 4341,
-                  "objectId": 335971,
-                  "scribeId": 335971,
-                  "slug": "kolkata-knight-riders",
-                  "name": "KKR",
-                  "longName": "Kolkata Knight Riders",
-                  "abbreviation": "KKR",
-                  "unofficialName": "Kolkata",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/313400/313419.logo.png",
-                  "isCountry": false,
-                  "primaryColor": "#573f82",
-                  "image": {
-                    "id": 313419,
-                    "objectId": 1241878,
-                    "slug": "kolkata-knight-riders-logo",
-                    "url": "/lsci/db/PICTURES/CMS/313400/313419.logo.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Kolkata Knight Riders logo",
-                    "longCaption": "Kolkata Knight Riders logo",
-                    "credit": null,
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 6,
-                    "objectId": 6,
-                    "name": "India",
-                    "shortName": "India",
-                    "abbreviation": "IND",
-                    "slug": "india"
-                  }
-                },
-                "isHome": false,
-                "isLive": false,
-                "score": "220/4",
-                "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": 0,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              },
-              {
-                "team": {
-                  "id": 4346,
-                  "objectId": 335978,
-                  "scribeId": 335978,
-                  "slug": "mumbai-indians",
-                  "name": "MI",
-                  "longName": "Mumbai Indians",
-                  "abbreviation": "MI",
-                  "unofficialName": "Mumbai",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/415000/415033.png",
-                  "isCountry": false,
-                  "primaryColor": "#004B8D",
-                  "image": {
-                    "id": 415033,
-                    "objectId": 1529621,
-                    "slug": "mumbai-indians-team-logo-2026",
-                    "url": "/lsci/db/PICTURES/CMS/415000/415033.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Mumbai Indians team logo 2026",
-                    "longCaption": "Mumbai Indians team logo 2026",
-                    "credit": "IPL",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 6,
-                    "objectId": 6,
-                    "name": "India",
-                    "shortName": "India",
-                    "abbreviation": "IND",
-                    "slug": "india"
-                  }
-                },
-                "isHome": true,
-                "isLive": false,
-                "score": "224/4",
-                "scoreInfo": "19.1/20 ov, T:221",
-                "inningNumbers": [
-                  2
-                ],
-                "points": 2,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              }
-            ],
-            "dayType": "SINGLE",
-            "format": "T20",
-            "headToHeadSource": "feedback",
-            "previewStoryId": 345228,
-            "reportStoryId": 345275,
-            "liveBlogStoryId": 345258,
-            "fantasyPickStoryId": null,
-            "reportStory": {
-              "storyId": 345275,
-              "day": null
-            },
-            "liveBlogStory": {
-              "storyId": 345258,
-              "day": null
-            },
-            "drawOdds": null,
-            "isSuperOver": false,
-            "isScheduledInningsComplete": true,
-            "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
-            "hasStandings": true,
-            "hasSuperStats": true,
-            "hasGameboard": true,
-            "hasFanRatings": true,
-            "hasGalleries": false,
-            "hasImages": true,
-            "hasVideos": true,
-            "hasStories": true,
-            "languages": [
-              "hi"
-            ],
-            "generatedAt": "2026-03-30T07:50:39.280Z",
-            "scorecardSource": "emma",
-            "ballByBallSource": "feedback"
-          },
-          {
-            "_uid": 124939,
-            "id": 124939,
-            "objectId": 1527949,
-            "scribeId": 1527949,
-            "slug": "karnali-province-vs-madhesh-province-19th-match",
-            "stage": "RUNNING",
-            "state": "LIVE",
+            "_uid": 124941,
+            "id": 124941,
+            "objectId": 1527951,
+            "scribeId": 1527951,
+            "slug": "koshi-province-vs-nepal-police-club-21st-match",
+            "stage": "SCHEDULED",
+            "state": "PRE",
             "internationalClassId": null,
             "generalClassId": 12,
             "subClassId": null,
             "season": "2025/26",
             "finalType": 0,
-            "title": "19th Match",
+            "title": "21st Match",
             "floodlit": "day",
-            "startDate": "2026-03-30T00:00:00.000Z",
-            "endDate": "2026-03-30T00:00:00.000Z",
-            "startTime": "2026-03-30T03:15:00.000Z",
+            "startDate": "2026-03-31T00:00:00.000Z",
+            "endDate": "2026-03-31T00:00:00.000Z",
+            "startTime": "2026-03-31T03:45:00.000Z",
             "timePublished": true,
             "scheduleNote": "",
             "isCancelled": false,
@@ -5329,251 +5324,19 @@
             "countryLiveStreamUrl": {},
             "highlightsUrl": null,
             "countryHighlightsUrl": {},
-            "status": "Live",
-            "statusText": "Madhesh need 18 runs from 26.2 overs.",
-            "statusEng": "Live",
+            "status": "{{MATCH_START_TIME}}",
+            "statusText": "Match yet to begin",
+            "statusEng": "{{MATCH_START_TIME}}",
             "internationalNumber": null,
             "generalNumber": null,
             "winnerTeamId": null,
-            "tossWinnerTeamId": 6525,
-            "tossWinnerChoice": 1,
+            "tossWinnerTeamId": null,
+            "tossWinnerChoice": null,
             "tiebreakerTeamId": null,
             "resultStatus": null,
-            "liveInning": 2,
+            "liveInning": null,
             "liveInningPredictions": null,
-            "liveOvers": 23.05,
-            "liveOversPending": null,
-            "liveBalls": null,
-            "liveRecentBalls": null,
-            "livePlayers": null,
-            "ballsPerOver": null,
-            "series": {
-              "id": 17974,
-              "objectId": 1527930,
-              "scribeId": 11132,
-              "slug": "men-s-pm-cup-2025-26",
-              "name": "Men's PM Cup",
-              "longName": "Men's PM Cup",
-              "alternateName": "CAN PM Cup",
-              "longAlternateName": null,
-              "unofficialName": null,
-              "broadcastName": null,
-              "seoName": "Men's PM Cup 2026",
-              "year": 2026,
-              "typeId": 3,
-              "trophyId": 695,
-              "isTrophy": true,
-              "description": "in Nepal",
-              "season": "2025/26",
-              "startDate": "2026-03-21T00:00:00.000Z",
-              "endDate": "2026-04-17T00:00:00.000Z",
-              "hasStandings": true,
-              "standingsType": 2,
-              "classSubClasses": [
-                {
-                  "classId": 12,
-                  "subClassId": null
-                }
-              ],
-              "totalVideos": 0,
-              "totalSquads": 0,
-              "gamePlayWatch": false
-            },
-            "ground": {
-              "id": 3639,
-              "objectId": 1378820,
-              "name": "Ramjanki Multipurpose Stadium, Janakpur",
-              "smallName": "Janakpur",
-              "longName": "Ramjanki Multipurpose Stadium, Janakpur",
-              "slug": "ramjanki-multipurpose-stadium-janakpur",
-              "location": "",
-              "image": null,
-              "town": {
-                "id": 1674,
-                "objectId": 1378819,
-                "name": "Janakpur",
-                "area": "",
-                "timezone": "Asia/Kathmandu"
-              },
-              "country": {
-                "id": 32,
-                "objectId": 33,
-                "name": "Nepal",
-                "shortName": "Nepal",
-                "abbreviation": "NEP",
-                "slug": "nepal"
-              },
-              "capacity": null
-            },
-            "teams": [
-              {
-                "team": {
-                  "id": 6525,
-                  "objectId": 1147777,
-                  "scribeId": 1147777,
-                  "slug": "karnali-province",
-                  "name": "Karnali",
-                  "longName": "Karnali Province",
-                  "abbreviation": "KAR",
-                  "unofficialName": null,
-                  "imageUrl": "/lsci/db/PICTURES/CMS/345600/345641.jpg",
-                  "isCountry": false,
-                  "primaryColor": null,
-                  "image": {
-                    "id": 345641,
-                    "objectId": 1333596,
-                    "slug": "karnali-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/345600/345641.jpg",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Karnali team logo",
-                    "longCaption": "Karnali team logo",
-                    "credit": "Nepal Cricket",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 32,
-                    "objectId": 33,
-                    "name": "Nepal",
-                    "shortName": "Nepal",
-                    "abbreviation": "NEP",
-                    "slug": "nepal"
-                  }
-                },
-                "isHome": true,
-                "isLive": false,
-                "score": "129",
-                "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": null,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              },
-              {
-                "team": {
-                  "id": 6971,
-                  "objectId": 1333459,
-                  "scribeId": 1333459,
-                  "slug": "madhesh-province",
-                  "name": "Madhesh",
-                  "longName": "Madhesh Province",
-                  "abbreviation": "MDH",
-                  "unofficialName": null,
-                  "imageUrl": "/lsci/db/PICTURES/CMS/345600/345600.jpg",
-                  "isCountry": false,
-                  "primaryColor": null,
-                  "image": {
-                    "id": 345600,
-                    "objectId": 1333519,
-                    "slug": "madhesh-province-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/345600/345600.jpg",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Madhesh Province team logo",
-                    "longCaption": "Madhesh Province team logo",
-                    "credit": "Nepal Cricket",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 32,
-                    "objectId": 33,
-                    "name": "Nepal",
-                    "shortName": "Nepal",
-                    "abbreviation": "NEP",
-                    "slug": "nepal"
-                  }
-                },
-                "isHome": false,
-                "isLive": true,
-                "score": "112/5",
-                "scoreInfo": "23.4/50 ov, T:130",
-                "inningNumbers": [
-                  2
-                ],
-                "points": null,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              }
-            ],
-            "dayType": "SINGLE",
-            "format": "ODI",
-            "headToHeadSource": "dougie",
-            "previewStoryId": null,
-            "reportStoryId": null,
-            "liveBlogStoryId": null,
-            "fantasyPickStoryId": null,
-            "reportStory": null,
-            "liveBlogStory": null,
-            "drawOdds": null,
-            "isSuperOver": false,
-            "isScheduledInningsComplete": false,
-            "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
-            "hasStandings": true,
-            "hasSuperStats": false,
-            "hasGameboard": false,
-            "hasFanRatings": false,
-            "hasGalleries": false,
-            "hasImages": false,
-            "hasVideos": false,
-            "hasStories": false,
-            "languages": [],
-            "generatedAt": "2026-03-30T07:50:39.280Z",
-            "scorecardSource": "dougie",
-            "ballByBallSource": ""
-          },
-          {
-            "_uid": 124940,
-            "id": 124940,
-            "objectId": 1527950,
-            "scribeId": 1527950,
-            "slug": "lumbini-province-vs-sudur-paschim-province-20th-match",
-            "stage": "RUNNING",
-            "state": "LIVE",
-            "internationalClassId": null,
-            "generalClassId": 12,
-            "subClassId": null,
-            "season": "2025/26",
-            "finalType": 0,
-            "title": "20th Match",
-            "floodlit": "day",
-            "startDate": "2026-03-30T00:00:00.000Z",
-            "endDate": "2026-03-30T00:00:00.000Z",
-            "startTime": "2026-03-30T03:15:00.000Z",
-            "timePublished": true,
-            "scheduleNote": "",
-            "isCancelled": false,
-            "coverage": "Y",
-            "coverageNote": "",
-            "liveStreamUrl": null,
-            "countryLiveStreamUrl": {},
-            "highlightsUrl": null,
-            "countryHighlightsUrl": {},
-            "status": "Live",
-            "statusText": "Lumbini need 141 runs from 41.1 overs.",
-            "statusEng": "Live",
-            "internationalNumber": null,
-            "generalNumber": null,
-            "winnerTeamId": null,
-            "tossWinnerTeamId": 6814,
-            "tossWinnerChoice": 2,
-            "tiebreakerTeamId": null,
-            "resultStatus": null,
-            "liveInning": 2,
-            "liveInningPredictions": null,
-            "liveOvers": 8.05,
+            "liveOvers": null,
             "liveOversPending": null,
             "liveBalls": null,
             "liveRecentBalls": null,
@@ -5640,26 +5403,73 @@
             "teams": [
               {
                 "team": {
-                  "id": 6526,
-                  "objectId": 1147778,
-                  "scribeId": 1147778,
-                  "slug": "sudur-paschim-province",
-                  "name": "Sudr Paschi",
-                  "longName": "Sudur Paschim Province",
-                  "abbreviation": "SPP",
+                  "id": 6520,
+                  "objectId": 1147772,
+                  "scribeId": 1147772,
+                  "slug": "koshi-province",
+                  "name": "Koshi",
+                  "longName": "Koshi Province",
+                  "abbreviation": "KP",
                   "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/394600/394638.png",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/315700/315738.png",
                   "isCountry": false,
                   "primaryColor": null,
                   "image": {
-                    "id": 394638,
-                    "objectId": 1468837,
-                    "slug": "sudur-paschim-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/394600/394638.png",
+                    "id": 315738,
+                    "objectId": 1249111,
+                    "slug": "provincial-cricket-association",
+                    "url": "/lsci/db/PICTURES/CMS/315700/315738.png",
                     "width": 500,
                     "height": 500,
-                    "caption": "Sudur Paschim team logo",
-                    "longCaption": "Sudur Paschim team logo",
+                    "caption": "Provincial Cricket Association",
+                    "longCaption": "Provincial Cricket Association",
+                    "credit": "Getty Images",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 32,
+                    "objectId": 33,
+                    "name": "Nepal",
+                    "shortName": "Nepal",
+                    "abbreviation": "NEP",
+                    "slug": "nepal"
+                  }
+                },
+                "isHome": true,
+                "isLive": false,
+                "score": null,
+                "scoreInfo": null,
+                "inningNumbers": [],
+                "points": null,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": null
+              },
+              {
+                "team": {
+                  "id": 6192,
+                  "objectId": 1098939,
+                  "scribeId": 1098939,
+                  "slug": "nepal-police-club",
+                  "name": "Police Club",
+                  "longName": "Nepal Police Club",
+                  "abbreviation": "NPC",
+                  "unofficialName": "",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/413800/413887.png",
+                  "isCountry": false,
+                  "primaryColor": null,
+                  "image": {
+                    "id": 413887,
+                    "objectId": 1525248,
+                    "slug": "nepal-police-club-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/413800/413887.png",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Nepal Police Club team logo",
+                    "longCaption": "Nepal Police Club team logo",
                     "credit": "Nepal Cricket",
                     "photographer": null,
                     "peerUrls": null
@@ -5675,60 +5485,9 @@
                 },
                 "isHome": false,
                 "isLive": false,
-                "score": "168",
+                "score": null,
                 "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": null,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              },
-              {
-                "team": {
-                  "id": 6814,
-                  "objectId": 1247348,
-                  "scribeId": 1247348,
-                  "slug": "lumbini-province",
-                  "name": "Lumbini",
-                  "longName": "Lumbini Province",
-                  "abbreviation": "LP",
-                  "unofficialName": null,
-                  "imageUrl": "/lsci/db/PICTURES/CMS/349500/349504.png",
-                  "isCountry": false,
-                  "primaryColor": null,
-                  "image": {
-                    "id": 349504,
-                    "objectId": 1345758,
-                    "slug": "lumbini-province-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/349500/349504.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Lumbini Province team logo",
-                    "longCaption": "Lumbini Province team logo",
-                    "credit": "Nepal Cricket",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 32,
-                    "objectId": 33,
-                    "name": "Nepal",
-                    "shortName": "Nepal",
-                    "abbreviation": "NEP",
-                    "slug": "nepal"
-                  }
-                },
-                "isHome": true,
-                "isLive": true,
-                "score": "28/3",
-                "scoreInfo": "8.5/50 ov, T:169",
-                "inningNumbers": [
-                  2
-                ],
+                "inningNumbers": [],
                 "points": null,
                 "sidePlayers": null,
                 "sideBatsmen": null,
@@ -5739,7 +5498,7 @@
             ],
             "dayType": "SINGLE",
             "format": "ODI",
-            "headToHeadSource": "dougie",
+            "headToHeadSource": null,
             "previewStoryId": null,
             "reportStoryId": null,
             "liveBlogStoryId": null,
@@ -5750,9 +5509,9 @@
             "isSuperOver": false,
             "isScheduledInningsComplete": false,
             "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
+            "hasMatchPlayers": false,
+            "hasCommentary": false,
+            "hasScorecard": false,
             "hasStandings": true,
             "hasSuperStats": false,
             "hasGameboard": false,
@@ -5762,28 +5521,28 @@
             "hasVideos": false,
             "hasStories": false,
             "languages": [],
-            "generatedAt": "2026-03-30T07:50:39.943Z",
-            "scorecardSource": "dougie",
-            "ballByBallSource": ""
+            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "scorecardSource": null,
+            "ballByBallSource": null
           },
           {
-            "_uid": 124809,
-            "id": 124809,
-            "objectId": 1527557,
-            "scribeId": 1527557,
-            "slug": "lahore-qalandars-vs-karachi-kings-6th-match",
-            "stage": "FINISHED",
-            "state": "POST",
+            "_uid": 124810,
+            "id": 124810,
+            "objectId": 1527558,
+            "scribeId": 1527558,
+            "slug": "islamabad-united-vs-peshawar-zalmi-7th-match",
+            "stage": "SCHEDULED",
+            "state": "PRE",
             "internationalClassId": null,
             "generalClassId": 6,
             "subClassId": null,
             "season": "2026",
             "finalType": 0,
-            "title": "6th Match",
+            "title": "7th Match",
             "floodlit": "night",
-            "startDate": "2026-03-29T00:00:00.000Z",
-            "endDate": "2026-03-29T00:00:00.000Z",
-            "startTime": "2026-03-29T14:00:00.000Z",
+            "startDate": "2026-03-31T00:00:00.000Z",
+            "endDate": "2026-03-31T00:00:00.000Z",
+            "startTime": "2026-03-31T14:00:00.000Z",
             "timePublished": true,
             "scheduleNote": "",
             "isCancelled": false,
@@ -5793,24 +5552,24 @@
             "countryLiveStreamUrl": {},
             "highlightsUrl": null,
             "countryHighlightsUrl": {},
-            "status": "RESULT",
-            "statusText": "Kings won by 4 wickets (with 3 balls remaining)",
-            "statusEng": "RESULT",
+            "status": "{{MATCH_START_TIME}}",
+            "statusText": "Match yet to begin",
+            "statusEng": "{{MATCH_START_TIME}}",
             "internationalNumber": null,
             "generalNumber": null,
-            "winnerTeamId": 5793,
-            "tossWinnerTeamId": 5799,
-            "tossWinnerChoice": 1,
+            "winnerTeamId": null,
+            "tossWinnerTeamId": null,
+            "tossWinnerChoice": null,
             "tiebreakerTeamId": null,
-            "resultStatus": 1,
-            "liveInning": 2,
+            "resultStatus": null,
+            "liveInning": null,
             "liveInningPredictions": null,
-            "liveOvers": 19.04,
+            "liveOvers": null,
             "liveOversPending": null,
-            "liveBalls": 114,
+            "liveBalls": null,
             "liveRecentBalls": null,
             "livePlayers": null,
-            "ballsPerOver": 6,
+            "ballsPerOver": null,
             "series": {
               "id": 17816,
               "objectId": 1515734,
@@ -5884,26 +5643,26 @@
             "teams": [
               {
                 "team": {
-                  "id": 5799,
-                  "objectId": 953847,
-                  "scribeId": 953847,
-                  "slug": "lahore-qalandars",
-                  "name": "Qalandars",
-                  "longName": "Lahore Qalandars",
-                  "abbreviation": "LQ",
-                  "unofficialName": null,
-                  "imageUrl": "/lsci/db/PICTURES/CMS/313500/313523.logo.png",
+                  "id": 5795,
+                  "objectId": 953843,
+                  "scribeId": 953843,
+                  "slug": "islamabad-united",
+                  "name": "United",
+                  "longName": "Islamabad United",
+                  "abbreviation": "IU",
+                  "unofficialName": "",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/313500/313521.logo.png",
                   "isCountry": false,
-                  "primaryColor": null,
+                  "primaryColor": "#e01515",
                   "image": {
-                    "id": 313523,
-                    "objectId": 1241982,
-                    "slug": "lahore-qalandars-logo",
-                    "url": "/lsci/db/PICTURES/CMS/313500/313523.logo.png",
+                    "id": 313521,
+                    "objectId": 1241980,
+                    "slug": "islamabad-united-logo",
+                    "url": "/lsci/db/PICTURES/CMS/313500/313521.logo.png",
                     "width": 500,
                     "height": 500,
-                    "caption": "Lahore Qalandars logo",
-                    "longCaption": "Lahore Qalandars logo",
+                    "caption": "Islamabad United logo",
+                    "longCaption": "Islamabad United logo",
                     "credit": null,
                     "photographer": null,
                     "peerUrls": null
@@ -5919,12 +5678,10 @@
                 },
                 "isHome": true,
                 "isLive": false,
-                "score": "128/9",
+                "score": null,
                 "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": 0,
+                "inningNumbers": [],
+                "points": null,
                 "sidePlayers": null,
                 "sideBatsmen": null,
                 "sideFielders": null,
@@ -5933,26 +5690,26 @@
               },
               {
                 "team": {
-                  "id": 5793,
-                  "objectId": 953835,
-                  "scribeId": 953835,
-                  "slug": "karachi-kings",
-                  "name": "Kings",
-                  "longName": "Karachi Kings",
-                  "abbreviation": "KK",
+                  "id": 5791,
+                  "objectId": 953833,
+                  "scribeId": 953833,
+                  "slug": "peshawar-zalmi",
+                  "name": "Zalmi",
+                  "longName": "Peshawar Zalmi",
+                  "abbreviation": "PZ",
                   "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/313500/313520.logo.png",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/313500/313519.logo.png",
                   "isCountry": false,
-                  "primaryColor": "#135bec",
+                  "primaryColor": "#f4c006",
                   "image": {
-                    "id": 313520,
-                    "objectId": 1241979,
-                    "slug": "karachi-kings-logo",
-                    "url": "/lsci/db/PICTURES/CMS/313500/313520.logo.png",
+                    "id": 313519,
+                    "objectId": 1241978,
+                    "slug": "peshawar-zalmi-logo",
+                    "url": "/lsci/db/PICTURES/CMS/313500/313519.logo.png",
                     "width": 500,
                     "height": 500,
-                    "caption": "Karachi Kings logo",
-                    "longCaption": "Karachi Kings logo",
+                    "caption": "Peshawar Zalmi logo",
+                    "longCaption": "Peshawar Zalmi logo",
                     "credit": null,
                     "photographer": null,
                     "peerUrls": null
@@ -5968,12 +5725,10 @@
                 },
                 "isHome": false,
                 "isLive": false,
-                "score": "131/6",
-                "scoreInfo": "19.3/20 ov, T:129",
-                "inningNumbers": [
-                  2
-                ],
-                "points": 2,
+                "score": null,
+                "scoreInfo": null,
+                "inningNumbers": [],
+                "points": null,
                 "sidePlayers": null,
                 "sideBatsmen": null,
                 "sideFielders": null,
@@ -5983,37 +5738,32 @@
             ],
             "dayType": "SINGLE",
             "format": "T20",
-            "headToHeadSource": "feedback",
+            "headToHeadSource": null,
             "previewStoryId": null,
-            "reportStoryId": 345283,
+            "reportStoryId": null,
             "liveBlogStoryId": null,
             "fantasyPickStoryId": null,
-            "reportStory": {
-              "storyId": 345283,
-              "day": null
-            },
+            "reportStory": null,
             "liveBlogStory": null,
             "drawOdds": null,
             "isSuperOver": false,
-            "isScheduledInningsComplete": true,
+            "isScheduledInningsComplete": false,
             "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
+            "hasMatchPlayers": false,
+            "hasCommentary": false,
+            "hasScorecard": false,
             "hasStandings": true,
             "hasSuperStats": true,
             "hasGameboard": true,
-            "hasFanRatings": true,
+            "hasFanRatings": false,
             "hasGalleries": false,
             "hasImages": false,
             "hasVideos": false,
-            "hasStories": true,
-            "languages": [
-              "hi"
-            ],
-            "generatedAt": "2026-03-30T07:50:39.279Z",
-            "scorecardSource": "emma",
-            "ballByBallSource": "feedback"
+            "hasStories": false,
+            "languages": [],
+            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "scorecardSource": null,
+            "ballByBallSource": null
           },
           {
             "_uid": 124682,
@@ -6255,9 +6005,473 @@
             "languages": [
               "hi"
             ],
-            "generatedAt": "2026-03-30T07:50:39.279Z",
+            "generatedAt": "2026-03-30T16:45:42.140Z",
             "scorecardSource": "emma",
             "ballByBallSource": "feedback"
+          },
+          {
+            "_uid": 124939,
+            "id": 124939,
+            "objectId": 1527949,
+            "scribeId": 1527949,
+            "slug": "karnali-province-vs-madhesh-province-19th-match",
+            "stage": "FINISHED",
+            "state": "POST",
+            "internationalClassId": null,
+            "generalClassId": 12,
+            "subClassId": null,
+            "season": "2025/26",
+            "finalType": 0,
+            "title": "19th Match",
+            "floodlit": "day",
+            "startDate": "2026-03-30T00:00:00.000Z",
+            "endDate": "2026-03-30T00:00:00.000Z",
+            "startTime": "2026-03-30T03:15:00.000Z",
+            "timePublished": true,
+            "scheduleNote": "",
+            "isCancelled": false,
+            "coverage": "Y",
+            "coverageNote": "",
+            "liveStreamUrl": null,
+            "countryLiveStreamUrl": {},
+            "highlightsUrl": null,
+            "countryHighlightsUrl": {},
+            "status": "RESULT",
+            "statusText": "Madhesh won by 5 wickets (with 151 balls remaining)",
+            "statusEng": "RESULT",
+            "internationalNumber": null,
+            "generalNumber": null,
+            "winnerTeamId": 6971,
+            "tossWinnerTeamId": 6525,
+            "tossWinnerChoice": 1,
+            "tiebreakerTeamId": null,
+            "resultStatus": 1,
+            "liveInning": 2,
+            "liveInningPredictions": null,
+            "liveOvers": 24.06,
+            "liveOversPending": null,
+            "liveBalls": null,
+            "liveRecentBalls": null,
+            "livePlayers": null,
+            "ballsPerOver": null,
+            "series": {
+              "id": 17974,
+              "objectId": 1527930,
+              "scribeId": 11132,
+              "slug": "men-s-pm-cup-2025-26",
+              "name": "Men's PM Cup",
+              "longName": "Men's PM Cup",
+              "alternateName": "CAN PM Cup",
+              "longAlternateName": null,
+              "unofficialName": null,
+              "broadcastName": null,
+              "seoName": "Men's PM Cup 2026",
+              "year": 2026,
+              "typeId": 3,
+              "trophyId": 695,
+              "isTrophy": true,
+              "description": "in Nepal",
+              "season": "2025/26",
+              "startDate": "2026-03-21T00:00:00.000Z",
+              "endDate": "2026-04-17T00:00:00.000Z",
+              "hasStandings": true,
+              "standingsType": 2,
+              "classSubClasses": [
+                {
+                  "classId": 12,
+                  "subClassId": null
+                }
+              ],
+              "totalVideos": 0,
+              "totalSquads": 0,
+              "gamePlayWatch": false
+            },
+            "ground": {
+              "id": 3639,
+              "objectId": 1378820,
+              "name": "Ramjanki Multipurpose Stadium, Janakpur",
+              "smallName": "Janakpur",
+              "longName": "Ramjanki Multipurpose Stadium, Janakpur",
+              "slug": "ramjanki-multipurpose-stadium-janakpur",
+              "location": "",
+              "image": null,
+              "town": {
+                "id": 1674,
+                "objectId": 1378819,
+                "name": "Janakpur",
+                "area": "",
+                "timezone": "Asia/Kathmandu"
+              },
+              "country": {
+                "id": 32,
+                "objectId": 33,
+                "name": "Nepal",
+                "shortName": "Nepal",
+                "abbreviation": "NEP",
+                "slug": "nepal"
+              },
+              "capacity": null
+            },
+            "teams": [
+              {
+                "team": {
+                  "id": 6525,
+                  "objectId": 1147777,
+                  "scribeId": 1147777,
+                  "slug": "karnali-province",
+                  "name": "Karnali",
+                  "longName": "Karnali Province",
+                  "abbreviation": "KAR",
+                  "unofficialName": null,
+                  "imageUrl": "/lsci/db/PICTURES/CMS/345600/345641.jpg",
+                  "isCountry": false,
+                  "primaryColor": null,
+                  "image": {
+                    "id": 345641,
+                    "objectId": 1333596,
+                    "slug": "karnali-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/345600/345641.jpg",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Karnali team logo",
+                    "longCaption": "Karnali team logo",
+                    "credit": "Nepal Cricket",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 32,
+                    "objectId": 33,
+                    "name": "Nepal",
+                    "shortName": "Nepal",
+                    "abbreviation": "NEP",
+                    "slug": "nepal"
+                  }
+                },
+                "isHome": true,
+                "isLive": false,
+                "score": "129",
+                "scoreInfo": null,
+                "inningNumbers": [
+                  1
+                ],
+                "points": 0,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": null
+              },
+              {
+                "team": {
+                  "id": 6971,
+                  "objectId": 1333459,
+                  "scribeId": 1333459,
+                  "slug": "madhesh-province",
+                  "name": "Madhesh",
+                  "longName": "Madhesh Province",
+                  "abbreviation": "MDH",
+                  "unofficialName": null,
+                  "imageUrl": "/lsci/db/PICTURES/CMS/345600/345600.jpg",
+                  "isCountry": false,
+                  "primaryColor": null,
+                  "image": {
+                    "id": 345600,
+                    "objectId": 1333519,
+                    "slug": "madhesh-province-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/345600/345600.jpg",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Madhesh Province team logo",
+                    "longCaption": "Madhesh Province team logo",
+                    "credit": "Nepal Cricket",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 32,
+                    "objectId": 33,
+                    "name": "Nepal",
+                    "shortName": "Nepal",
+                    "abbreviation": "NEP",
+                    "slug": "nepal"
+                  }
+                },
+                "isHome": false,
+                "isLive": false,
+                "score": "131/5",
+                "scoreInfo": "24.5/50 ov, T:130",
+                "inningNumbers": [
+                  2
+                ],
+                "points": 2,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": null
+              }
+            ],
+            "dayType": "SINGLE",
+            "format": "ODI",
+            "headToHeadSource": "dougie",
+            "previewStoryId": null,
+            "reportStoryId": null,
+            "liveBlogStoryId": null,
+            "fantasyPickStoryId": null,
+            "reportStory": null,
+            "liveBlogStory": null,
+            "drawOdds": null,
+            "isSuperOver": false,
+            "isScheduledInningsComplete": true,
+            "insightsEnabled": false,
+            "hasMatchPlayers": true,
+            "hasCommentary": true,
+            "hasScorecard": true,
+            "hasStandings": true,
+            "hasSuperStats": false,
+            "hasGameboard": false,
+            "hasFanRatings": true,
+            "hasGalleries": false,
+            "hasImages": false,
+            "hasVideos": false,
+            "hasStories": false,
+            "languages": [],
+            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "scorecardSource": "emma",
+            "ballByBallSource": ""
+          },
+          {
+            "_uid": 124940,
+            "id": 124940,
+            "objectId": 1527950,
+            "scribeId": 1527950,
+            "slug": "lumbini-province-vs-sudur-paschim-province-20th-match",
+            "stage": "FINISHED",
+            "state": "POST",
+            "internationalClassId": null,
+            "generalClassId": 12,
+            "subClassId": null,
+            "season": "2025/26",
+            "finalType": 0,
+            "title": "20th Match",
+            "floodlit": "day",
+            "startDate": "2026-03-30T00:00:00.000Z",
+            "endDate": "2026-03-30T00:00:00.000Z",
+            "startTime": "2026-03-30T03:15:00.000Z",
+            "timePublished": true,
+            "scheduleNote": "",
+            "isCancelled": false,
+            "coverage": "Y",
+            "coverageNote": "",
+            "liveStreamUrl": null,
+            "countryLiveStreamUrl": {},
+            "highlightsUrl": null,
+            "countryHighlightsUrl": {},
+            "status": "RESULT",
+            "statusText": "Sudr Paschi won by 12 runs",
+            "statusEng": "RESULT",
+            "internationalNumber": null,
+            "generalNumber": null,
+            "winnerTeamId": 6526,
+            "tossWinnerTeamId": 6814,
+            "tossWinnerChoice": 2,
+            "tiebreakerTeamId": null,
+            "resultStatus": 1,
+            "liveInning": 2,
+            "liveInningPredictions": null,
+            "liveOvers": 40.02,
+            "liveOversPending": null,
+            "liveBalls": null,
+            "liveRecentBalls": null,
+            "livePlayers": null,
+            "ballsPerOver": null,
+            "series": {
+              "id": 17974,
+              "objectId": 1527930,
+              "scribeId": 11132,
+              "slug": "men-s-pm-cup-2025-26",
+              "name": "Men's PM Cup",
+              "longName": "Men's PM Cup",
+              "alternateName": "CAN PM Cup",
+              "longAlternateName": null,
+              "unofficialName": null,
+              "broadcastName": null,
+              "seoName": "Men's PM Cup 2026",
+              "year": 2026,
+              "typeId": 3,
+              "trophyId": 695,
+              "isTrophy": true,
+              "description": "in Nepal",
+              "season": "2025/26",
+              "startDate": "2026-03-21T00:00:00.000Z",
+              "endDate": "2026-04-17T00:00:00.000Z",
+              "hasStandings": true,
+              "standingsType": 2,
+              "classSubClasses": [
+                {
+                  "classId": 12,
+                  "subClassId": null
+                }
+              ],
+              "totalVideos": 0,
+              "totalSquads": 0,
+              "gamePlayWatch": false
+            },
+            "ground": {
+              "id": 3658,
+              "objectId": 1413354,
+              "name": "Narayani Cricket Ground, Birgunj",
+              "smallName": "Birgunj",
+              "longName": "Narayani Cricket Ground, Birgunj",
+              "slug": "narayani-cricket-ground-birgunj",
+              "location": "",
+              "image": null,
+              "town": {
+                "id": 1682,
+                "objectId": 1413353,
+                "name": "Birgunj",
+                "area": "",
+                "timezone": "Asia/Kathmandu"
+              },
+              "country": {
+                "id": 32,
+                "objectId": 33,
+                "name": "Nepal",
+                "shortName": "Nepal",
+                "abbreviation": "NEP",
+                "slug": "nepal"
+              },
+              "capacity": null
+            },
+            "teams": [
+              {
+                "team": {
+                  "id": 6526,
+                  "objectId": 1147778,
+                  "scribeId": 1147778,
+                  "slug": "sudur-paschim-province",
+                  "name": "Sudr Paschi",
+                  "longName": "Sudur Paschim Province",
+                  "abbreviation": "SPP",
+                  "unofficialName": "",
+                  "imageUrl": "/lsci/db/PICTURES/CMS/394600/394638.png",
+                  "isCountry": false,
+                  "primaryColor": null,
+                  "image": {
+                    "id": 394638,
+                    "objectId": 1468837,
+                    "slug": "sudur-paschim-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/394600/394638.png",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Sudur Paschim team logo",
+                    "longCaption": "Sudur Paschim team logo",
+                    "credit": "Nepal Cricket",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 32,
+                    "objectId": 33,
+                    "name": "Nepal",
+                    "shortName": "Nepal",
+                    "abbreviation": "NEP",
+                    "slug": "nepal"
+                  }
+                },
+                "isHome": false,
+                "isLive": false,
+                "score": "168",
+                "scoreInfo": null,
+                "inningNumbers": [
+                  1
+                ],
+                "points": 2,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": null
+              },
+              {
+                "team": {
+                  "id": 6814,
+                  "objectId": 1247348,
+                  "scribeId": 1247348,
+                  "slug": "lumbini-province",
+                  "name": "Lumbini",
+                  "longName": "Lumbini Province",
+                  "abbreviation": "LP",
+                  "unofficialName": null,
+                  "imageUrl": "/lsci/db/PICTURES/CMS/349500/349504.png",
+                  "isCountry": false,
+                  "primaryColor": null,
+                  "image": {
+                    "id": 349504,
+                    "objectId": 1345758,
+                    "slug": "lumbini-province-team-logo",
+                    "url": "/lsci/db/PICTURES/CMS/349500/349504.png",
+                    "width": 500,
+                    "height": 500,
+                    "caption": "Lumbini Province team logo",
+                    "longCaption": "Lumbini Province team logo",
+                    "credit": "Nepal Cricket",
+                    "photographer": null,
+                    "peerUrls": null
+                  },
+                  "country": {
+                    "id": 32,
+                    "objectId": 33,
+                    "name": "Nepal",
+                    "shortName": "Nepal",
+                    "abbreviation": "NEP",
+                    "slug": "nepal"
+                  }
+                },
+                "isHome": true,
+                "isLive": false,
+                "score": "156",
+                "scoreInfo": "40.2/50 ov, T:169",
+                "inningNumbers": [
+                  2
+                ],
+                "points": 0,
+                "sidePlayers": null,
+                "sideBatsmen": null,
+                "sideFielders": null,
+                "captain": null,
+                "teamOdds": null
+              }
+            ],
+            "dayType": "SINGLE",
+            "format": "ODI",
+            "headToHeadSource": "dougie",
+            "previewStoryId": null,
+            "reportStoryId": null,
+            "liveBlogStoryId": null,
+            "fantasyPickStoryId": null,
+            "reportStory": null,
+            "liveBlogStory": null,
+            "drawOdds": null,
+            "isSuperOver": false,
+            "isScheduledInningsComplete": true,
+            "insightsEnabled": false,
+            "hasMatchPlayers": true,
+            "hasCommentary": true,
+            "hasScorecard": true,
+            "hasStandings": true,
+            "hasSuperStats": false,
+            "hasGameboard": false,
+            "hasFanRatings": true,
+            "hasGalleries": false,
+            "hasImages": false,
+            "hasVideos": false,
+            "hasStories": false,
+            "languages": [],
+            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "scorecardSource": "emma",
+            "ballByBallSource": ""
           },
           {
             "_uid": 121496,
@@ -6492,502 +6706,9 @@
             "hasVideos": true,
             "hasStories": true,
             "languages": [],
-            "generatedAt": "2026-03-30T07:50:39.279Z",
+            "generatedAt": "2026-03-30T16:45:42.139Z",
             "scorecardSource": "emma",
             "ballByBallSource": ""
-          },
-          {
-            "_uid": 124808,
-            "id": 124808,
-            "objectId": 1527556,
-            "scribeId": 1527556,
-            "slug": "hyderabad-kingsmen-vs-quetta-gladiators-5th-match",
-            "stage": "FINISHED",
-            "state": "POST",
-            "internationalClassId": null,
-            "generalClassId": 6,
-            "subClassId": null,
-            "season": "2026",
-            "finalType": 0,
-            "title": "5th Match",
-            "floodlit": "daynight",
-            "startDate": "2026-03-29T00:00:00.000Z",
-            "endDate": "2026-03-29T00:00:00.000Z",
-            "startTime": "2026-03-29T09:30:00.000Z",
-            "timePublished": true,
-            "scheduleNote": "",
-            "isCancelled": false,
-            "coverage": "Y",
-            "coverageNote": "",
-            "liveStreamUrl": null,
-            "countryLiveStreamUrl": {},
-            "highlightsUrl": null,
-            "countryHighlightsUrl": {},
-            "status": "RESULT",
-            "statusText": "Gladiators won by 40 runs",
-            "statusEng": "RESULT",
-            "internationalNumber": null,
-            "generalNumber": null,
-            "winnerTeamId": 5797,
-            "tossWinnerTeamId": 5797,
-            "tossWinnerChoice": 1,
-            "tiebreakerTeamId": null,
-            "resultStatus": 1,
-            "liveInning": 2,
-            "liveInningPredictions": null,
-            "liveOvers": 19.06,
-            "liveOversPending": null,
-            "liveBalls": 115,
-            "liveRecentBalls": null,
-            "livePlayers": null,
-            "ballsPerOver": 6,
-            "series": {
-              "id": 17816,
-              "objectId": 1515734,
-              "scribeId": 8679,
-              "slug": "pakistan-super-league-2026",
-              "name": "Pakistan Super League",
-              "longName": "Pakistan Super League",
-              "alternateName": "PSL 2026",
-              "longAlternateName": null,
-              "unofficialName": null,
-              "broadcastName": null,
-              "seoName": "Pakistan Super League 2026",
-              "year": 2026,
-              "typeId": 3,
-              "trophyId": 205,
-              "isTrophy": true,
-              "description": "",
-              "season": "2026",
-              "startDate": "2026-03-26T00:00:00.000Z",
-              "endDate": "2026-05-03T00:00:00.000Z",
-              "hasStandings": true,
-              "standingsType": 2,
-              "classSubClasses": [
-                {
-                  "classId": 6,
-                  "subClassId": null
-                }
-              ],
-              "totalVideos": 1,
-              "totalSquads": 8,
-              "gamePlayWatch": false
-            },
-            "ground": {
-              "id": 545,
-              "objectId": 58967,
-              "name": "Gaddafi Stadium, Lahore",
-              "smallName": "Lahore",
-              "longName": "Gaddafi Stadium, Lahore",
-              "slug": "gaddafi-stadium-lahore",
-              "location": "",
-              "image": {
-                "id": 397070,
-                "objectId": 1474408,
-                "slug": "gaddafi-stadium-latest-ground-picture",
-                "url": "/lsci/db/PICTURES/CMS/397000/397070.jpg",
-                "width": 900,
-                "height": 600,
-                "caption": "Gaddafi Stadium latest ground picture",
-                "longCaption": "Gaddafi Stadium latest ground picture",
-                "credit": "Getty Images",
-                "photographer": null,
-                "peerUrls": null
-              },
-              "town": {
-                "id": 868,
-                "objectId": 58963,
-                "name": "Lahore",
-                "area": "",
-                "timezone": "Asia/Karachi"
-              },
-              "country": {
-                "id": 7,
-                "objectId": 7,
-                "name": "Pakistan",
-                "shortName": "Pakistan",
-                "abbreviation": "PAK",
-                "slug": "pakistan"
-              },
-              "capacity": null
-            },
-            "teams": [
-              {
-                "team": {
-                  "id": 5797,
-                  "objectId": 953845,
-                  "scribeId": 953845,
-                  "slug": "quetta-gladiators",
-                  "name": "Gladiators",
-                  "longName": "Quetta Gladiators",
-                  "abbreviation": "QG",
-                  "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/313500/313522.logo.png",
-                  "isCountry": false,
-                  "primaryColor": "#b115d1",
-                  "image": {
-                    "id": 313522,
-                    "objectId": 1241981,
-                    "slug": "quetta-gladiators-logo",
-                    "url": "/lsci/db/PICTURES/CMS/313500/313522.logo.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Quetta Gladiators logo",
-                    "longCaption": "Quetta Gladiators logo",
-                    "credit": null,
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 7,
-                    "objectId": 7,
-                    "name": "Pakistan",
-                    "shortName": "Pakistan",
-                    "abbreviation": "PAK",
-                    "slug": "pakistan"
-                  }
-                },
-                "isHome": false,
-                "isLive": false,
-                "score": "174/8",
-                "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": 2,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              },
-              {
-                "team": {
-                  "id": 7320,
-                  "objectId": 1523799,
-                  "scribeId": 1523799,
-                  "slug": "hyderabad-kingsmen",
-                  "name": "Kingsmen",
-                  "longName": "Hyderabad Kingsmen",
-                  "abbreviation": "HHK",
-                  "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/414900/414947.png",
-                  "isCountry": false,
-                  "primaryColor": null,
-                  "image": {
-                    "id": 414947,
-                    "objectId": 1529370,
-                    "slug": "hyderabad-kingsmen-2026-psl-new-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/414900/414947.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "Hyderabad Kingsmen 2026 PSL new team logo",
-                    "longCaption": "Hyderabad Kingsmen 2026 PSL new team logo",
-                    "credit": "PSL",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 7,
-                    "objectId": 7,
-                    "name": "Pakistan",
-                    "shortName": "Pakistan",
-                    "abbreviation": "PAK",
-                    "slug": "pakistan"
-                  }
-                },
-                "isHome": true,
-                "isLive": false,
-                "score": "134/8",
-                "scoreInfo": "20 ov, T:175",
-                "inningNumbers": [
-                  2
-                ],
-                "points": 0,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              }
-            ],
-            "dayType": "SINGLE",
-            "format": "T20",
-            "headToHeadSource": "feedback",
-            "previewStoryId": null,
-            "reportStoryId": 345269,
-            "liveBlogStoryId": null,
-            "fantasyPickStoryId": null,
-            "reportStory": {
-              "storyId": 345269,
-              "day": null
-            },
-            "liveBlogStory": null,
-            "drawOdds": null,
-            "isSuperOver": false,
-            "isScheduledInningsComplete": true,
-            "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
-            "hasStandings": true,
-            "hasSuperStats": true,
-            "hasGameboard": true,
-            "hasFanRatings": true,
-            "hasGalleries": false,
-            "hasImages": true,
-            "hasVideos": false,
-            "hasStories": true,
-            "languages": [
-              "hi"
-            ],
-            "generatedAt": "2026-03-30T07:50:39.279Z",
-            "scorecardSource": "emma",
-            "ballByBallSource": "feedback"
-          },
-          {
-            "_uid": 120775,
-            "id": 120775,
-            "objectId": 1491710,
-            "scribeId": 1491710,
-            "slug": "new-zealand-women-vs-south-africa-women-1st-odi",
-            "stage": "FINISHED",
-            "state": "POST",
-            "internationalClassId": 9,
-            "generalClassId": 12,
-            "subClassId": null,
-            "season": "2025/26",
-            "finalType": 0,
-            "title": "1st ODI",
-            "floodlit": "daynight",
-            "startDate": "2026-03-29T00:00:00.000Z",
-            "endDate": "2026-03-29T00:00:00.000Z",
-            "startTime": "2026-03-29T01:00:00.000Z",
-            "timePublished": true,
-            "scheduleNote": "",
-            "isCancelled": false,
-            "coverage": "Y",
-            "coverageNote": "",
-            "liveStreamUrl": null,
-            "countryLiveStreamUrl": {},
-            "highlightsUrl": null,
-            "countryHighlightsUrl": {},
-            "status": "RESULT",
-            "statusText": "SA Women won by 2 wickets (with 0 balls remaining)",
-            "statusEng": "RESULT",
-            "internationalNumber": "001537",
-            "generalNumber": null,
-            "winnerTeamId": 3379,
-            "tossWinnerTeamId": 3379,
-            "tossWinnerChoice": 2,
-            "tiebreakerTeamId": null,
-            "resultStatus": 1,
-            "liveInning": 2,
-            "liveInningPredictions": null,
-            "liveOvers": 49.06,
-            "liveOversPending": null,
-            "liveBalls": 295,
-            "liveRecentBalls": null,
-            "livePlayers": null,
-            "ballsPerOver": 6,
-            "series": {
-              "id": 17366,
-              "objectId": 1491692,
-              "scribeId": 24212,
-              "slug": "south-africa-women-in-new-zealand-2025-26",
-              "name": "South Africa Women in New Zealand",
-              "longName": "South Africa Women tour of New Zealand",
-              "alternateName": "NZ-W vs SA-W",
-              "longAlternateName": null,
-              "unofficialName": null,
-              "broadcastName": null,
-              "seoName": "South Africa Women tour of New Zealand 2025/26",
-              "year": 2026,
-              "typeId": 4,
-              "trophyId": 0,
-              "isTrophy": false,
-              "description": "",
-              "season": "2025/26",
-              "startDate": "2026-03-15T00:00:00.000Z",
-              "endDate": "2026-04-04T00:00:00.000Z",
-              "hasStandings": false,
-              "standingsType": 1,
-              "classSubClasses": [],
-              "totalVideos": 2,
-              "totalSquads": 5,
-              "gamePlayWatch": false
-            },
-            "ground": {
-              "id": 93,
-              "objectId": 58810,
-              "name": "Hagley Oval, Christchurch",
-              "smallName": "Christchurch",
-              "longName": "Hagley Oval, Christchurch",
-              "slug": "hagley-oval-christchurch",
-              "location": "",
-              "image": {
-                "id": 206697,
-                "objectId": 837175,
-                "slug": "the-hagley-oval-drew-a-big-crowd-for-the-england-scotland-game",
-                "url": "/lsci/db/PICTURES/CMS/206600/206697.jpg",
-                "width": 900,
-                "height": 600,
-                "caption": "The Hagley Oval drew a big crowd for the England-Scotland game",
-                "longCaption": "The Hagley Oval drew a big crowd , England v Scotland, World Cup 2015, Group A, Christchurch, February 23, 2015",
-                "credit": "ICC",
-                "photographer": null,
-                "peerUrls": null
-              },
-              "town": {
-                "id": 824,
-                "objectId": 58807,
-                "name": "Christchurch",
-                "area": "",
-                "timezone": "Pacific/Auckland"
-              },
-              "country": {
-                "id": 5,
-                "objectId": 5,
-                "name": "New Zealand",
-                "shortName": "New Zealand",
-                "abbreviation": "NZ",
-                "slug": "new-zealand"
-              },
-              "capacity": "18,000"
-            },
-            "teams": [
-              {
-                "team": {
-                  "id": 2614,
-                  "objectId": 2563,
-                  "scribeId": 2563,
-                  "slug": "new-zealand-women",
-                  "name": "NZ Women",
-                  "longName": "New Zealand Women",
-                  "abbreviation": "NZ-W",
-                  "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/340500/340505.png",
-                  "isCountry": false,
-                  "primaryColor": "#b7c0c8",
-                  "image": {
-                    "id": 340505,
-                    "objectId": 1318717,
-                    "slug": "new-zealand-team-flag-latest",
-                    "url": "/lsci/db/PICTURES/CMS/340500/340505.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "New Zealand team flag-latest",
-                    "longCaption": "New Zealand team flag-latest",
-                    "credit": "Getty Images",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 5,
-                    "objectId": 5,
-                    "name": "New Zealand",
-                    "shortName": "New Zealand",
-                    "abbreviation": "NZ",
-                    "slug": "new-zealand"
-                  }
-                },
-                "isHome": true,
-                "isLive": false,
-                "score": "268",
-                "scoreInfo": null,
-                "inningNumbers": [
-                  1
-                ],
-                "points": 0,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              },
-              {
-                "team": {
-                  "id": 3379,
-                  "objectId": 3328,
-                  "scribeId": 3328,
-                  "slug": "south-africa-women",
-                  "name": "SA Women",
-                  "longName": "South Africa Women",
-                  "abbreviation": "SA-W",
-                  "unofficialName": "",
-                  "imageUrl": "/lsci/db/PICTURES/CMS/382700/382733.png",
-                  "isCountry": false,
-                  "primaryColor": "#1c9b36",
-                  "image": {
-                    "id": 382733,
-                    "objectId": 1438445,
-                    "slug": "south-africa-flag-team-logo",
-                    "url": "/lsci/db/PICTURES/CMS/382700/382733.png",
-                    "width": 500,
-                    "height": 500,
-                    "caption": "South Africa flag team logo",
-                    "longCaption": "South Africa flag team logo",
-                    "credit": "Getty Images",
-                    "photographer": null,
-                    "peerUrls": null
-                  },
-                  "country": {
-                    "id": 3,
-                    "objectId": 3,
-                    "name": "South Africa",
-                    "shortName": "South Africa",
-                    "abbreviation": "SA",
-                    "slug": "south-africa"
-                  }
-                },
-                "isHome": false,
-                "isLive": false,
-                "score": "269/8",
-                "scoreInfo": "50 ov, T:269",
-                "inningNumbers": [
-                  2
-                ],
-                "points": 2,
-                "sidePlayers": null,
-                "sideBatsmen": null,
-                "sideFielders": null,
-                "captain": null,
-                "teamOdds": null
-              }
-            ],
-            "dayType": "SINGLE",
-            "format": "ODI",
-            "headToHeadSource": "feedback",
-            "previewStoryId": null,
-            "reportStoryId": 345249,
-            "liveBlogStoryId": null,
-            "fantasyPickStoryId": null,
-            "reportStory": {
-              "storyId": 345249,
-              "day": null
-            },
-            "liveBlogStory": null,
-            "drawOdds": null,
-            "isSuperOver": false,
-            "isScheduledInningsComplete": true,
-            "insightsEnabled": false,
-            "hasMatchPlayers": true,
-            "hasCommentary": true,
-            "hasScorecard": true,
-            "hasStandings": true,
-            "hasSuperStats": true,
-            "hasGameboard": true,
-            "hasFanRatings": true,
-            "hasGalleries": false,
-            "hasImages": true,
-            "hasVideos": false,
-            "hasStories": true,
-            "languages": [
-              "hi"
-            ],
-            "generatedAt": "2026-03-30T07:50:39.279Z",
-            "scorecardSource": "emma",
-            "ballByBallSource": "feedback"
           }
         ]
       },
@@ -7104,7 +6825,7 @@
                 "subClassId": null
               }
             ],
-            "totalVideos": 78,
+            "totalVideos": 80,
             "totalSquads": 10,
             "gamePlayWatch": false
           }
@@ -7549,7 +7270,7 @@
               "subClassId": null
             }
           ],
-          "totalVideos": 78,
+          "totalVideos": 79,
           "totalSquads": 10,
           "gamePlayWatch": false,
           "fanRatings": {
@@ -7579,7 +7300,7 @@
           },
           "totalTeams": 10,
           "totalGalleries": 0,
-          "totalImages": 87
+          "totalImages": 99
         },
         "content": {
           "matches": [
@@ -7656,7 +7377,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -7831,7 +7552,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:54.772Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": "emma",
               "ballByBallSource": "feedback"
             },
@@ -7908,7 +7629,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8083,7 +7804,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:26:01.134Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": "emma",
               "ballByBallSource": "feedback"
             },
@@ -8093,8 +7814,8 @@
               "objectId": 1527676,
               "scribeId": 1527676,
               "slug": "rajasthan-royals-vs-chennai-super-kings-3rd-match",
-              "stage": "SCHEDULED",
-              "state": "PRE",
+              "stage": "RUNNING",
+              "state": "LIVE",
               "internationalClassId": null,
               "generalClassId": 6,
               "subClassId": null,
@@ -8114,24 +7835,29 @@
               "countryLiveStreamUrl": {},
               "highlightsUrl": null,
               "countryHighlightsUrl": {},
-              "status": "{{MATCH_START_TIME}}",
-              "statusText": "Match yet to begin",
-              "statusEng": "{{MATCH_START_TIME}}",
+              "status": "Live",
+              "statusText": "RR need 69 runs in 88 balls.",
+              "statusEng": "Live",
               "internationalNumber": null,
               "generalNumber": null,
               "winnerTeamId": null,
-              "tossWinnerTeamId": null,
-              "tossWinnerChoice": null,
+              "tossWinnerTeamId": 4345,
+              "tossWinnerChoice": 2,
               "tiebreakerTeamId": null,
               "resultStatus": null,
-              "liveInning": null,
-              "liveInningPredictions": null,
-              "liveOvers": null,
+              "liveInning": 2,
+              "liveInningPredictions": {
+                "inningNumber": 2,
+                "oversUnique": 5.02,
+                "score": 179,
+                "winProbability": 97.48
+              },
+              "liveOvers": 5.02,
               "liveOversPending": null,
-              "liveBalls": null,
+              "liveBalls": 30,
               "liveRecentBalls": null,
               "livePlayers": null,
-              "ballsPerOver": null,
+              "ballsPerOver": 6,
               "series": {
                 "id": 17740,
                 "objectId": 1510719,
@@ -8160,7 +7886,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8191,56 +7917,6 @@
                 "capacity": "40000"
               },
               "teams": [
-                {
-                  "team": {
-                    "id": 4345,
-                    "objectId": 335977,
-                    "scribeId": 335977,
-                    "slug": "rajasthan-royals",
-                    "name": "RR",
-                    "longName": "Rajasthan Royals",
-                    "abbreviation": "RR",
-                    "unofficialName": "Rajasthan",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
-                    "isCountry": false,
-                    "primaryColor": "#c511e8",
-                    "image": {
-                      "id": 400406,
-                      "objectId": 1485132,
-                      "slug": "rajasthan-royals-without-background-2025",
-                      "url": "/lsci/db/PICTURES/CMS/400400/400406.png",
-                      "width": 500,
-                      "height": 500,
-                      "caption": "Rajasthan Royals without background 2025",
-                      "longCaption": "Rajasthan Royals without background 2025",
-                      "credit": "Rajasthan Royals",
-                      "photographer": null,
-                      "peerUrls": null
-                    },
-                    "country": {
-                      "id": 6,
-                      "objectId": 6,
-                      "name": "India",
-                      "shortName": "India",
-                      "abbreviation": "IND",
-                      "slug": "india"
-                    }
-                  },
-                  "isHome": true,
-                  "isLive": false,
-                  "score": null,
-                  "scoreInfo": null,
-                  "inningNumbers": [],
-                  "points": null,
-                  "sidePlayers": null,
-                  "sideBatsmen": null,
-                  "sideFielders": null,
-                  "captain": null,
-                  "teamOdds": {
-                    "odds": "10/11",
-                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175359~10/11&bet=1"
-                  }
-                },
                 {
                   "team": {
                     "id": 4343,
@@ -8278,50 +7954,107 @@
                   },
                   "isHome": false,
                   "isLive": false,
-                  "score": null,
+                  "score": "127",
                   "scoreInfo": null,
-                  "inningNumbers": [],
+                  "inningNumbers": [
+                    1
+                  ],
                   "points": null,
                   "sidePlayers": null,
                   "sideBatsmen": null,
                   "sideFielders": null,
                   "captain": null,
                   "teamOdds": {
-                    "odds": "10/11",
-                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175365~10/11&bet=1"
+                    "odds": "100/1",
+                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104198~100/1&bet=1"
+                  }
+                },
+                {
+                  "team": {
+                    "id": 4345,
+                    "objectId": 335977,
+                    "scribeId": 335977,
+                    "slug": "rajasthan-royals",
+                    "name": "RR",
+                    "longName": "Rajasthan Royals",
+                    "abbreviation": "RR",
+                    "unofficialName": "Rajasthan",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "isCountry": false,
+                    "primaryColor": "#c511e8",
+                    "image": {
+                      "id": 400406,
+                      "objectId": 1485132,
+                      "slug": "rajasthan-royals-without-background-2025",
+                      "url": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                      "width": 500,
+                      "height": 500,
+                      "caption": "Rajasthan Royals without background 2025",
+                      "longCaption": "Rajasthan Royals without background 2025",
+                      "credit": "Rajasthan Royals",
+                      "photographer": null,
+                      "peerUrls": null
+                    },
+                    "country": {
+                      "id": 6,
+                      "objectId": 6,
+                      "name": "India",
+                      "shortName": "India",
+                      "abbreviation": "IND",
+                      "slug": "india"
+                    }
+                  },
+                  "isHome": true,
+                  "isLive": true,
+                  "score": "59/0",
+                  "scoreInfo": "5.2/20 ov, T:128",
+                  "inningNumbers": [
+                    2
+                  ],
+                  "points": null,
+                  "sidePlayers": null,
+                  "sideBatsmen": null,
+                  "sideFielders": null,
+                  "captain": null,
+                  "teamOdds": {
+                    "odds": "1/1000",
+                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104189~1/1000&bet=1"
                   }
                 }
               ],
               "dayType": "SINGLE",
               "format": "T20",
-              "headToHeadSource": null,
+              "headToHeadSource": "feedback",
               "previewStoryId": 345272,
               "reportStoryId": null,
-              "liveBlogStoryId": null,
+              "liveBlogStoryId": 345298,
               "fantasyPickStoryId": null,
               "reportStory": null,
-              "liveBlogStory": null,
+              "liveBlogStory": {
+                "storyId": 345298,
+                "day": null
+              },
               "drawOdds": null,
               "isSuperOver": false,
               "isScheduledInningsComplete": false,
               "insightsEnabled": false,
-              "hasMatchPlayers": false,
-              "hasCommentary": false,
-              "hasScorecard": false,
+              "hasMatchPlayers": true,
+              "hasCommentary": true,
+              "hasScorecard": true,
               "hasStandings": true,
               "hasSuperStats": true,
               "hasGameboard": true,
               "hasFanRatings": false,
               "hasGalleries": false,
-              "hasImages": false,
+              "hasImages": true,
               "hasVideos": true,
               "hasStories": true,
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:26:01.134Z",
-              "scorecardSource": null,
-              "ballByBallSource": null
+              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "scorecardSource": "feedback",
+              "ballByBallSource": "feedback"
             },
             {
               "_uid": 124851,
@@ -8396,7 +8129,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8537,7 +8270,7 @@
               "dayType": "SINGLE",
               "format": "T20",
               "headToHeadSource": null,
-              "previewStoryId": null,
+              "previewStoryId": 345305,
               "reportStoryId": null,
               "liveBlogStoryId": null,
               "fantasyPickStoryId": null,
@@ -8557,11 +8290,11 @@
               "hasGalleries": false,
               "hasImages": false,
               "hasVideos": false,
-              "hasStories": false,
+              "hasStories": true,
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:26:01.134Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -8638,7 +8371,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8791,7 +8524,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:37.799Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -8868,7 +8601,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9033,7 +8766,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:38.432Z",
+              "generatedAt": "2026-03-30T16:30:45.563Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9110,7 +8843,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9275,7 +9008,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:37.799Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9352,7 +9085,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9517,7 +9250,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:38.432Z",
+              "generatedAt": "2026-03-30T16:30:32.411Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9594,7 +9327,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9759,7 +9492,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:37.800Z",
+              "generatedAt": "2026-03-30T16:31:00.372Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9836,7 +9569,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10001,7 +9734,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:21:30.307Z",
+              "generatedAt": "2026-03-30T16:30:21.223Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10078,7 +9811,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10243,7 +9976,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:24:29.581Z",
+              "generatedAt": "2026-03-30T16:30:45.563Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10320,7 +10053,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10485,7 +10218,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:21:10.230Z",
+              "generatedAt": "2026-03-30T16:30:07.431Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10562,7 +10295,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10715,7 +10448,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:22:40.182Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10792,7 +10525,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10957,7 +10690,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:23:08.133Z",
+              "generatedAt": "2026-03-30T16:26:13.619Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11034,7 +10767,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11199,7 +10932,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:21:48.302Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11276,7 +11009,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11429,7 +11162,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:22:19.898Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11506,7 +11239,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11671,7 +11404,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:23:08.133Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11748,7 +11481,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11913,7 +11646,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:22:40.182Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11990,7 +11723,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12143,7 +11876,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:25:32.265Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12220,7 +11953,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12385,7 +12118,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:26:06.692Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12462,7 +12195,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12625,7 +12358,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:40.182Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12702,7 +12435,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12865,7 +12598,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:40.182Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12942,7 +12675,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13105,7 +12838,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:19.898Z",
+              "generatedAt": "2026-03-30T16:26:06.717Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13182,7 +12915,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13345,7 +13078,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13422,7 +13155,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13585,7 +13318,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:41.286Z",
+              "generatedAt": "2026-03-30T16:26:40.077Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13662,7 +13395,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13825,7 +13558,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:03.970Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13902,7 +13635,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14065,7 +13798,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14142,7 +13875,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14305,7 +14038,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:56.780Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14382,7 +14115,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14545,7 +14278,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14622,7 +14355,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14785,7 +14518,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14862,7 +14595,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15025,7 +14758,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:03.970Z",
+              "generatedAt": "2026-03-30T16:27:37.038Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15102,7 +14835,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15253,7 +14986,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:56.780Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15330,7 +15063,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15493,7 +15226,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:26:01.187Z",
+              "generatedAt": "2026-03-30T16:28:12.572Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15570,7 +15303,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15733,7 +15466,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:19.898Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15810,7 +15543,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15973,7 +15706,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:03.970Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16050,7 +15783,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16213,7 +15946,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:25:49.464Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16290,7 +16023,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16453,7 +16186,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:40.182Z",
+              "generatedAt": "2026-03-30T16:26:40.077Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16530,7 +16263,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16681,7 +16414,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:03.176Z",
+              "generatedAt": "2026-03-30T16:27:37.038Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16758,7 +16491,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16921,7 +16654,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:35.768Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16998,7 +16731,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17161,7 +16894,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:01.379Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17238,7 +16971,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17401,7 +17134,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:27:37.038Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17478,7 +17211,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17641,7 +17374,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:19.898Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17718,7 +17451,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17881,7 +17614,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:35.768Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17958,7 +17691,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18121,7 +17854,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:28:34.532Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18198,7 +17931,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18361,7 +18094,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:35.768Z",
+              "generatedAt": "2026-03-30T16:29:20.948Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18438,7 +18171,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18601,7 +18334,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:41.286Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18678,7 +18411,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18841,7 +18574,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.017Z",
+              "generatedAt": "2026-03-30T16:27:04.221Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18918,7 +18651,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19081,7 +18814,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:27.704Z",
+              "generatedAt": "2026-03-30T16:28:34.532Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19158,7 +18891,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19321,7 +19054,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:45.023Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19398,7 +19131,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19549,7 +19282,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:27.704Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19626,7 +19359,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19789,7 +19522,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:26:01.187Z",
+              "generatedAt": "2026-03-30T16:29:41.275Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19866,7 +19599,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20029,7 +19762,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:45.023Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20106,7 +19839,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20269,7 +20002,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:28:34.532Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20346,7 +20079,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20509,7 +20242,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:03.018Z",
+              "generatedAt": "2026-03-30T16:28:34.532Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20586,7 +20319,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20749,7 +20482,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:45.023Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20826,7 +20559,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20989,7 +20722,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:29:09.305Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21066,7 +20799,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21229,7 +20962,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:26:01.187Z",
+              "generatedAt": "2026-03-30T16:29:57.334Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21306,7 +21039,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21469,7 +21202,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:08.517Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21546,7 +21279,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21697,7 +21430,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:27.705Z",
+              "generatedAt": "2026-03-30T16:29:23.809Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21774,7 +21507,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21937,7 +21670,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:08.517Z",
+              "generatedAt": "2026-03-30T16:30:07.432Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22014,7 +21747,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22177,7 +21910,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:08.517Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22254,7 +21987,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22417,7 +22150,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:56.780Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22494,7 +22227,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22657,7 +22390,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:45.023Z",
+              "generatedAt": "2026-03-30T16:30:07.432Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22734,7 +22467,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22897,7 +22630,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:01.379Z",
+              "generatedAt": "2026-03-30T16:26:21.168Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22974,7 +22707,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23137,7 +22870,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:26:21.169Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23214,7 +22947,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23377,7 +23110,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:26:21.169Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23454,7 +23187,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23617,7 +23350,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:28:34.532Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23694,7 +23427,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23845,7 +23578,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:24:09.412Z",
+              "generatedAt": "2026-03-30T16:26:21.169Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23922,7 +23655,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -24085,7 +23818,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:23:56.780Z",
+              "generatedAt": "2026-03-30T16:26:21.169Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -24162,7 +23895,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 78,
+                "totalVideos": 79,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -24325,7 +24058,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T07:22:01.379Z",
+              "generatedAt": "2026-03-30T16:26:21.169Z",
               "scorecardSource": null,
               "ballByBallSource": null
             }
@@ -25329,7 +25062,7 @@
                   "subClassId": null
                 }
               ],
-              "totalVideos": 78,
+              "totalVideos": 79,
               "totalSquads": 10,
               "gamePlayWatch": false
             },
@@ -26635,13 +26368,13 @@
                     "pct": null,
                     "recentMatches": [],
                     "nextMatch": {
-                      "_uid": 124850,
-                      "id": 124850,
-                      "objectId": 1527676,
-                      "slug": "rajasthan-royals-vs-chennai-super-kings-3rd-match",
-                      "title": "3rd Match",
-                      "startDate": "2026-03-30T00:00:00.000Z",
-                      "startTime": "2026-03-30T14:00:00.000Z",
+                      "_uid": 124854,
+                      "id": 124854,
+                      "objectId": 1527680,
+                      "slug": "chennai-super-kings-vs-punjab-kings-7th-match",
+                      "title": "7th Match",
+                      "startDate": "2026-04-03T00:00:00.000Z",
+                      "startTime": "2026-04-03T14:00:00.000Z",
                       "format": "T20",
                       "isCancelled": false,
                       "stage": "SCHEDULED",
@@ -26652,7 +26385,7 @@
                       "statusText": "Match yet to begin",
                       "statusEng": "{{MATCH_START_TIME}}",
                       "resultStatus": null,
-                      "previewStoryId": 345272,
+                      "previewStoryId": null,
                       "coverage": "Y",
                       "series": {
                         "id": 17740,
@@ -26670,18 +26403,30 @@
                         "endDate": "2026-05-31T00:00:00.000Z"
                       },
                       "ground": {
-                        "id": 2865,
-                        "objectId": 680295,
-                        "name": "Barsapara Cricket Stadium, Guwahati",
-                        "smallName": "Guwahati",
-                        "longName": "Barsapara Cricket Stadium, Guwahati",
-                        "slug": "barsapara-cricket-stadium-guwahati",
-                        "location": "",
-                        "image": null,
+                        "id": 291,
+                        "objectId": 58008,
+                        "name": "MA Chidambaram Stadium, Chepauk, Chennai",
+                        "smallName": "Chennai",
+                        "longName": "MA Chidambaram Stadium, Chepauk, Chennai",
+                        "slug": "ma-chidambaram-stadium-chepauk-chennai",
+                        "location": "Chepauk",
+                        "image": {
+                          "id": 128358,
+                          "objectId": 501288,
+                          "slug": "the-ma-chidambaram-stadium-in-chennai",
+                          "url": "/lsci/db/PICTURES/CMS/128300/128358.jpg",
+                          "width": 900,
+                          "height": 566,
+                          "caption": "The MA Chidambaram Stadium in Chennai ",
+                          "longCaption": "The MA Chidambaram Stadium in Chennai, India v New Zealand, World Cup warm-up match, Chennai",
+                          "credit": "Getty Images",
+                          "photographer": null,
+                          "peerUrls": null
+                        },
                         "town": {
-                          "id": 605,
-                          "objectId": 58111,
-                          "name": "Guwahati",
+                          "id": 577,
+                          "objectId": 57995,
+                          "name": "Chennai",
                           "area": "",
                           "timezone": "Asia/Kolkata"
                         },
@@ -26693,31 +26438,9 @@
                           "abbreviation": "IND",
                           "slug": "india"
                         },
-                        "capacity": "40000"
+                        "capacity": "38,000"
                       },
                       "teams": [
-                        {
-                          "team": {
-                            "id": 4345,
-                            "objectId": 335977,
-                            "slug": "rajasthan-royals",
-                            "name": "RR",
-                            "longName": "Rajasthan Royals",
-                            "abbreviation": "RR",
-                            "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
-                            "unofficialName": "Rajasthan"
-                          },
-                          "inningNumbers": [],
-                          "isHome": true,
-                          "isLive": false,
-                          "score": null,
-                          "scoreInfo": null,
-                          "points": null,
-                          "teamOdds": {
-                            "odds": "10/11",
-                            "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175359~10/11&bet=1"
-                          }
-                        },
                         {
                           "team": {
                             "id": 4343,
@@ -26730,15 +26453,31 @@
                             "unofficialName": "Chennai"
                           },
                           "inningNumbers": [],
+                          "isHome": true,
+                          "isLive": false,
+                          "score": null,
+                          "scoreInfo": null,
+                          "points": null,
+                          "teamOdds": null
+                        },
+                        {
+                          "team": {
+                            "id": 4342,
+                            "objectId": 335973,
+                            "slug": "punjab-kings",
+                            "name": "PBKS",
+                            "longName": "Punjab Kings",
+                            "abbreviation": "PBKS",
+                            "imageUrl": "/lsci/db/PICTURES/CMS/414800/414846.png",
+                            "unofficialName": "Punjab"
+                          },
+                          "inningNumbers": [],
                           "isHome": false,
                           "isLive": false,
                           "score": null,
                           "scoreInfo": null,
                           "points": null,
-                          "teamOdds": {
-                            "odds": "10/11",
-                            "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175365~10/11&bet=1"
-                          }
+                          "teamOdds": null
                         }
                       ],
                       "languages": [
@@ -27006,7 +26745,7 @@
                       "statusText": "Match yet to begin",
                       "statusEng": "{{MATCH_START_TIME}}",
                       "resultStatus": null,
-                      "previewStoryId": null,
+                      "previewStoryId": 345305,
                       "coverage": "Y",
                       "series": {
                         "id": 17740,
@@ -27366,7 +27105,7 @@
                       "statusText": "Match yet to begin",
                       "statusEng": "{{MATCH_START_TIME}}",
                       "resultStatus": null,
-                      "previewStoryId": null,
+                      "previewStoryId": 345305,
                       "coverage": "Y",
                       "series": {
                         "id": 17740,
@@ -27535,13 +27274,13 @@
                     "pct": null,
                     "recentMatches": [],
                     "nextMatch": {
-                      "_uid": 124850,
-                      "id": 124850,
-                      "objectId": 1527676,
-                      "slug": "rajasthan-royals-vs-chennai-super-kings-3rd-match",
-                      "title": "3rd Match",
-                      "startDate": "2026-03-30T00:00:00.000Z",
-                      "startTime": "2026-03-30T14:00:00.000Z",
+                      "_uid": 124856,
+                      "id": 124856,
+                      "objectId": 1527682,
+                      "slug": "gujarat-titans-vs-rajasthan-royals-9th-match",
+                      "title": "9th Match",
+                      "startDate": "2026-04-04T00:00:00.000Z",
+                      "startTime": "2026-04-04T14:00:00.000Z",
                       "format": "T20",
                       "isCancelled": false,
                       "stage": "SCHEDULED",
@@ -27552,7 +27291,7 @@
                       "statusText": "Match yet to begin",
                       "statusEng": "{{MATCH_START_TIME}}",
                       "resultStatus": null,
-                      "previewStoryId": 345272,
+                      "previewStoryId": null,
                       "coverage": "Y",
                       "series": {
                         "id": 17740,
@@ -27570,18 +27309,30 @@
                         "endDate": "2026-05-31T00:00:00.000Z"
                       },
                       "ground": {
-                        "id": 2865,
-                        "objectId": 680295,
-                        "name": "Barsapara Cricket Stadium, Guwahati",
-                        "smallName": "Guwahati",
-                        "longName": "Barsapara Cricket Stadium, Guwahati",
-                        "slug": "barsapara-cricket-stadium-guwahati",
-                        "location": "",
-                        "image": null,
+                        "id": 840,
+                        "objectId": 57851,
+                        "name": "Narendra Modi Stadium, Ahmedabad",
+                        "smallName": "Ahmedabad",
+                        "longName": "Narendra Modi Stadium, Ahmedabad",
+                        "slug": "narendra-modi-stadium-motera-ahmedabad",
+                        "location": "Motera",
+                        "image": {
+                          "id": 66837,
+                          "objectId": 261701,
+                          "slug": "sardar-patel-stadium-in-ahmedabad",
+                          "url": "/lsci/db/PICTURES/CMS/66800/66837.jpg",
+                          "width": 500,
+                          "height": 316,
+                          "caption": "Sardar Patel stadium in Ahmedabad",
+                          "longCaption": "Sardar Patel stadium in Ahmedabad",
+                          "credit": "AFP",
+                          "photographer": null,
+                          "peerUrls": null
+                        },
                         "town": {
-                          "id": 605,
-                          "objectId": 58111,
-                          "name": "Guwahati",
+                          "id": 534,
+                          "objectId": 57847,
+                          "name": "Ahmedabad",
                           "area": "",
                           "timezone": "Asia/Kolkata"
                         },
@@ -27593,9 +27344,28 @@
                           "abbreviation": "IND",
                           "slug": "india"
                         },
-                        "capacity": "40000"
+                        "capacity": "132,000"
                       },
                       "teams": [
+                        {
+                          "team": {
+                            "id": 6904,
+                            "objectId": 1298769,
+                            "slug": "gujarat-titans",
+                            "name": "GT",
+                            "longName": "Gujarat Titans",
+                            "abbreviation": "GT",
+                            "imageUrl": "/lsci/db/PICTURES/CMS/334700/334707.png",
+                            "unofficialName": "Gujarat"
+                          },
+                          "inningNumbers": [],
+                          "isHome": true,
+                          "isLive": false,
+                          "score": null,
+                          "scoreInfo": null,
+                          "points": null,
+                          "teamOdds": null
+                        },
                         {
                           "team": {
                             "id": 4345,
@@ -27608,37 +27378,12 @@
                             "unofficialName": "Rajasthan"
                           },
                           "inningNumbers": [],
-                          "isHome": true,
-                          "isLive": false,
-                          "score": null,
-                          "scoreInfo": null,
-                          "points": null,
-                          "teamOdds": {
-                            "odds": "10/11",
-                            "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175359~10/11&bet=1"
-                          }
-                        },
-                        {
-                          "team": {
-                            "id": 4343,
-                            "objectId": 335974,
-                            "slug": "chennai-super-kings",
-                            "name": "CSK",
-                            "longName": "Chennai Super Kings",
-                            "abbreviation": "CSK",
-                            "imageUrl": "/lsci/db/PICTURES/CMS/313400/313421.logo.png",
-                            "unofficialName": "Chennai"
-                          },
-                          "inningNumbers": [],
                           "isHome": false,
                           "isLive": false,
                           "score": null,
                           "scoreInfo": null,
                           "points": null,
-                          "teamOdds": {
-                            "odds": "10/11",
-                            "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175365~10/11&bet=1"
-                          }
+                          "teamOdds": null
                         }
                       ],
                       "languages": [
@@ -27667,7 +27412,10 @@
               }
             ],
             "finalMatches": [],
-            "liveTeamIds": [],
+            "liveTeamIds": [
+              4343,
+              4345
+            ],
             "objects": {
               "matches": {}
             }
@@ -28454,6 +28202,95 @@
               "statsByEconomy": [
                 {
                   "player": {
+                    "id": 72379,
+                    "objectId": 669855,
+                    "name": "JC Archer",
+                    "longName": "Jofra Archer",
+                    "mobileName": "Archer",
+                    "indexName": "Archer, JC",
+                    "battingName": "JC Archer",
+                    "fieldingName": "Archer",
+                    "slug": "jofra-archer",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/383100/383146.1.png",
+                    "headshotImageUrl": "/lsci/db/PICTURES/CMS/383100/383146.png",
+                    "dateOfBirth": {
+                      "year": 1995,
+                      "month": 4,
+                      "date": 1
+                    },
+                    "dateOfDeath": null,
+                    "gender": "M",
+                    "battingStyles": [
+                      "rhb"
+                    ],
+                    "bowlingStyles": [
+                      "rf"
+                    ],
+                    "longBattingStyles": [
+                      "right-hand bat"
+                    ],
+                    "longBowlingStyles": [
+                      "right-arm fast"
+                    ],
+                    "image": {
+                      "id": 383146,
+                      "objectId": 1439387,
+                      "slug": "jofra-archer-cutout",
+                      "url": "/lsci/db/PICTURES/CMS/383100/383146.1.png",
+                      "width": 160,
+                      "height": 136,
+                      "caption": "Jofra Archer cutout",
+                      "longCaption": "Jofra Archer cutout",
+                      "credit": null,
+                      "photographer": null,
+                      "peerUrls": null
+                    },
+                    "countryTeamId": 1,
+                    "playerRoleTypeIds": [
+                      4
+                    ],
+                    "playingRoles": [
+                      "bowler"
+                    ],
+                    "headshotImage": {
+                      "id": 383146,
+                      "objectId": 1439387,
+                      "slug": "jofra-archer-cutout",
+                      "url": "/lsci/db/PICTURES/CMS/383100/383146.png",
+                      "width": 600,
+                      "height": 436,
+                      "caption": "Jofra Archer cutout",
+                      "longCaption": "Jofra Archer cutout",
+                      "credit": null,
+                      "photographer": null,
+                      "peerUrls": {
+                        "FILM": null,
+                        "WIDE": null,
+                        "SQUARE": "/lsci/db/PICTURES/CMS/383100/383146.square.png"
+                      }
+                    }
+                  },
+                  "team": {
+                    "id": 4345,
+                    "objectId": 335977,
+                    "slug": "rajasthan-royals",
+                    "name": "RR",
+                    "longName": "Rajasthan Royals",
+                    "abbreviation": "RR",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "unofficialName": "Rajasthan"
+                  },
+                  "matches": 1,
+                  "wickets": 2,
+                  "innings": 1,
+                  "average": 9.5,
+                  "economy": 4.75,
+                  "conceded": 19,
+                  "balls": 24,
+                  "strikerate": 12
+                },
+                {
+                  "player": {
                     "id": 67190,
                     "objectId": 547766,
                     "name": "JA Duffy",
@@ -28543,181 +28380,76 @@
                 },
                 {
                   "player": {
-                    "id": 54282,
-                    "objectId": 326016,
-                    "name": "B Kumar",
-                    "longName": "Bhuvneshwar Kumar",
-                    "mobileName": "Bhuvneshwar",
-                    "indexName": "Kumar, B",
-                    "battingName": "B Kumar",
-                    "fieldingName": "Kumar",
-                    "slug": "bhuvneshwar-kumar",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/392400/392400.2.png",
-                    "headshotImageUrl": "/lsci/db/PICTURES/CMS/316600/316658.png",
+                    "id": 89925,
+                    "objectId": 971349,
+                    "name": "N Burger",
+                    "longName": "Nandre Burger",
+                    "mobileName": "Burger",
+                    "indexName": "Burger, N",
+                    "battingName": "N Burger",
+                    "fieldingName": "Burger",
+                    "slug": "nandre-burger",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/388400/388421.5.png",
+                    "headshotImageUrl": null,
                     "dateOfBirth": {
-                      "year": 1990,
-                      "month": 2,
-                      "date": 5
+                      "year": 1995,
+                      "month": 8,
+                      "date": 11
                     },
                     "dateOfDeath": null,
                     "gender": "M",
                     "battingStyles": [
-                      "rhb"
+                      "lhb"
                     ],
                     "bowlingStyles": [
-                      "rm"
+                      "lfm"
                     ],
                     "longBattingStyles": [
-                      "right-hand bat"
+                      "left-hand bat"
                     ],
                     "longBowlingStyles": [
-                      "right-arm medium"
+                      "left-arm fast-medium"
                     ],
                     "image": {
-                      "id": 392400,
-                      "objectId": 1463682,
-                      "slug": "bhuvneshwar-kumar-player-portrait",
-                      "url": "/lsci/db/PICTURES/CMS/392400/392400.2.png",
+                      "id": 388421,
+                      "objectId": 1453692,
+                      "slug": "nandre-burger-player-portrait",
+                      "url": "/lsci/db/PICTURES/CMS/388400/388421.5.png",
                       "width": 160,
                       "height": 136,
-                      "caption": "Bhuvneshwar Kumar, player portrait",
-                      "longCaption": "Bhuvneshwar Kumar, player portrait player portrait",
-                      "credit": "ICC/Getty Images",
-                      "photographer": null,
+                      "caption": "Nandre Burger, player portrait",
+                      "longCaption": "Nandre Burger, player portrait",
+                      "credit": "AFP/Getty Images",
+                      "photographer": "Randy Brooks",
                       "peerUrls": null
                     },
-                    "countryTeamId": 6,
+                    "countryTeamId": 3,
                     "playerRoleTypeIds": [
                       4
                     ],
                     "playingRoles": [
                       "bowler"
                     ],
-                    "headshotImage": {
-                      "id": 316658,
-                      "objectId": 1251291,
-                      "slug": "b-kumar-headshot",
-                      "url": "/lsci/db/PICTURES/CMS/316600/316658.png",
-                      "width": 600,
-                      "height": 436,
-                      "caption": "B Kumar headshot",
-                      "longCaption": "B Kumar headshot",
-                      "credit": null,
-                      "photographer": null,
-                      "peerUrls": {
-                        "FILM": null,
-                        "WIDE": null,
-                        "SQUARE": null
-                      }
-                    }
+                    "headshotImage": null
                   },
                   "team": {
-                    "id": 4340,
-                    "objectId": 335970,
-                    "slug": "royal-challengers-bengaluru",
-                    "name": "RCB",
-                    "longName": "Royal Challengers Bengaluru",
-                    "abbreviation": "RCB",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/378000/378049.png",
-                    "unofficialName": "Bangalore"
+                    "id": 4345,
+                    "objectId": 335977,
+                    "slug": "rajasthan-royals",
+                    "name": "RR",
+                    "longName": "Rajasthan Royals",
+                    "abbreviation": "RR",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "unofficialName": "Rajasthan"
                   },
                   "matches": 1,
-                  "wickets": 1,
+                  "wickets": 2,
                   "innings": 1,
-                  "average": 31,
-                  "economy": 7.75,
-                  "conceded": 31,
+                  "average": 13,
+                  "economy": 6.5,
+                  "conceded": 26,
                   "balls": 24,
-                  "strikerate": 24
-                },
-                {
-                  "player": {
-                    "id": 70640,
-                    "objectId": 625383,
-                    "name": "JJ Bumrah",
-                    "longName": "Jasprit Bumrah",
-                    "mobileName": "Bumrah",
-                    "indexName": "Bumrah, JJ",
-                    "battingName": "JJ Bumrah",
-                    "fieldingName": "Bumrah",
-                    "slug": "jasprit-bumrah",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/319900/319940.2.png",
-                    "headshotImageUrl": "/lsci/db/PICTURES/CMS/319900/319940.png",
-                    "dateOfBirth": {
-                      "year": 1993,
-                      "month": 12,
-                      "date": 6
-                    },
-                    "dateOfDeath": null,
-                    "gender": "M",
-                    "battingStyles": [
-                      "rhb"
-                    ],
-                    "bowlingStyles": [
-                      "rf"
-                    ],
-                    "longBattingStyles": [
-                      "right-hand bat"
-                    ],
-                    "longBowlingStyles": [
-                      "right-arm fast"
-                    ],
-                    "image": {
-                      "id": 319940,
-                      "objectId": 1260219,
-                      "slug": "jasprit-bumrah-player-page-headshot-cutout-2021",
-                      "url": "/lsci/db/PICTURES/CMS/319900/319940.2.png",
-                      "width": 160,
-                      "height": 136,
-                      "caption": "Jasprit Bumrah player page headshot cutout, 2021",
-                      "longCaption": "Jasprit Bumrah player page headshot cutout, 2021",
-                      "credit": null,
-                      "photographer": null,
-                      "peerUrls": null
-                    },
-                    "countryTeamId": 6,
-                    "playerRoleTypeIds": [
-                      4
-                    ],
-                    "playingRoles": [
-                      "bowler"
-                    ],
-                    "headshotImage": {
-                      "id": 319940,
-                      "objectId": 1260219,
-                      "slug": "jasprit-bumrah-player-page-headshot-cutout-2021",
-                      "url": "/lsci/db/PICTURES/CMS/319900/319940.png",
-                      "width": 600,
-                      "height": 436,
-                      "caption": "Jasprit Bumrah player page headshot cutout, 2021",
-                      "longCaption": "Jasprit Bumrah player page headshot cutout, 2021",
-                      "credit": null,
-                      "photographer": null,
-                      "peerUrls": {
-                        "FILM": null,
-                        "WIDE": null,
-                        "SQUARE": "/lsci/db/PICTURES/CMS/319900/319940.square.png"
-                      }
-                    }
-                  },
-                  "team": {
-                    "id": 4346,
-                    "objectId": 335978,
-                    "slug": "mumbai-indians",
-                    "name": "MI",
-                    "longName": "Mumbai Indians",
-                    "abbreviation": "MI",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/415000/415033.png",
-                    "unofficialName": "Mumbai"
-                  },
-                  "matches": 1,
-                  "wickets": 0,
-                  "innings": 1,
-                  "average": 0,
-                  "economy": 8.75,
-                  "conceded": 35,
-                  "balls": 24,
-                  "strikerate": 0
+                  "strikerate": 12
                 }
               ]
             }
@@ -29413,8 +29145,8 @@
             "fixtures"
           ],
           "metaTags": {
-            "dateModified": "2026-03-30T07:51:26+00:00",
-            "datePublished": "2026-03-30T07:51:26+00:00"
+            "dateModified": "2026-03-30T16:47:11+00:00",
+            "datePublished": "2026-03-30T16:47:11+00:00"
           },
           "languagesCanonical": [
             {

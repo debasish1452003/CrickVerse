@@ -1,12 +1,10 @@
 import app from "./app.js";
 import dotenv from "dotenv";
 import { PORT } from "./config/env.js";
-import { startMatchPolling } from "./jobs/match.job.js";
 import { connectDB } from "./config/db.js";
 import { startScraper } from "./jobs/scraper.job.js";
 
 dotenv.config();
-// startMatchPolling();
 startScraper();
 connectDB();
 

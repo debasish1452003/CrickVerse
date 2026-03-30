@@ -49,18 +49,22 @@ export const updateScrapedMatches = async () => {
   );
 
   for (const m of matches) {
+    // Ensure we actually have data before updating
+    if (!m.matchId) continue;
+
     await Match.findOneAndUpdate(
-      { matchId: m.teams }, // Note: Using m.teams as matchId might cause issues if team names change slightly, but it works for now.
+      { matchId: m.matchId }, // FIXED: Use actual matchId
       {
-        team1: m.teams,
-        score: m.score,
+        seriesName: m.seriesName,
+        matchTitle: m.matchTitle,
+        status: m.status,
+        team1: m.team1,
+        team2: m.team2,
         lastUpdated: new Date(),
       },
       { upsert: true },
     );
   }
   console.log("✅ Scraped data stored");
-
-  // ADD THIS LINE to pass the data back to startScraper
   return matches;
 };
