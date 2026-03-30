@@ -8,11 +8,14 @@ import { scrapeCricinfoLink } from "../services/scraper.services.js";
 
 export const getMatches = async (req: Request, res: Response) => {
   try {
-    await smartFetchMatches(); // this controls API calls
-    const matches = await Match.find();
-    res.json(matches);
-  } catch (err) {
-    res.status(500).json({ message: "API failed" });
+    // Grab the latest matches from your database
+    const matches = await Match.find({});
+
+    // Send them back to React!
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ message: "Failed to fetch matches" });
   }
 };
 

@@ -4,6 +4,8 @@ import matchRoutes from "./routes/match.routes.js";
 import morgan from "morgan";
 import type { Application, Response, Request } from "express";
 import { errorHandler } from "./middleware/error.middleware.js";
+import { startScraper } from "./jobs/scraper.job.js";
+import { getMatches } from "./controllers/match.controller.js";
 
 const app: Application = express();
 
@@ -11,8 +13,8 @@ const app: Application = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use("/api/matches", matchRoutes);
-app.use(errorHandler)
+app.use("/api/matches", getMatches);
+app.use(errorHandler);
 //#endregion
 
 //#region [HEALTH CHECK]
@@ -33,7 +35,7 @@ app.get("/api/test", (req: Request, res: Response) => {
 
 app.get("/api/hello", (req, res) => {
   res.json({
-    message: "Namaste CrickMedia 🙏"
+    message: "Namaste CrickMedia 🙏",
   });
 });
 

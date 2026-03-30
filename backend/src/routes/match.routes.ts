@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getMatches } from "../controllers/match.controller.js";
+import {
+  getMatches,
+  updateScrapedMatches,
+} from "../controllers/match.controller.js";
+import { startScraper } from "../jobs/scraper.job.js";
 
 const router = Router();
 router.get("/", getMatches);

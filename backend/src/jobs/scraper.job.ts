@@ -13,6 +13,7 @@ export const startScraper = () => {
 
       console.log("✅ Scraping finished");
       console.log("📦 Data:", data); // print fetched data
+      return data;
     } catch (err) {
       console.error("❌ Scraping error:", err);
     }
