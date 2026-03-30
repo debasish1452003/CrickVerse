@@ -41,7 +41,10 @@
     /* =========================
        PERFORMANCE
     ========================== */
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"]
 }
