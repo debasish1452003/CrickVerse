@@ -1,0 +1,113 @@
+import axios from "axios";
+import * as cheerio from "cheerio";
+import * as fs from "fs";
+
+// ============================================================================
+// 1. GENERIC FETCHER
+// Bypasses the WAF and extracts the raw Next.js JSON from ANY Cricinfo URL
+// ============================================================================
+export const fetchCricinfoJSON = async (url: string) => {
+  try {
+    const { data } = await axios.get(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        Connection: "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Cache-Control": "max-age=0",
+      },
+    });
+
+    const $ = cheerio.load(data);
+    const nextDataStr = $("#__NEXT_DATA__").html();
+
+    if (!nextDataStr)
+      throw new Error("No __NEXT_DATA__ found. Blocked by WAF?");
+
+    return JSON.parse(nextDataStr);
+  } catch (error) {
+    console.error(`❌ Failed to fetch JSON for ${url}`, error);
+    return null;
+  }
+};
+
+// ============================================================================
+// 2. SPECIFIC PARSERS
+// Maps the massive JSON tree into clean objects for your MongoDB
+// ============================================================================
+
+// Parser A: For the "Live Scores" homepage
+export const parseLiveScores = (jsonData: any) => {
+  const matchesData =
+    jsonData?.props?.appPageProps?.data?.content?.matches || [];
+
+  return matchesData
+    .filter((m: any) => m.series?.longName === "Indian Premier League")
+    .map((m: any) => {
+      const team1Data = m.teams?.[0];
+      const team2Data = m.teams?.[1];
+
+      return {
+        matchId: m.id,
+        seriesName: m.series?.longName,
+        matchTitle: m.title,
+        status: m.statusText,
+        team1: {
+          name: team1Data?.team?.longName,
+          score: team1Data?.score || "",
+        },
+        team2: {
+          name: team2Data?.team?.longName,
+          score: team2Data?.score || "",
+        },
+      };
+    });
+};
+
+// Parser B: For a Specific Series "Fixtures & Results" page
+export const parseSeriesFixtures = (jsonData: any) => {
+  // 🐛 We don't know the exact path for this page yet!
+  // Dump the JSON to the hard drive so you can inspect it.
+  fs.writeFileSync("fixtures_dump.json", JSON.stringify(jsonData, null, 2));
+  console.log("📁 Saved Series JSON tree to fixtures_dump.json.");
+  console.log(
+    "🔍 Open it and search for 'matches' or a specific team name to find the new array path!",
+  );
+
+  // Return empty array for now until we write the mapping logic
+  return [];
+};
+
+// ============================================================================
+// 3. THE ROUTER / CONTROLLER
+// Decides which parser to use based on the URL provided
+// ============================================================================
+export const scrapeCricinfoLink = async (url: string) => {
+  const rawJson = await fetchCricinfoJSON(url);
+  if (!rawJson) return [];
+
+  // Route 1: Live Scores
+  if (url.includes("/live-cricket-score")) {
+    console.log("📡 Detected Live Scores page. Parsing...");
+    return parseLiveScores(rawJson);
+  }
+
+  // Route 2: Series Fixtures
+  if (url.includes("/match-schedule-fixtures-and-results")) {
+    console.log("📅 Detected Series Fixtures page. Parsing...");
+    return parseSeriesFixtures(rawJson);
+  }
+
+  // Route Fallback: Unknown URL
+  console.log("⚠️ Unknown URL format. Saving dump to unknown_dump.json");
+  fs.writeFileSync("unknown_dump.json", JSON.stringify(rawJson, null, 2));
+  return [];
+};
