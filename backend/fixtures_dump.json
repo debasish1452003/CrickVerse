@@ -2,7 +2,7 @@
   "props": {
     "appNextJsContext": {
       "lang": "en",
-      "country": "np",
+      "country": "in",
       "edition": "in",
       "device": {
         "screen": "DESKTOP_LG",
@@ -10,7 +10,8 @@
         "isTouchDevice": false,
         "isMobile": false,
         "isSSR": true
-      }
+      },
+      "hip": "baa8b48bdbfadd8e0983d69eec9d7647"
     },
     "globalDetails": {
       "followItems": [
@@ -4814,7 +4815,7 @@
             "scribeId": 1527676,
             "slug": "rajasthan-royals-vs-chennai-super-kings-3rd-match",
             "stage": "RUNNING",
-            "state": "LIVE",
+            "state": "POST",
             "internationalClassId": null,
             "generalClassId": 6,
             "subClassId": null,
@@ -4834,26 +4835,21 @@
             "countryLiveStreamUrl": {},
             "highlightsUrl": null,
             "countryHighlightsUrl": {},
-            "status": "Live",
-            "statusText": "RR need 29 runs in 70 balls.",
-            "statusEng": "Live",
+            "status": "RESULT",
+            "statusText": "RR won by 8 wickets (with 47 balls remaining)",
+            "statusEng": "RESULT",
             "internationalNumber": null,
             "generalNumber": null,
-            "winnerTeamId": null,
+            "winnerTeamId": 4345,
             "tossWinnerTeamId": 4345,
             "tossWinnerChoice": 2,
             "tiebreakerTeamId": null,
-            "resultStatus": null,
+            "resultStatus": 1,
             "liveInning": 2,
-            "liveInningPredictions": {
-              "inningNumber": 2,
-              "oversUnique": 8.02,
-              "score": 194,
-              "winProbability": 99.62
-            },
-            "liveOvers": 8.02,
+            "liveInningPredictions": null,
+            "liveOvers": 12.01,
             "liveOversPending": null,
-            "liveBalls": 48,
+            "liveBalls": 72,
             "liveRecentBalls": null,
             "livePlayers": null,
             "ballsPerOver": 6,
@@ -4958,14 +4954,14 @@
                 "inningNumbers": [
                   1
                 ],
-                "points": null,
+                "points": 0,
                 "sidePlayers": null,
                 "sideBatsmen": null,
                 "sideFielders": null,
                 "captain": null,
                 "teamOdds": {
-                  "odds": "OFF",
-                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104198~OFF&bet=1"
+                  "odds": "5/4",
+                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175365~5/4&bet=1"
                 }
               },
               {
@@ -5004,20 +5000,20 @@
                   }
                 },
                 "isHome": true,
-                "isLive": true,
-                "score": "99/1",
-                "scoreInfo": "8.2/20 ov, T:128",
+                "isLive": false,
+                "score": "128/2",
+                "scoreInfo": "12.1/20 ov, T:128",
                 "inningNumbers": [
                   2
                 ],
-                "points": null,
+                "points": 2,
                 "sidePlayers": null,
                 "sideBatsmen": null,
                 "sideFielders": null,
                 "captain": null,
                 "teamOdds": {
-                  "odds": "OFF",
-                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104189~OFF&bet=1"
+                  "odds": "23/40",
+                  "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=191358092-847175359~23/40&bet=1"
                 }
               }
             ],
@@ -5035,7 +5031,7 @@
             },
             "drawOdds": null,
             "isSuperOver": false,
-            "isScheduledInningsComplete": false,
+            "isScheduledInningsComplete": true,
             "insightsEnabled": false,
             "hasMatchPlayers": true,
             "hasCommentary": true,
@@ -5043,7 +5039,7 @@
             "hasStandings": true,
             "hasSuperStats": true,
             "hasGameboard": true,
-            "hasFanRatings": false,
+            "hasFanRatings": true,
             "hasGalleries": false,
             "hasImages": true,
             "hasVideos": true,
@@ -5051,8 +5047,8 @@
             "languages": [
               "hi"
             ],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
-            "scorecardSource": "feedback",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
+            "scorecardSource": "emma",
             "ballByBallSource": "feedback"
           },
           {
@@ -5293,7 +5289,7 @@
             "languages": [
               "hi"
             ],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
             "scorecardSource": null,
             "ballByBallSource": null
           },
@@ -5521,7 +5517,7 @@
             "hasVideos": false,
             "hasStories": false,
             "languages": [],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
             "scorecardSource": null,
             "ballByBallSource": null
           },
@@ -5761,7 +5757,7 @@
             "hasVideos": false,
             "hasStories": false,
             "languages": [],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
             "scorecardSource": null,
             "ballByBallSource": null
           },
@@ -6005,7 +6001,7 @@
             "languages": [
               "hi"
             ],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.175Z",
             "scorecardSource": "emma",
             "ballByBallSource": "feedback"
           },
@@ -6237,7 +6233,7 @@
             "hasVideos": false,
             "hasStories": false,
             "languages": [],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
             "scorecardSource": "emma",
             "ballByBallSource": ""
           },
@@ -6469,7 +6465,7 @@
             "hasVideos": false,
             "hasStories": false,
             "languages": [],
-            "generatedAt": "2026-03-30T16:45:42.140Z",
+            "generatedAt": "2026-03-30T17:23:29.176Z",
             "scorecardSource": "emma",
             "ballByBallSource": ""
           },
@@ -6706,7 +6702,7 @@
             "hasVideos": true,
             "hasStories": true,
             "languages": [],
-            "generatedAt": "2026-03-30T16:45:42.139Z",
+            "generatedAt": "2026-03-30T17:23:29.175Z",
             "scorecardSource": "emma",
             "ballByBallSource": ""
           }
@@ -7270,7 +7266,7 @@
               "subClassId": null
             }
           ],
-          "totalVideos": 79,
+          "totalVideos": 80,
           "totalSquads": 10,
           "gamePlayWatch": false,
           "fanRatings": {
@@ -7300,7 +7296,7 @@
           },
           "totalTeams": 10,
           "totalGalleries": 0,
-          "totalImages": 99
+          "totalImages": 103
         },
         "content": {
           "matches": [
@@ -7377,7 +7373,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -7552,7 +7548,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:34.527Z",
               "scorecardSource": "emma",
               "ballByBallSource": "feedback"
             },
@@ -7629,7 +7625,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -7804,7 +7800,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:35.758Z",
               "scorecardSource": "emma",
               "ballByBallSource": "feedback"
             },
@@ -7836,7 +7832,7 @@
               "highlightsUrl": null,
               "countryHighlightsUrl": {},
               "status": "Live",
-              "statusText": "RR need 69 runs in 88 balls.",
+              "statusText": "RR need 19 runs in 55 balls.",
               "statusEng": "Live",
               "internationalNumber": null,
               "generalNumber": null,
@@ -7848,13 +7844,13 @@
               "liveInning": 2,
               "liveInningPredictions": {
                 "inningNumber": 2,
-                "oversUnique": 5.02,
+                "oversUnique": 10.05,
                 "score": 179,
-                "winProbability": 97.48
+                "winProbability": 99.56
               },
-              "liveOvers": 5.02,
+              "liveOvers": 10.05,
               "liveOversPending": null,
-              "liveBalls": 30,
+              "liveBalls": 61,
               "liveRecentBalls": null,
               "livePlayers": null,
               "ballsPerOver": 6,
@@ -7886,7 +7882,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -7965,8 +7961,8 @@
                   "sideFielders": null,
                   "captain": null,
                   "teamOdds": {
-                    "odds": "100/1",
-                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104198~100/1&bet=1"
+                    "odds": "OFF",
+                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104198~OFF&bet=1"
                   }
                 },
                 {
@@ -8006,8 +8002,8 @@
                   },
                   "isHome": true,
                   "isLive": true,
-                  "score": "59/0",
-                  "scoreInfo": "5.2/20 ov, T:128",
+                  "score": "109/2",
+                  "scoreInfo": "10.5/20 ov, T:128",
                   "inningNumbers": [
                     2
                   ],
@@ -8017,8 +8013,8 @@
                   "sideFielders": null,
                   "captain": null,
                   "teamOdds": {
-                    "odds": "1/1000",
-                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104189~1/1000&bet=1"
+                    "odds": "OFF",
+                    "url": "https://www.bet365.com/dl/sportsbookredirect?affiliate=365_307576&bs=192128988-949104189~OFF&bet=1"
                   }
                 }
               ],
@@ -8052,7 +8048,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:35.154Z",
               "scorecardSource": "feedback",
               "ballByBallSource": "feedback"
             },
@@ -8129,7 +8125,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8294,7 +8290,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:35.154Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -8371,7 +8367,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8524,7 +8520,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:34.527Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -8601,7 +8597,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -8766,7 +8762,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:30:45.563Z",
+              "generatedAt": "2026-03-30T16:59:16.870Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -8843,7 +8839,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9008,7 +9004,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:34.527Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9085,7 +9081,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9250,7 +9246,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:30:32.411Z",
+              "generatedAt": "2026-03-30T16:58:58.329Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9327,7 +9323,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9492,7 +9488,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:31:00.372Z",
+              "generatedAt": "2026-03-30T16:59:34.527Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9569,7 +9565,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9734,7 +9730,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:30:21.223Z",
+              "generatedAt": "2026-03-30T16:56:08.144Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -9811,7 +9807,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -9976,7 +9972,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:30:45.563Z",
+              "generatedAt": "2026-03-30T16:59:16.870Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10053,7 +10049,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10218,7 +10214,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:30:07.431Z",
+              "generatedAt": "2026-03-30T16:55:33.123Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10295,7 +10291,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10448,7 +10444,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:53.251Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10525,7 +10521,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10690,7 +10686,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:13.619Z",
+              "generatedAt": "2026-03-30T16:56:53.251Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -10767,7 +10763,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -10932,7 +10928,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:53.251Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11009,7 +11005,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11162,7 +11158,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11239,7 +11235,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11404,7 +11400,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11481,7 +11477,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11646,7 +11642,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11723,7 +11719,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -11876,7 +11872,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -11953,7 +11949,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12118,7 +12114,7 @@
               "languages": [
                 "hi"
               ],
-              "generatedAt": "2026-03-30T16:26:06.692Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12195,7 +12191,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12358,7 +12354,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12435,7 +12431,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12598,7 +12594,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:53.252Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12675,7 +12671,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -12838,7 +12834,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:06.717Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -12915,7 +12911,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13078,7 +13074,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:30.109Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13155,7 +13151,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13318,7 +13314,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:40.077Z",
+              "generatedAt": "2026-03-30T16:57:11.894Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13395,7 +13391,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13558,7 +13554,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:15.631Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13635,7 +13631,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -13798,7 +13794,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -13875,7 +13871,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14038,7 +14034,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14115,7 +14111,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14278,7 +14274,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14355,7 +14351,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14518,7 +14514,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:47.925Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14595,7 +14591,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14758,7 +14754,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:27:37.038Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -14835,7 +14831,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -14986,7 +14982,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:15.631Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15063,7 +15059,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15226,7 +15222,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:12.572Z",
+              "generatedAt": "2026-03-30T16:59:15.380Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15303,7 +15299,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15466,7 +15462,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:15.631Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15543,7 +15539,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15706,7 +15702,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -15783,7 +15779,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -15946,7 +15942,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16023,7 +16019,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16186,7 +16182,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:40.077Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16263,7 +16259,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16414,7 +16410,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:27:37.038Z",
+              "generatedAt": "2026-03-30T16:59:15.380Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16491,7 +16487,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16654,7 +16650,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16731,7 +16727,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -16894,7 +16890,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:57:15.631Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -16971,7 +16967,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17134,7 +17130,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:27:37.038Z",
+              "generatedAt": "2026-03-30T16:59:35.795Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17211,7 +17207,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17374,7 +17370,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17451,7 +17447,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17614,7 +17610,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17691,7 +17687,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -17854,7 +17850,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:34.532Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -17931,7 +17927,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18094,7 +18090,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:29:20.948Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18171,7 +18167,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18334,7 +18330,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18411,7 +18407,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18574,7 +18570,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:27:04.221Z",
+              "generatedAt": "2026-03-30T16:57:47.925Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18651,7 +18647,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -18814,7 +18810,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:34.532Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -18891,7 +18887,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19054,7 +19050,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:56:59.772Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19131,7 +19127,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19282,7 +19278,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19359,7 +19355,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19522,7 +19518,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:29:41.275Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19599,7 +19595,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -19762,7 +19758,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -19839,7 +19835,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20002,7 +19998,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:34.532Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20079,7 +20075,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20242,7 +20238,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:34.532Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20319,7 +20315,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20482,7 +20478,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20559,7 +20555,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20722,7 +20718,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:29:09.305Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -20799,7 +20795,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -20962,7 +20958,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:29:57.334Z",
+              "generatedAt": "2026-03-30T16:56:02.845Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21039,7 +21035,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21202,7 +21198,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21279,7 +21275,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21430,7 +21426,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:29:23.809Z",
+              "generatedAt": "2026-03-30T16:55:15.040Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21507,7 +21503,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21670,7 +21666,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:30:07.432Z",
+              "generatedAt": "2026-03-30T16:56:49.566Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21747,7 +21743,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -21910,7 +21906,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -21987,7 +21983,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22150,7 +22146,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22227,7 +22223,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22390,7 +22386,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:30:07.432Z",
+              "generatedAt": "2026-03-30T16:56:05.395Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22467,7 +22463,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22630,7 +22626,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.168Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22707,7 +22703,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -22870,7 +22866,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.169Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -22947,7 +22943,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23110,7 +23106,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.169Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23187,7 +23183,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23350,7 +23346,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:28:34.532Z",
+              "generatedAt": "2026-03-30T16:54:54.243Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23427,7 +23423,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23578,7 +23574,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.169Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23655,7 +23651,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -23818,7 +23814,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.169Z",
+              "generatedAt": "2026-03-30T16:58:50.961Z",
               "scorecardSource": null,
               "ballByBallSource": null
             },
@@ -23895,7 +23891,7 @@
                     "subClassId": null
                   }
                 ],
-                "totalVideos": 79,
+                "totalVideos": 80,
                 "totalSquads": 10,
                 "gamePlayWatch": false
               },
@@ -24058,7 +24054,7 @@
               "hasVideos": false,
               "hasStories": false,
               "languages": [],
-              "generatedAt": "2026-03-30T16:26:21.169Z",
+              "generatedAt": "2026-03-30T16:58:04.661Z",
               "scorecardSource": null,
               "ballByBallSource": null
             }
@@ -25062,7 +25058,7 @@
                   "subClassId": null
                 }
               ],
-              "totalVideos": 79,
+              "totalVideos": 80,
               "totalSquads": 10,
               "gamePlayWatch": false
             },
@@ -27692,6 +27688,77 @@
               "statsByStrikerate": [
                 {
                   "player": {
+                    "id": 116341,
+                    "objectId": 1408688,
+                    "name": "V Sooryavanshi",
+                    "longName": "Vaibhav Sooryavanshi",
+                    "mobileName": "Sooryavanshi",
+                    "indexName": "Sooryavanshi, V",
+                    "battingName": "V Sooryavanshi",
+                    "fieldingName": "Sooryavanshi",
+                    "slug": "vaibhav-sooryavanshi",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/412600/412631.2.png",
+                    "headshotImageUrl": null,
+                    "dateOfBirth": {
+                      "year": 2011,
+                      "month": 3,
+                      "date": 27
+                    },
+                    "dateOfDeath": null,
+                    "gender": "M",
+                    "battingStyles": [
+                      "lhb"
+                    ],
+                    "bowlingStyles": [
+                      "sla"
+                    ],
+                    "longBattingStyles": [
+                      "left-hand bat"
+                    ],
+                    "longBowlingStyles": [
+                      "slow left-arm orthodox"
+                    ],
+                    "image": {
+                      "id": 412631,
+                      "objectId": 1521562,
+                      "slug": "vaibhav-sooryavanshi-player-portrait",
+                      "url": "/lsci/db/PICTURES/CMS/412600/412631.2.png",
+                      "width": 160,
+                      "height": 136,
+                      "caption": "Vaibhav Sooryavanshi, player portrait",
+                      "longCaption": "Vaibhav Sooryavanshi, player portrait",
+                      "credit": "ICC/Getty Images",
+                      "photographer": null,
+                      "peerUrls": null
+                    },
+                    "countryTeamId": 6,
+                    "playerRoleTypeIds": [
+                      2
+                    ],
+                    "playingRoles": [
+                      "top-order batter"
+                    ],
+                    "headshotImage": null
+                  },
+                  "team": {
+                    "id": 4345,
+                    "objectId": 335977,
+                    "slug": "rajasthan-royals",
+                    "name": "RR",
+                    "longName": "Rajasthan Royals",
+                    "abbreviation": "RR",
+                    "imageUrl": "/lsci/db/PICTURES/CMS/400400/400406.png",
+                    "unofficialName": "Rajasthan"
+                  },
+                  "matches": 1,
+                  "runs": 52,
+                  "innings": 1,
+                  "average": 52,
+                  "notouts": 0,
+                  "strikerate": 305.88
+                },
+                {
+                  "player": {
                     "id": 80645,
                     "objectId": 823703,
                     "name": "RM Patidar",
@@ -27831,93 +27898,6 @@
                   "average": 43,
                   "notouts": 0,
                   "strikerate": 238.88
-                },
-                {
-                  "player": {
-                    "id": 100878,
-                    "objectId": 1119026,
-                    "name": "D Padikkal",
-                    "longName": "Devdutt Padikkal",
-                    "mobileName": "Padikkal",
-                    "indexName": "Padikkal, D",
-                    "battingName": "D Padikkal",
-                    "fieldingName": "Padikkal",
-                    "slug": "devdutt-padikkal",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/322200/322229.1.png",
-                    "headshotImageUrl": "/lsci/db/PICTURES/CMS/322200/322229.png",
-                    "dateOfBirth": {
-                      "year": 2000,
-                      "month": 7,
-                      "date": 7
-                    },
-                    "dateOfDeath": null,
-                    "gender": "M",
-                    "battingStyles": [
-                      "lhb"
-                    ],
-                    "bowlingStyles": [
-                      "ob"
-                    ],
-                    "longBattingStyles": [
-                      "left-hand bat"
-                    ],
-                    "longBowlingStyles": [
-                      "right-arm offbreak"
-                    ],
-                    "image": {
-                      "id": 322229,
-                      "objectId": 1264713,
-                      "slug": "devdutt-padikkal-player-page-headshot-cutout-2021",
-                      "url": "/lsci/db/PICTURES/CMS/322200/322229.1.png",
-                      "width": 160,
-                      "height": 136,
-                      "caption": "Devdutt Padikkal player page headshot cutout, 2021",
-                      "longCaption": "Devdutt Padikkal player page headshot cutout, 2021",
-                      "credit": null,
-                      "photographer": null,
-                      "peerUrls": null
-                    },
-                    "countryTeamId": 6,
-                    "playerRoleTypeIds": [
-                      2
-                    ],
-                    "playingRoles": [
-                      "top-order batter"
-                    ],
-                    "headshotImage": {
-                      "id": 322229,
-                      "objectId": 1264713,
-                      "slug": "devdutt-padikkal-player-page-headshot-cutout-2021",
-                      "url": "/lsci/db/PICTURES/CMS/322200/322229.png",
-                      "width": 600,
-                      "height": 436,
-                      "caption": "Devdutt Padikkal player page headshot cutout, 2021",
-                      "longCaption": "Devdutt Padikkal player page headshot cutout, 2021",
-                      "credit": null,
-                      "photographer": null,
-                      "peerUrls": {
-                        "FILM": null,
-                        "WIDE": null,
-                        "SQUARE": "/lsci/db/PICTURES/CMS/322200/322229.square.png"
-                      }
-                    }
-                  },
-                  "team": {
-                    "id": 4340,
-                    "objectId": 335970,
-                    "slug": "royal-challengers-bengaluru",
-                    "name": "RCB",
-                    "longName": "Royal Challengers Bengaluru",
-                    "abbreviation": "RCB",
-                    "imageUrl": "/lsci/db/PICTURES/CMS/378000/378049.png",
-                    "unofficialName": "Bangalore"
-                  },
-                  "matches": 1,
-                  "runs": 61,
-                  "innings": 1,
-                  "average": 61,
-                  "notouts": 0,
-                  "strikerate": 234.61
                 }
               ]
             }
@@ -29145,8 +29125,8 @@
             "fixtures"
           ],
           "metaTags": {
-            "dateModified": "2026-03-30T16:47:11+00:00",
-            "datePublished": "2026-03-30T16:47:11+00:00"
+            "dateModified": "2026-03-30T17:24:59+00:00",
+            "datePublished": "2026-03-30T17:24:59+00:00"
           },
           "languagesCanonical": [
             {

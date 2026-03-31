@@ -1,8 +1,4 @@
 import type { Request, Response } from "express";
-import {
-  fetchMatches,
-  smartFetchMatches,
-} from "../services/cricket.service.js";
 import { Match } from "../models/match.model.js";
 import { scrapeCricinfoLink } from "../services/scraper.services.js";
 
@@ -19,52 +15,75 @@ export const getMatches = async (req: Request, res: Response) => {
   }
 };
 
-export const updateMatches = async () => {
-  const data = await fetchMatches();
-
-  for (const match of data.matches) {
-    await Match.findOneAndUpdate(
-      { matchId: match.id },
-      {
-        team1: match.team1,
-        team2: match.team2,
-        score: match.score,
-        status: match.status,
-        lastUpdated: new Date(),
-      },
-      {
-        upsert: true,
-      },
-    );
-  }
-  console.log("✅ Matches updated in DB");
-};
-
 export const updateScrapedMatches = async () => {
-  const matches = await scrapeCricinfoLink(
-    "https://www.espncricinfo.com/live-cricket-score",
-  );
   const iplData = await scrapeCricinfoLink(
     "https://www.espncricinfo.com/series/ipl-2026-1510719/match-schedule-fixtures-and-results",
   );
 
-  for (const m of matches) {
-    // Ensure we actually have data before updating
+  for (const m of iplData) {
     if (!m.matchId) continue;
 
     await Match.findOneAndUpdate(
-      { matchId: m.matchId }, // FIXED: Use actual matchId
+      { matchId: Number(m.matchId) },
+
       {
-        seriesName: m.seriesName,
-        matchTitle: m.matchTitle,
-        status: m.status,
-        team1: m.team1,
-        team2: m.team2,
+        matchId: Number(m.matchId),
+        objectId: m.objectId,
+        slug: m.slug,
+
+        series: {
+          id: m.series?.id,
+          objectId: m.series?.objectId,
+          slug: m.series?.slug,
+          name: m.series?.name,
+        },
+        seriesId: m.series?.id,
+        season: m.season,
+        title: m.title,
+        format: m.format,
+
+        startTime: m.startTime,
+        dayNight: m.dayNight,
+
+        venue: {
+          name: m.venue?.name,
+          city: m.venue?.city,
+          country: m.venue?.country,
+        },
+
+        teams: [
+          {
+            teamId: m.teams?.[0]?.id,
+            name: m.teams?.[0]?.name,
+            score: m.teams?.[0]?.score,
+          },
+          {
+            teamId: m.teams?.[1]?.id,
+            name: m.teams?.[1]?.name,
+            score: m.teams?.[1]?.score,
+          },
+        ],
+
+        result: {
+          winnerTeamId: m.result?.winner,
+          tossWinnerTeamId: m.result?.tossWinner,
+          tossDecision: m.result?.tossDecision,
+          status: m.result?.status,
+        },
+
+        flags: {
+          hasScorecard: m.hasScorecard,
+          hasCommentary: m.hasCommentary,
+        },
+
         lastUpdated: new Date(),
       },
-      { upsert: true },
+
+      { upsert: true, new: true },
     );
   }
-  console.log("✅ Scraped data stored");
-  return matches;
+
+  console.log("✅ Matches stored in DB");
+
+  return iplData;
 };

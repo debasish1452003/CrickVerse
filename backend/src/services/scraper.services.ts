@@ -39,53 +39,91 @@ export const fetchCricinfoJSON = async (url: string) => {
   }
 };
 
-// ============================================================================
-// 2. SPECIFIC PARSERS
-// Maps the massive JSON tree into clean objects for your MongoDB
-// ============================================================================
-
-// Parser A: For the "Live Scores" homepage
-export const parseLiveScores = (jsonData: any) => {
-  const matchesData =
-    jsonData?.props?.appPageProps?.data?.content?.matches || [];
-
-  return (
-    matchesData
-      // .filter((m: any) => m.series?.longName === "Indian Premier League")
-      .map((m: any) => {
-        const team1Data = m.teams?.[0];
-        const team2Data = m.teams?.[1];
-
-        return {
-          matchId: m.id,
-          seriesName: m.series?.longName,
-          matchTitle: m.title,
-          status: m.statusText,
-          team1: {
-            name: team1Data?.team?.longName,
-            score: team1Data?.score || "",
-          },
-          team2: {
-            name: team2Data?.team?.longName,
-            score: team2Data?.score || "",
-          },
-        };
-      })
-  );
-};
-
 // Parser B: For a Specific Series "Fixtures & Results" page
+// export const parseSeriesFixtures = (jsonData: any) => {
+//   // 🐛 We don't know the exact path for this page yet!
+//   // Dump the JSON to the hard drive so you can inspect it.
+//   fs.writeFileSync("fixtures_dump.json", JSON.stringify(jsonData, null, 2));
+//   console.log("📁 Saved Series JSON tree to fixtures_dump.json.");
+//   console.log(
+//     "🔍 Open it and search for 'matches' or a specific team name to find the new array path!",
+//   );
+
+//   // Return empty array for now until we write the mapping logic
+//   return jsonData;
+// };
+
 export const parseSeriesFixtures = (jsonData: any) => {
-  // 🐛 We don't know the exact path for this page yet!
-  // Dump the JSON to the hard drive so you can inspect it.
-  fs.writeFileSync("fixtures_dump.json", JSON.stringify(jsonData, null, 2));
-  console.log("📁 Saved Series JSON tree to fixtures_dump.json.");
+  // 1. Find the array (with a fallback path just in case Next.js changes its mind)
+  const matchesData: any[] =
+    jsonData?.props?.appPageProps?.data?.content?.matches ||
+    jsonData?.props?.pageProps?.appPageProps?.data?.content?.matches ||
+    [];
+
   console.log(
-    "🔍 Open it and search for 'matches' or a specific team name to find the new array path!",
+    `📅 Extracted ${matchesData.length} matches from the Fixtures page.`,
   );
 
-  // Return empty array for now until we write the mapping logic
-  return [];
+  return matchesData.map((m) => {
+    const [t1, t2] = m.teams || [];
+
+    return {
+      // 🔹 Match Info
+      matchId: m.objectId,
+      objectId: m.objectId,
+      slug: m.slug,
+
+      title: m.title,
+      format: m.format,
+      season: m.season,
+
+      // 🔹 Series
+      series: {
+        id: m.series?.id,
+        objectId: m.series?.objectId,
+        slug: m.series?.slug,
+        name: m.series?.name,
+      },
+
+      // 🔹 Time
+      startTime: m.startTime,
+      dayNight: m.floodlit,
+
+      // 🔹 Venue
+      venue: {
+        name: m.ground?.name,
+        city: m.ground?.town?.name,
+        country: m.ground?.country?.name,
+        capacity: m.ground?.capacity,
+      },
+
+      // 🔹 Teams
+      teams: [
+        {
+          id: t1?.team?.objectId,
+          name: t1?.team?.longName,
+          score: t1?.score,
+        },
+        {
+          id: t2?.team?.objectId,
+          name: t2?.team?.longName,
+          score: t2?.score,
+        },
+      ],
+
+      // 🔹 Result
+      result: {
+        winner: m.winnerTeamId,
+        tossWinner: m.tossWinnerTeamId,
+        tossDecision: m.tossWinnerChoice,
+        status: m.statusText,
+      },
+
+      // 🔹 Flags
+      hasScorecard: m.hasScorecard,
+      hasCommentary: m.hasCommentary,
+    };
+  });
 };
 
 // ============================================================================
@@ -96,13 +134,7 @@ export const scrapeCricinfoLink = async (url: string) => {
   const rawJson = await fetchCricinfoJSON(url);
   if (!rawJson) return [];
 
-  // Route 1: Live Scores
-  if (url.includes("/live-cricket-score")) {
-    console.log("📡 Detected Live Scores page. Parsing...");
-    return parseLiveScores(rawJson);
-  }
-
-  // Route 2: Series Fixtures
+  // Route 1: Series Fixtures
   if (url.includes("/match-schedule-fixtures-and-results")) {
     console.log("📅 Detected Series Fixtures page. Parsing...");
     return parseSeriesFixtures(rawJson);

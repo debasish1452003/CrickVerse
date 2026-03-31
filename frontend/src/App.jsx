@@ -9,10 +9,9 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Polling every 10 seconds to keep scores live
     const fetchMatches = () => {
       axios
-        .get("/api/matches") // Ensure URL is correct
+        .get("/api/matches")
         .then((res) => {
           setMatches(res.data);
           setLoading(false);
