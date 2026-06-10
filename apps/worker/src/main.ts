@@ -1,8 +1,18 @@
+import { prisma } from "@crickverse/db";
 import { createLogger } from "./logger";
+import { startScheduler } from "./scheduler";
 
-// The long-running entry point. The cron scheduler (live + backfill ticks)
-// lands in Phase 7; for now this documents how to run a one-shot crawl.
+// Long-running entry point: start the cron scheduler and stay alive.
 const logger = createLogger("main");
+logger.info("CrickVerse worker starting…");
 
-logger.info("CrickVerse worker is up. Scheduler arrives in Phase 7.");
-logger.info("One-shot crawl: pnpm --filter @crickverse/worker run seed <slug> <objectId> [LIVE|HISTORICAL]");
+startScheduler();
+
+async function shutdown(signal: string): Promise<void> {
+  logger.info(`received ${signal}, shutting down`);
+  await prisma.$disconnect();
+  process.exit(0);
+}
+
+process.on("SIGINT", () => void shutdown("SIGINT"));
+process.on("SIGTERM", () => void shutdown("SIGTERM"));
