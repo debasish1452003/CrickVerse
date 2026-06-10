@@ -8,7 +8,7 @@ import {
 } from "@crickverse/types";
 import { CricinfoUrls } from "../cricinfo/url-builder";
 import type { SourceDescriptor } from "../types";
-import { numOr, numOrNull, strOrNull } from "../util/coerce";
+import { asArray, boolOrNull, numOr, numOrNull, strOrNull } from "../util/coerce";
 
 export interface ScorecardParams extends Record<string, string | number> {
   seriesSlug: string;
@@ -17,24 +17,43 @@ export interface ScorecardParams extends Record<string, string | number> {
   matchId: string | number;
 }
 
+/** ESPNCricinfo's dismissalText is an object { short, long, commentary, ... }. */
+function dismissalString(d: unknown): string | null {
+  if (d == null) return null;
+  if (typeof d === "string") return strOrNull(d);
+  if (typeof d === "object") {
+    const o = d as Record<string, unknown>;
+    return strOrNull(o.long ?? o.short ?? o.commentary);
+  }
+  return null;
+}
+
 function mapBatting(b: any): ParsedBattingLine {
+  const player = b?.player ?? b?.batsman;
   return {
-    sourcePlayerId: numOrNull(b?.batsman?.objectId ?? b?.player?.objectId),
-    name: strOrNull(b?.batsman?.longName ?? b?.player?.longName ?? b?.name),
+    sourcePlayerId: numOrNull(player?.objectId),
+    name: strOrNull(player?.longName ?? player?.name),
     runs: numOr(b?.runs, 0),
     balls: numOr(b?.balls, 0),
     fours: numOrNull(b?.fours),
     sixes: numOrNull(b?.sixes),
+    strikeRate: numOrNull(b?.strikerate ?? b?.strikeRate),
+    isOut: boolOrNull(b?.isOut),
+    dismissalText: dismissalString(b?.dismissalText),
   };
 }
 
 function mapBowling(bw: any): ParsedBowlingLine {
+  const player = bw?.player ?? bw?.bowler;
   return {
-    sourcePlayerId: numOrNull(bw?.bowler?.objectId ?? bw?.player?.objectId),
-    name: strOrNull(bw?.bowler?.longName ?? bw?.player?.longName ?? bw?.name),
+    sourcePlayerId: numOrNull(player?.objectId),
+    name: strOrNull(player?.longName ?? player?.name),
     wickets: numOr(bw?.wickets, 0),
     runs: numOr(bw?.conceded ?? bw?.runs, 0),
     overs: strOrNull(bw?.overs),
+    balls: numOrNull(bw?.balls),
+    maidens: numOrNull(bw?.maidens),
+    economy: numOrNull(bw?.economy),
   };
 }
 
@@ -61,8 +80,7 @@ export const scorecardDescriptor: SourceDescriptor<ScorecardParams, ParsedScorec
 
   parse(content, params) {
     const c = content as any;
-    const rawInnings: any[] =
-      c?.scorecard?.innings ?? c?.innings ?? c?.match?.innings ?? [];
+    const rawInnings = asArray<any>(c?.scorecard?.innings ?? c?.innings ?? c?.match?.innings);
 
     const innings: ParsedInnings[] = rawInnings.map((inn: any, i: number) => ({
       inningsNo: numOr(inn?.inningNumber ?? inn?.inningsNumber, i + 1),
@@ -70,8 +88,8 @@ export const scorecardDescriptor: SourceDescriptor<ScorecardParams, ParsedScorec
       runs: numOrNull(inn?.runs),
       wickets: numOrNull(inn?.wickets),
       overs: strOrNull(inn?.overs),
-      batting: (Array.isArray(inn?.batsmen) ? inn.batsmen : inn?.batting ?? []).map(mapBatting),
-      bowling: (Array.isArray(inn?.bowlers) ? inn.bowlers : inn?.bowling ?? []).map(mapBowling),
+      batting: asArray(inn?.inningBatsmen ?? inn?.batsmen ?? inn?.batting).map(mapBatting),
+      bowling: asArray(inn?.inningBowlers ?? inn?.bowlers ?? inn?.bowling).map(mapBowling),
     }));
 
     return { sourceMatchId: Number(params.matchId), innings };

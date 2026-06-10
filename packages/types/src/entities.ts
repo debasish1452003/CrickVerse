@@ -90,6 +90,9 @@ export const ParsedBattingLineSchema = z.object({
   balls: z.number().int().nonnegative().default(0),
   fours: z.number().int().nonnegative().nullable().default(null),
   sixes: z.number().int().nonnegative().nullable().default(null),
+  strikeRate: z.number().nonnegative().nullable().default(null),
+  isOut: z.boolean().nullable().default(null),
+  dismissalText: Nullable(z.string()),
 });
 export type ParsedBattingLine = z.infer<typeof ParsedBattingLineSchema>;
 
@@ -99,6 +102,9 @@ export const ParsedBowlingLineSchema = z.object({
   wickets: z.number().int().nonnegative().default(0),
   runs: z.number().int().nonnegative().default(0),
   overs: Nullable(z.string()),
+  balls: z.number().int().nonnegative().nullable().default(null),
+  maidens: z.number().int().nonnegative().nullable().default(null),
+  economy: z.number().nonnegative().nullable().default(null),
 });
 export type ParsedBowlingLine = z.infer<typeof ParsedBowlingLineSchema>;
 

@@ -1,4 +1,4 @@
-import { MatchFormat, MatchState } from "@prisma/client";
+import { DismissalKind, MatchFormat, MatchState } from "@prisma/client";
 
 /** Map ESPNCricinfo's format token to our enum. */
 export function toMatchFormat(raw: string | null | undefined): MatchFormat {
@@ -54,4 +54,25 @@ export function parseDate(iso: string | null | undefined): Date | undefined {
 export function toUtcDateOnly(d: Date | undefined): Date | undefined {
   if (!d) return undefined;
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+}
+
+/** Derive a dismissal kind from ESPNCricinfo's dismissalText (e.g. "c Smith b Jones"). */
+export function toDismissalKind(
+  text: string | null | undefined,
+  isOut: boolean | null | undefined,
+): DismissalKind {
+  if (isOut === false) return DismissalKind.NOT_OUT;
+  if (!text) return isOut ? DismissalKind.OTHER : DismissalKind.NOT_OUT;
+  const t = text.toLowerCase().trim();
+  if (t.includes("not out")) return DismissalKind.NOT_OUT;
+  if (t.includes("run out")) return DismissalKind.RUN_OUT;
+  if (t.startsWith("st ") || t.includes("stumped")) return DismissalKind.STUMPED;
+  if (t.startsWith("lbw")) return DismissalKind.LBW;
+  if (t.includes("c & b") || t.includes("c and b") || t.includes("caught and bowled"))
+    return DismissalKind.CAUGHT_AND_BOWLED;
+  if (t.startsWith("c ") || t.includes("caught")) return DismissalKind.CAUGHT;
+  if (t.includes("hit wicket")) return DismissalKind.HIT_WICKET;
+  if (t.startsWith("b ") || t.includes("bowled")) return DismissalKind.BOWLED;
+  if (t.includes("retired")) return DismissalKind.RETIRED_OUT;
+  return DismissalKind.OTHER;
 }

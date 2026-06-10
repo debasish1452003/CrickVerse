@@ -1,6 +1,7 @@
 import type { ParsedScorecard } from "@crickverse/types";
 import type { Source } from "@prisma/client";
 import { prisma } from "../client";
+import { toDismissalKind } from "../mappers/match.mapper";
 import { resolvePlayer, resolveTeam } from "../resolve/resolve";
 
 /**
@@ -57,44 +58,38 @@ export async function upsertScorecard(
       pos += 1;
       const playerId = await resolvePlayer(prisma, source, b.sourcePlayerId, b.name);
       if (!playerId) continue;
+      const battingData = {
+        battingPos: pos,
+        runs: b.runs,
+        balls: b.balls,
+        fours: b.fours ?? 0,
+        sixes: b.sixes ?? 0,
+        strikeRate: b.strikeRate ?? undefined,
+        dismissal: toDismissalKind(b.dismissalText, b.isOut),
+        dismissalText: b.dismissalText ?? undefined,
+      };
       await prisma.battingPerformance.upsert({
         where: { inningsId_playerId: { inningsId: innings.id, playerId } },
-        create: {
-          inningsId: innings.id,
-          playerId,
-          battingPos: pos,
-          runs: b.runs,
-          balls: b.balls,
-          fours: b.fours ?? 0,
-          sixes: b.sixes ?? 0,
-        },
-        update: {
-          battingPos: pos,
-          runs: b.runs,
-          balls: b.balls,
-          fours: b.fours ?? 0,
-          sixes: b.sixes ?? 0,
-        },
+        create: { inningsId: innings.id, playerId, ...battingData },
+        update: battingData,
       });
     }
 
     for (const bw of inn.bowling) {
       const playerId = await resolvePlayer(prisma, source, bw.sourcePlayerId, bw.name);
       if (!playerId) continue;
+      const bowlingData = {
+        oversText: bw.overs ?? undefined,
+        balls: bw.balls ?? undefined,
+        maidens: bw.maidens ?? undefined,
+        runs: bw.runs,
+        wickets: bw.wickets,
+        economy: bw.economy ?? undefined,
+      };
       await prisma.bowlingPerformance.upsert({
         where: { inningsId_playerId: { inningsId: innings.id, playerId } },
-        create: {
-          inningsId: innings.id,
-          playerId,
-          oversText: bw.overs ?? undefined,
-          runs: bw.runs,
-          wickets: bw.wickets,
-        },
-        update: {
-          oversText: bw.overs ?? undefined,
-          runs: bw.runs,
-          wickets: bw.wickets,
-        },
+        create: { inningsId: innings.id, playerId, ...bowlingData },
+        update: bowlingData,
       });
     }
   }

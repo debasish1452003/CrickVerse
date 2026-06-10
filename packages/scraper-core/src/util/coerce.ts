@@ -20,3 +20,7 @@ export function strOrNull(v: unknown): string | null {
 export function boolOrNull(v: unknown): boolean | null {
   return typeof v === "boolean" ? v : null;
 }
+
+export function asArray<T = unknown>(v: unknown): T[] {
+  return Array.isArray(v) ? (v as T[]) : [];
+}
