@@ -1,0 +1,27 @@
+{
+  "name": "@crickverse/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- tsx watch src/main.ts",
+    "start": "dotenv -e ../../.env -- tsx src/main.ts",
+    "seed": "dotenv -e ../../.env -- tsx src/cli.ts seed",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "echo \"(no tests in @crickverse/worker)\""
+  },
+  "dependencies": {
+    "@crickverse/db": "workspace:*",
+    "@crickverse/scraper-core": "workspace:*",
+    "@crickverse/types": "workspace:*",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/node-cron": "^3.0.11",
+    "dotenv-cli": "^7.4.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
