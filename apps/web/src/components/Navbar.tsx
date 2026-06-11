@@ -2,7 +2,14 @@ import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
 export async function Navbar() {
-  const session = await auth();
+  // Browsing must never depend on auth being fully configured — if the auth
+  // layer isn't set up (e.g. no AUTH_SECRET), treat the visitor as signed out.
+  let session: Awaited<ReturnType<typeof auth>> = null;
+  try {
+    session = await auth();
+  } catch {
+    session = null;
+  }
 
   return (
     <header className="sticky top-0 z-30 px-5 pt-4">
