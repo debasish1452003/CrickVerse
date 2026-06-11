@@ -4,7 +4,7 @@ import type {
   ParsedTeamRef,
   ParsedVenue,
 } from "@crickverse/types";
-import type { Prisma, PrismaClient, Source } from "@prisma/client";
+import { type Prisma, type PrismaClient, Source } from "@prisma/client";
 
 /** Accepts either the client or a transaction client. */
 export type Db = PrismaClient | Prisma.TransactionClient;
@@ -142,8 +142,22 @@ export async function resolvePlayer(
   sourcePlayerId: number | null,
   name: string | null,
 ): Promise<string | null> {
-  if (sourcePlayerId == null) return null;
-  const externalId = String(sourcePlayerId);
+  return resolvePlayerByExternalId(
+    db,
+    source,
+    sourcePlayerId == null ? null : String(sourcePlayerId),
+    name,
+  );
+}
+
+/** Resolve a player by an arbitrary string external id (ESPNCricinfo objectId or Cricsheet id). */
+export async function resolvePlayerByExternalId(
+  db: Db,
+  source: Source,
+  externalId: string | null,
+  name: string | null,
+): Promise<string | null> {
+  if (!externalId) return null;
   const k = cacheKey(source, externalId);
   const hit = playerCache.get(k);
   if (hit) return hit;
@@ -166,6 +180,169 @@ export async function resolvePlayer(
     id = created.id;
   }
   playerCache.set(k, id);
+  return id;
+}
+
+/**
+ * Resolve a Cricsheet player to a canonical row, reconciling with ESPNCricinfo
+ * via the people.csv `key_cricinfo` so the SAME human is one canonical Player no
+ * matter which source ingested first:
+ *   1. an existing (CRICSHEET, id) mapping — reuse it;
+ *   2. else an existing (CRICINFO, keyCricinfo) row — reuse it and attach the Cricsheet id;
+ *   3. else a brand-new row, dual-keyed with both ids when keyCricinfo is known.
+ * Unregistered players (no Cricsheet id) fall back to a name-derived key.
+ */
+export async function resolveCricsheetPlayer(
+  db: Db,
+  ref: { id: string | null; name: string },
+  keyCricinfo: string | null,
+): Promise<string> {
+  const externalId = ref.id ?? `name:${ref.name}`;
+  const k = cacheKey(Source.CRICSHEET, externalId);
+  const hit = playerCache.get(k);
+  if (hit) return hit;
+
+  const existingCs = await db.playerExternalId.findUnique({
+    where: { source_externalId: { source: Source.CRICSHEET, externalId } },
+  });
+  if (existingCs) {
+    await db.player.update({
+      where: { id: existingCs.playerId },
+      data: { fullName: ref.name, needsReview: false },
+    });
+    playerCache.set(k, existingCs.playerId);
+    return existingCs.playerId;
+  }
+
+  let playerId: string | null = null;
+  if (keyCricinfo) {
+    const existingCi = await db.playerExternalId.findUnique({
+      where: { source_externalId: { source: Source.CRICINFO, externalId: keyCricinfo } },
+    });
+    if (existingCi) {
+      playerId = existingCi.playerId;
+      await db.playerExternalId.create({
+        data: { source: Source.CRICSHEET, externalId, playerId },
+      });
+    }
+  }
+
+  if (!playerId) {
+    const created = await db.player.create({
+      data: {
+        fullName: ref.name,
+        externalIds: {
+          create: [
+            { source: Source.CRICSHEET, externalId },
+            ...(keyCricinfo ? [{ source: Source.CRICINFO, externalId: keyCricinfo }] : []),
+          ],
+        },
+      },
+    });
+    playerId = created.id;
+  }
+
+  playerCache.set(k, playerId);
+  return playerId;
+}
+
+/** Resolve a team by name (Cricsheet has no team ids). The name is the source key. */
+export async function resolveTeamByName(
+  db: Db,
+  source: Source,
+  name: string | null,
+  opts: { isNational?: boolean } = {},
+): Promise<string | null> {
+  if (!name) return null;
+  const k = cacheKey(source, name);
+  const hit = teamCache.get(k);
+  if (hit) return hit;
+
+  const existing = await db.teamExternalId.findUnique({
+    where: { source_externalId: { source, externalId: name } },
+  });
+  let id: string;
+  if (existing) {
+    id = existing.teamId;
+  } else {
+    const created = await db.team.create({
+      data: {
+        name,
+        isNational: opts.isNational ?? false,
+        externalIds: { create: { source, externalId: name } },
+      },
+    });
+    id = created.id;
+  }
+  teamCache.set(k, id);
+  return id;
+}
+
+/** Resolve a venue by name (Cricsheet has no venue ids). */
+export async function resolveVenueByName(
+  db: Db,
+  source: Source,
+  name: string | null,
+  city: string | null = null,
+): Promise<string | null> {
+  if (!name) return null;
+  const k = cacheKey(source, name);
+  const hit = venueCache.get(k);
+  if (hit) return hit;
+
+  const existing = await db.venueExternalId.findUnique({
+    where: { source_externalId: { source, externalId: name } },
+  });
+  let id: string;
+  if (existing) {
+    if (city) await db.venue.update({ where: { id: existing.venueId }, data: { city } });
+    id = existing.venueId;
+  } else {
+    const created = await db.venue.create({
+      data: {
+        name,
+        city: city ?? undefined,
+        externalIds: { create: { source, externalId: name } },
+      },
+    });
+    id = created.id;
+  }
+  venueCache.set(k, id);
+  return id;
+}
+
+/** Resolve a season-specific series by name (Cricsheet has no series ids); keyed by name+season. */
+export async function resolveSeriesByName(
+  db: Db,
+  source: Source,
+  name: string | null,
+  season: string | null = null,
+  format?: Prisma.SeriesCreateInput["format"],
+): Promise<string | null> {
+  if (!name) return null;
+  const externalId = season ? `${name}|${season}` : name;
+  const k = cacheKey(source, externalId);
+  const hit = seriesCache.get(k);
+  if (hit) return hit;
+
+  const existing = await db.seriesExternalId.findUnique({
+    where: { source_externalId: { source, externalId } },
+  });
+  let id: string;
+  if (existing) {
+    id = existing.seriesId;
+  } else {
+    const created = await db.series.create({
+      data: {
+        name,
+        season: season ?? undefined,
+        format: format ?? undefined,
+        externalIds: { create: { source, externalId } },
+      },
+    });
+    id = created.id;
+  }
+  seriesCache.set(k, id);
   return id;
 }
 

@@ -46,3 +46,7 @@ Thumbs.db
 
 # legacy debug artifacts
 backend/debug_db_match.json
+
+# Cricsheet scratch data + people.csv cache (Phase 9)
+.cricsheet-data/
+apps/worker/.cache/

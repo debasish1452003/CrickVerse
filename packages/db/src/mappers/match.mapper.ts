@@ -56,6 +56,59 @@ export function toUtcDateOnly(d: Date | undefined): Date | undefined {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 }
 
+/** Map Cricsheet's match_type token ("T20" | "IT20" | "ODI" | "Test" | "MDM" | "Hundred" ...). */
+export function toMatchFormatFromCricsheet(raw: string | null | undefined): MatchFormat {
+  if (!raw) return MatchFormat.OTHER;
+  const f = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  switch (f) {
+    case "T20":
+    case "IT20":
+      return MatchFormat.T20;
+    case "ODI":
+    case "ODM":
+      return MatchFormat.ODI;
+    case "TEST":
+    case "MDM":
+      return MatchFormat.TEST;
+    case "HUNDRED":
+    case "THEHUNDRED":
+      return MatchFormat.HUNDRED;
+    default:
+      return MatchFormat.OTHER;
+  }
+}
+
+/** Map Cricsheet's wicket `kind` token (e.g. "caught", "run out") to our enum. */
+export function toDismissalKindFromCricsheet(kind: string | null | undefined): DismissalKind {
+  if (!kind) return DismissalKind.OTHER;
+  switch (kind.toLowerCase().trim()) {
+    case "bowled":
+      return DismissalKind.BOWLED;
+    case "caught":
+      return DismissalKind.CAUGHT;
+    case "lbw":
+      return DismissalKind.LBW;
+    case "run out":
+      return DismissalKind.RUN_OUT;
+    case "stumped":
+      return DismissalKind.STUMPED;
+    case "caught and bowled":
+      return DismissalKind.CAUGHT_AND_BOWLED;
+    case "hit wicket":
+      return DismissalKind.HIT_WICKET;
+    case "retired hurt":
+    case "retired out":
+    case "retired not out":
+      return DismissalKind.RETIRED_OUT;
+    case "obstructing the field":
+      return DismissalKind.OBSTRUCTING;
+    case "timed out":
+      return DismissalKind.TIMED_OUT;
+    default:
+      return DismissalKind.OTHER;
+  }
+}
+
 /** Derive a dismissal kind from ESPNCricinfo's dismissalText (e.g. "c Smith b Jones"). */
 export function toDismissalKind(
   text: string | null | undefined,

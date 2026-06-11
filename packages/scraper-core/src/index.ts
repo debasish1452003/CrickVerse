@@ -16,4 +16,5 @@ export {
   playerProfileDescriptor,
   type PlayerProfileParams,
 } from "./descriptors/player-profile";
+export { parseCricsheetMatch } from "./cricsheet/parse-match";
 export * from "./util/coerce";
