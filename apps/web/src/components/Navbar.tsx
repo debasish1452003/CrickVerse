@@ -5,40 +5,44 @@ export async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className="navbar">
-      <Link href="/" className="navbar__brand">
-        🏏 <span>CrickVerse</span>
-      </Link>
-      <div className="navbar__links">
-        <Link href="/">Live &amp; Fixtures</Link>
-        {session?.user ? (
-          <>
-            <Link href="/dashboard">Dashboard</Link>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button
-                type="submit"
-                style={{
-                  background: "transparent",
-                  color: "var(--muted)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  padding: "0.3rem 0.6rem",
-                  cursor: "pointer",
+    <header className="sticky top-0 z-30 px-5 pt-4">
+      <nav className="glass mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3">
+        <Link href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
+          <span aria-hidden>🏏</span>
+          <span>
+            Crick<span className="text-accent">Verse</span>
+          </span>
+        </Link>
+        <div className="flex items-center gap-5 text-sm text-muted">
+          <Link href="/" className="transition-colors hover:text-fg">
+            Matches
+          </Link>
+          {session?.user ? (
+            <>
+              <Link href="/dashboard" className="transition-colors hover:text-fg">
+                Dashboard
+              </Link>
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut({ redirectTo: "/" });
                 }}
               >
-                Sign out
-              </button>
-            </form>
-          </>
-        ) : (
-          <Link href="/login">Sign in</Link>
-        )}
-      </div>
-    </nav>
+                <button className="rounded-lg border border-line px-3 py-1.5 text-fg transition-colors hover:border-accent/50">
+                  Sign out
+                </button>
+              </form>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="rounded-lg bg-accent px-3.5 py-1.5 font-medium text-black transition-opacity hover:opacity-90"
+            >
+              Sign in
+            </Link>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 }
