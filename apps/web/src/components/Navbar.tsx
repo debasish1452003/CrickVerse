@@ -1,10 +1,11 @@
+import type { Session } from "next-auth";
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
 export async function Navbar() {
   // Browsing must never depend on auth being fully configured — if the auth
   // layer isn't set up (e.g. no AUTH_SECRET), treat the visitor as signed out.
-  let session: Awaited<ReturnType<typeof auth>> = null;
+  let session: Session | null = null;
   try {
     session = await auth();
   } catch {
