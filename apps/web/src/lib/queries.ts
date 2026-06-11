@@ -40,3 +40,18 @@ export function getMatchById(id: string): Promise<MatchDetail | null> {
     include: matchDetailInclude,
   });
 }
+
+const playerInclude = {
+  battingPerfs: {
+    include: { innings: { include: { match: { include: { series: true } } } } },
+  },
+  bowlingPerfs: {
+    include: { innings: { include: { match: { include: { series: true } } } } },
+  },
+} satisfies Prisma.PlayerInclude;
+
+export type PlayerWithPerfs = Prisma.PlayerGetPayload<{ include: typeof playerInclude }>;
+
+export function getPlayerById(id: string): Promise<PlayerWithPerfs | null> {
+  return prisma.player.findUnique({ where: { id }, include: playerInclude });
+}

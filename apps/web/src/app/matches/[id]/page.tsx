@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { getMatchById } from "@/lib/queries";
@@ -92,7 +93,12 @@ export default async function MatchPage({ params }: { params: Promise<{ id: stri
                 {inn.battingPerfs.map((b) => (
                   <tr key={b.id} className="border-t border-line/60">
                     <td className="px-5 py-2.5">
-                      <span className="font-medium">{b.player.fullName}</span>
+                      <Link
+                        href={`/players/${b.player.id}`}
+                        className="font-medium transition-colors hover:text-accent"
+                      >
+                        {b.player.fullName}
+                      </Link>
                       <span className="ml-2 text-xs text-muted">
                         {b.dismissalText ?? (b.dismissal === "NOT_OUT" ? "not out" : "")}
                       </span>
@@ -111,7 +117,14 @@ export default async function MatchPage({ params }: { params: Promise<{ id: stri
                   <Table head={["Bowler", "O", "M", "R", "W", "Econ"]}>
                     {inn.bowlingPerfs.map((bw) => (
                       <tr key={bw.id} className="border-t border-line/60">
-                        <td className="px-5 py-2.5 font-medium">{bw.player.fullName}</td>
+                        <td className="px-5 py-2.5">
+                          <Link
+                            href={`/players/${bw.player.id}`}
+                            className="font-medium transition-colors hover:text-accent"
+                          >
+                            {bw.player.fullName}
+                          </Link>
+                        </td>
                         <td className="px-3 text-right font-mono tabular-nums text-muted">{bw.oversText ?? "—"}</td>
                         <td className="px-3 text-right font-mono tabular-nums text-muted">{bw.maidens}</td>
                         <td className="px-3 text-right font-mono tabular-nums text-muted">{bw.runs}</td>
