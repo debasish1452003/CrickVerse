@@ -34,9 +34,16 @@ const teamInMatchSchema = new mongoose.Schema(
 const matchSchema = new mongoose.Schema({
   matchId: { type: Number, unique: true },
 
-  seriesId: Number,
-  season: String,
+  // 🔥 ADD THESE
+  slug: String,
 
+  series: {
+    objectId: Number,
+    slug: String,
+    name: String,
+  },
+
+  season: String,
   title: String,
   format: String,
 
@@ -55,7 +62,7 @@ const matchSchema = new mongoose.Schema({
   result: {
     winnerTeamId: Number,
     tossWinnerTeamId: Number,
-    tossDecision: Number,
+    tossDecision: String,
     status: String,
   },
 

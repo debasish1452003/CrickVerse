@@ -1,11 +1,20 @@
 import type { MatchWithRelations } from "./queries";
 
+const IMG_CDN = "https://img1.hscicdn.com/image/upload";
+
+/** Turn an ESPNCricinfo image path into a full CDN URL. */
+export function teamLogo(imageUrl: string | null | undefined): string | null {
+  if (!imageUrl) return null;
+  if (imageUrl.startsWith("http")) return imageUrl;
+  return `${IMG_CDN}${imageUrl}`;
+}
+
 export interface TeamDTO {
   name: string | null;
   shortName: string | null;
   score: string | null;
   primaryColor: string | null;
-  imageUrl: string | null;
+  logoUrl: string | null;
 }
 
 export interface MatchDTO {
@@ -29,7 +38,7 @@ export function serializeMatch(m: MatchWithRelations): MatchDTO {
       shortName: m.homeTeam.shortName,
       score: m.homeScore,
       primaryColor: m.homeTeam.primaryColor,
-      imageUrl: m.homeTeam.imageUrl,
+      logoUrl: teamLogo(m.homeTeam.imageUrl),
     });
   }
   if (m.awayTeam) {
@@ -38,7 +47,7 @@ export function serializeMatch(m: MatchWithRelations): MatchDTO {
       shortName: m.awayTeam.shortName,
       score: m.awayScore,
       primaryColor: m.awayTeam.primaryColor,
-      imageUrl: m.awayTeam.imageUrl,
+      logoUrl: teamLogo(m.awayTeam.imageUrl),
     });
   }
 

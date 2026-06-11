@@ -8,9 +8,33 @@ const STATE: Record<string, { label: string; cls: string }> = {
   ABANDONED: { label: "Abandoned", cls: "" },
 };
 
-function crest(t: TeamDTO): string {
+function initials(t: TeamDTO): string {
   const base = (t.shortName ?? t.name ?? "?").replace(/[^A-Za-z]/g, "");
   return (base.slice(0, 3) || "?").toUpperCase();
+}
+
+export function TeamCrest({ team, size = 36 }: { team: TeamDTO; size?: number }) {
+  if (team.logoUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={team.logoUrl}
+        alt={team.name ?? ""}
+        width={size}
+        height={size}
+        className="shrink-0 rounded-lg bg-white/5 object-contain p-1 ring-1 ring-white/10"
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+  return (
+    <div
+      className="grid shrink-0 place-items-center rounded-lg text-[11px] font-bold text-white ring-1 ring-white/10"
+      style={{ width: size, height: size, background: team.primaryColor ?? "#334155" }}
+    >
+      {initials(team)}
+    </div>
+  );
 }
 
 function TeamRow({ team }: { team?: TeamDTO }) {
@@ -24,12 +48,7 @@ function TeamRow({ team }: { team?: TeamDTO }) {
   }
   return (
     <div className="flex items-center gap-3">
-      <div
-        className="grid size-9 shrink-0 place-items-center rounded-lg text-[11px] font-bold text-white shadow-inner ring-1 ring-white/10"
-        style={{ background: team.primaryColor ?? "#334155" }}
-      >
-        {crest(team)}
-      </div>
+      <TeamCrest team={team} />
       <span className="flex-1 truncate font-medium">{team.name ?? team.shortName ?? "Unknown"}</span>
       <span className="font-mono text-sm tabular-nums">{team.score ?? "—"}</span>
     </div>
