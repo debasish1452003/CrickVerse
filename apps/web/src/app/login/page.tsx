@@ -20,7 +20,7 @@ export default function LoginPage() {
           >
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 font-medium text-black transition-transform hover:-translate-y-0.5"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-3 font-medium text-fg transition-transform hover:-translate-y-0.5"
             >
               Continue with Google
             </button>

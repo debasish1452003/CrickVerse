@@ -2,6 +2,14 @@ import type { Session } from "next-auth";
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 
+const NAV = [
+  { href: "/matches", label: "Matches" },
+  { href: "/series", label: "Series" },
+  { href: "/teams", label: "Teams" },
+  { href: "/players", label: "Players" },
+  { href: "/rankings", label: "Rankings" },
+];
+
 export async function Navbar() {
   // Browsing must never depend on auth being fully configured — if the auth
   // layer isn't set up (e.g. no AUTH_SECRET), treat the visitor as signed out.
@@ -13,33 +21,31 @@ export async function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-30 px-5 pt-4">
-      <nav className="glass mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-5 py-3">
-        <Link href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
+    <header className="sticky top-0 z-30 bg-brand text-white shadow-[0_1px_0_rgba(0,0,0,0.14)]">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
           <span aria-hidden>🏏</span>
           <span>
-            Crick<span className="text-accent">Verse</span>
+            Crick<span className="text-[#9ff0c4]">Verse</span>
           </span>
         </Link>
-        <div className="flex items-center gap-5 text-sm text-muted">
-          <Link href="/matches" className="transition-colors hover:text-fg">
-            Matches
-          </Link>
-          <Link href="/series" className="transition-colors hover:text-fg">
-            Series
-          </Link>
-          <Link href="/teams" className="transition-colors hover:text-fg">
-            Teams
-          </Link>
-          <Link href="/players" className="transition-colors hover:text-fg">
-            Players
-          </Link>
-          <Link href="/rankings" className="transition-colors hover:text-fg">
-            Rankings
-          </Link>
+
+        <div className="flex items-center gap-0.5 text-sm font-medium">
+          {NAV.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className="rounded-md px-3 py-1.5 text-white/85 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              {n.label}
+            </Link>
+          ))}
           {session?.user ? (
             <>
-              <Link href="/dashboard" className="transition-colors hover:text-fg">
+              <Link
+                href="/dashboard"
+                className="rounded-md px-3 py-1.5 text-white/85 transition-colors hover:bg-white/10 hover:text-white"
+              >
                 Dashboard
               </Link>
               <form
@@ -48,7 +54,7 @@ export async function Navbar() {
                   await signOut({ redirectTo: "/" });
                 }}
               >
-                <button className="rounded-lg border border-line px-3 py-1.5 text-fg transition-colors hover:border-accent/50">
+                <button className="ml-1 rounded-md border border-white/30 px-3 py-1.5 text-white transition-colors hover:bg-white/10">
                   Sign out
                 </button>
               </form>
@@ -56,7 +62,7 @@ export async function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-accent px-3.5 py-1.5 font-medium text-black transition-opacity hover:opacity-90"
+              className="ml-1 rounded-md bg-white px-3.5 py-1.5 font-semibold text-brand transition-colors hover:bg-white/90"
             >
               Sign in
             </Link>

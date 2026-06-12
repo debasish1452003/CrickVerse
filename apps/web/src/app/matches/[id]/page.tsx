@@ -400,7 +400,7 @@ function TeamLine({
   score?: string | null;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-white/[0.02] p-4">
+    <div className="flex items-center gap-3 rounded-xl bg-black/[0.02] p-4">
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -408,12 +408,12 @@ function TeamLine({
           alt={name}
           width={40}
           height={40}
-          className="rounded-lg bg-white/5 object-contain p-1 ring-1 ring-white/10"
+          className="rounded-lg bg-black/[0.04] object-contain p-1 ring-1 ring-black/10"
           style={{ width: 40, height: 40 }}
         />
       ) : color ? (
         <div
-          className="size-10 shrink-0 rounded-lg ring-1 ring-white/10"
+          className="size-10 shrink-0 rounded-lg ring-1 ring-black/10"
           style={{ background: color }}
         />
       ) : (

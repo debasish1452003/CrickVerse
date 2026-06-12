@@ -44,14 +44,14 @@ export function TeamBadge({
         height={size}
         loading="lazy"
         onError={() => setFailed(true)}
-        className={`shrink-0 ${rounded} bg-white/5 object-contain p-0.5 ring-1 ring-white/10 ${className}`}
+        className={`shrink-0 ${rounded} bg-black/[0.04] object-contain p-0.5 ring-1 ring-black/10 ${className}`}
         style={{ width: size, height: size }}
       />
     );
   }
   return (
     <div
-      className={`grid shrink-0 place-items-center ${rounded} font-bold text-white ring-1 ring-white/10 ${className}`}
+      className={`grid shrink-0 place-items-center ${rounded} font-bold text-white ring-1 ring-black/10 ${className}`}
       style={{
         width: size,
         height: size,
@@ -89,7 +89,7 @@ export function PlayerAvatar({
         height={size}
         loading="lazy"
         onError={() => setFailed(true)}
-        className={`shrink-0 rounded-full bg-white/5 object-cover ring-1 ring-white/10 ${className}`}
+        className={`shrink-0 rounded-full bg-black/[0.04] object-cover ring-1 ring-black/10 ${className}`}
         style={{ width: size, height: size }}
       />
     );
@@ -97,7 +97,7 @@ export function PlayerAvatar({
   const hue = hueFromName(label);
   return (
     <div
-      className={`grid shrink-0 place-items-center rounded-full font-bold text-white ring-1 ring-white/10 ${className}`}
+      className={`grid shrink-0 place-items-center rounded-full font-bold text-white ring-1 ring-black/10 ${className}`}
       style={{
         width: size,
         height: size,

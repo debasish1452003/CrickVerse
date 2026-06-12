@@ -35,8 +35,8 @@ function Worm({ innings, labels }: { innings: InningsOversData[]; labels: (n: nu
         {/* y gridlines */}
         {[0, 0.25, 0.5, 0.75, 1].map((t) => (
           <g key={t}>
-            <line x1={padL} x2={W - padR} y1={y(oy * t)} y2={y(oy * t)} stroke="rgba(255,255,255,0.06)" />
-            <text x={4} y={y(oy * t) + 3} fontSize="9" fill="rgba(255,255,255,0.4)">
+            <line x1={padL} x2={W - padR} y1={y(oy * t)} y2={y(oy * t)} stroke="rgba(16,24,40,0.08)" />
+            <text x={4} y={y(oy * t) + 3} fontSize="9" fill="rgba(16,24,40,0.45)">
               {Math.round(oy * t)}
             </text>
           </g>
@@ -57,7 +57,7 @@ function Worm({ innings, labels }: { innings: InningsOversData[]; labels: (n: nu
           );
         })}
         {/* x label */}
-        <text x={W - padR} y={H - 6} fontSize="9" fill="rgba(255,255,255,0.4)" textAnchor="end">
+        <text x={W - padR} y={H - 6} fontSize="9" fill="rgba(16,24,40,0.45)" textAnchor="end">
           Over {ox}
         </text>
       </svg>
@@ -97,8 +97,8 @@ function Manhattan({ data, label }: { data: InningsOversData; label: string }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full min-w-[480px]" role="img" aria-label={`Runs per over — ${label}`}>
         {[0, 0.5, 1].map((t) => (
           <g key={t}>
-            <line x1={padL} x2={W - 6} y1={y(my * t)} y2={y(my * t)} stroke="rgba(255,255,255,0.06)" />
-            <text x={2} y={y(my * t) + 3} fontSize="9" fill="rgba(255,255,255,0.4)">
+            <line x1={padL} x2={W - 6} y1={y(my * t)} y2={y(my * t)} stroke="rgba(16,24,40,0.08)" />
+            <text x={2} y={y(my * t) + 3} fontSize="9" fill="rgba(16,24,40,0.45)">
               {Math.round(my * t)}
             </text>
           </g>

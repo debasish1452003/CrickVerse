@@ -30,7 +30,7 @@ export function MatchRow({
           )}
           <span className="truncate text-sm font-semibold tracking-tight">{title}</span>
         </div>
-        <span className="shrink-0 rounded-full bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
+        <span className="shrink-0 rounded-full bg-black/[0.04] px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
           {MATCH_CLASS_LABEL[m.matchClass as keyof typeof MATCH_CLASS_LABEL] ?? m.matchClass}
         </span>
       </div>

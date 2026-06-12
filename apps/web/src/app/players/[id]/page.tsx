@@ -30,7 +30,7 @@ function ageFromDob(dob: string | null | undefined): number | null {
 
 function BioChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-line bg-white/[0.02] px-3 py-2">
+    <div className="rounded-lg border border-line bg-black/[0.02] px-3 py-2">
       <div className="text-[10px] uppercase tracking-wider text-muted">{label}</div>
       <div className="mt-0.5 text-sm font-medium">{value}</div>
     </div>
@@ -166,7 +166,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </h2>
             <Table head={["Format", "M", "Inns", "NO", "Runs", "HS", "Avg", "SR", "100", "50", "0", "4s", "6s"]}>
               {battingRows.map((c) => (
-                <tr key={c.matchClass} className="transition-colors hover:bg-white/[0.02]">
+                <tr key={c.matchClass} className="transition-colors hover:bg-black/[0.03]">
                   <FormatCell fc={c} />
                   <Num>{c.matches}</Num>
                   <Num>{c.batting.innings}</Num>
@@ -193,7 +193,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </h2>
             <Table head={["Format", "M", "Inns", "Balls", "Runs", "Wkts", "BBI", "Avg", "Econ", "SR", "5w"]}>
               {bowlingRows.map((c) => (
-                <tr key={c.matchClass} className="transition-colors hover:bg-white/[0.02]">
+                <tr key={c.matchClass} className="transition-colors hover:bg-black/[0.03]">
                   <FormatCell fc={c} />
                   <Num>{c.matches}</Num>
                   <Num>{c.bowling.innings}</Num>
@@ -221,7 +221,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
                 <Link
                   key={b.id}
                   href={`/matches/${b.innings.match.id}`}
-                  className="flex items-center justify-between gap-3 px-5 py-3 text-sm transition-colors hover:bg-white/[0.02]"
+                  className="flex items-center justify-between gap-3 px-5 py-3 text-sm transition-colors hover:bg-black/[0.03]"
                 >
                   <span className="truncate text-muted">
                     {b.innings.match.series?.name ?? b.innings.match.title ?? "Match"}

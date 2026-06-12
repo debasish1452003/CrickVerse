@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-line bg-white/[0.02] px-4 py-3">
+    <div className="rounded-xl border border-line bg-black/[0.02] px-4 py-3">
       <div className="text-[10px] uppercase tracking-wider text-muted">{label}</div>
       <div className="mt-1 font-mono text-xl tabular-nums">{value}</div>
     </div>

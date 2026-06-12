@@ -30,7 +30,7 @@ function CompetitionCard({ c }: { c: Competition }) {
         </div>
       </div>
       {c.latestSeason && (
-        <span className="shrink-0 rounded-full bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
+        <span className="shrink-0 rounded-full bg-black/[0.04] px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
           {c.latestSeason}
         </span>
       )}
@@ -67,11 +67,11 @@ export default async function SeriesPage({
               defaultValue={q}
               placeholder="Search competitions…"
               autoComplete="off"
-              className="flex-1 rounded-xl border border-line bg-white/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
+              className="flex-1 rounded-xl border border-line bg-black/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
             />
             <button
               type="submit"
-              className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-black transition-opacity hover:opacity-90"
+              className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
             >
               Search
             </button>

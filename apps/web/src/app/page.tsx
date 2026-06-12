@@ -47,7 +47,7 @@ function Leaderboard({
           <li key={p.cricsheetId}>
             <Link
               href={`/players/${p.cricsheetId}`}
-              className="flex items-center gap-3 px-5 py-2.5 transition-colors hover:bg-white/[0.02]"
+              className="flex items-center gap-3 px-5 py-2.5 transition-colors hover:bg-black/[0.03]"
             >
               <span className="w-4 shrink-0 font-mono text-xs tabular-nums text-muted">{i + 1}</span>
               <PlayerAvatar name={p.name} src={p.photoUrl} size={32} />
@@ -80,7 +80,7 @@ export default async function Home() {
       <Navbar />
       <main className="mx-auto max-w-6xl px-5 pb-24">
         <section className="py-12 sm:py-16">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs text-muted">
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1 text-xs text-muted">
             <span className="live-dot" /> {recent.total.toLocaleString()} matches · all formats, all eras
           </p>
           <h1 className="max-w-2xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
@@ -91,7 +91,7 @@ export default async function Home() {
             Cricsheet corpus — structured into a clean model and served fast.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
-            <Link href="/matches" className="rounded-xl bg-accent px-4 py-2.5 font-medium text-black transition-opacity hover:opacity-90">
+            <Link href="/matches" className="rounded-xl bg-accent px-4 py-2.5 font-medium text-white transition-opacity hover:opacity-90">
               Browse matches
             </Link>
             <Link href="/players" className="rounded-xl border border-line px-4 py-2.5 transition-colors hover:border-accent/50">

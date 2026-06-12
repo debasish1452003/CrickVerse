@@ -586,6 +586,455 @@ export async function getCompetition(eventName: string | null): Promise<Competit
   return comps.find((c) => c.eventName === eventName) ?? null;
 }
 
+// ── Tournament edition: points table (NRR), stats, squads, venues ────────────
+
+const LIMITED_OVERS_CLASSES = new Set(["T20", "T20I", "ODI", "LIST_A", "HUNDRED", "T10"]);
+
+/** Whether a class has a points-table / NRR concept (limited-overs). */
+export function isLimitedOversClass(c: string | null | undefined): boolean {
+  return c ? LIMITED_OVERS_CLASSES.has(c) : false;
+}
+
+/** Full-quota balls per innings, used for the NRR all-out adjustment (0 = unknown). */
+function quotaBalls(matchClass: string | null | undefined): number {
+  switch (matchClass) {
+    case "T20":
+    case "T20I":
+      return 120;
+    case "ODI":
+    case "LIST_A":
+      return 300;
+    case "T10":
+      return 60;
+    case "HUNDRED":
+      return 100;
+    default:
+      return 0;
+  }
+}
+
+export interface StandingRow {
+  team: string;
+  played: number;
+  won: number;
+  lost: number;
+  noResult: number; // ties + no-results lumped (gold stores only `winner`)
+  points: number;
+  /** Net run rate: runs-per-over scored minus runs-per-over conceded. */
+  nrr: number;
+}
+
+interface EditionInnings {
+  matchId: string;
+  battingTeam: string | null;
+  runs: number;
+  balls: number;
+  wickets: number;
+}
+
+/**
+ * Points table for one tournament edition, with Net Run Rate. Win = 2 pts, tie /
+ * no-result = 1 pt (we only store `winner`, so ties and abandoned games can't be
+ * told apart and are lumped as "NR"). NRR applies the standard all-out rule: a
+ * side bowled out is charged its full over quota in the run-rate denominator.
+ * Sorted by points, then NRR.
+ */
+export async function getStandings(
+  eventName: string | null,
+  season: string | null,
+): Promise<StandingRow[]> {
+  const matches = await prisma.careerMatch.findMany({
+    where: { eventName, season },
+    select: { matchId: true, teamHome: true, teamAway: true, winner: true, matchClass: true },
+  });
+  if (matches.length === 0) return [];
+
+  const ids = matches.map((m) => m.matchId);
+  const innings = await prisma.scorecardInnings.findMany({
+    where: { matchId: { in: ids } },
+    select: { matchId: true, battingTeam: true, runs: true, balls: true, wickets: true },
+  });
+  const innByMatch = new Map<string, EditionInnings[]>();
+  for (const i of innings) {
+    const list = innByMatch.get(i.matchId);
+    if (list) list.push(i);
+    else innByMatch.set(i.matchId, [i]);
+  }
+
+  interface Acc {
+    played: number;
+    won: number;
+    lost: number;
+    noResult: number;
+    runsFor: number;
+    ballsFor: number;
+    runsAgainst: number;
+    ballsAgainst: number;
+  }
+  const table = new Map<string, Acc>();
+  const acc = (team: string): Acc => {
+    let a = table.get(team);
+    if (!a)
+      table.set(
+        team,
+        (a = {
+          played: 0,
+          won: 0,
+          lost: 0,
+          noResult: 0,
+          runsFor: 0,
+          ballsFor: 0,
+          runsAgainst: 0,
+          ballsAgainst: 0,
+        }),
+      );
+    return a;
+  };
+
+  for (const m of matches) {
+    const home = m.teamHome;
+    const away = m.teamAway;
+    if (!home || !away) continue;
+    const ah = acc(home);
+    const aa = acc(away);
+    ah.played++;
+    aa.played++;
+    if (m.winner === home) {
+      ah.won++;
+      aa.lost++;
+    } else if (m.winner === away) {
+      aa.won++;
+      ah.lost++;
+    } else {
+      ah.noResult++;
+      aa.noResult++;
+    }
+
+    // NRR contribution (limited-overs only; needs both innings present).
+    const quota = quotaBalls(m.matchClass);
+    const inns = innByMatch.get(m.matchId) ?? [];
+    const homeInn = inns.find((i) => i.battingTeam === home);
+    const awayInn = inns.find((i) => i.battingTeam === away);
+    if (homeInn && awayInn) {
+      const eff = (i: EditionInnings) =>
+        quota > 0 && i.wickets >= 10 ? quota : i.balls;
+      const hb = eff(homeInn);
+      const ab = eff(awayInn);
+      ah.runsFor += homeInn.runs;
+      ah.ballsFor += hb;
+      ah.runsAgainst += awayInn.runs;
+      ah.ballsAgainst += ab;
+      aa.runsFor += awayInn.runs;
+      aa.ballsFor += ab;
+      aa.runsAgainst += homeInn.runs;
+      aa.ballsAgainst += hb;
+    }
+  }
+
+  const rows: StandingRow[] = [...table.entries()].map(([team, a]) => {
+    const rateFor = a.ballsFor > 0 ? a.runsFor / (a.ballsFor / 6) : 0;
+    const rateAgainst = a.ballsAgainst > 0 ? a.runsAgainst / (a.ballsAgainst / 6) : 0;
+    return {
+      team,
+      played: a.played,
+      won: a.won,
+      lost: a.lost,
+      noResult: a.noResult,
+      points: a.won * 2 + a.noResult,
+      nrr: rateFor - rateAgainst,
+    };
+  });
+  rows.sort((x, y) => y.points - x.points || y.nrr - x.nrr || x.team.localeCompare(y.team));
+  return rows;
+}
+
+export interface StatLeader {
+  cricsheetId: string | null;
+  name: string;
+  /** Primary metric, pre-formatted for display. */
+  value: string;
+  /** Secondary context line (e.g. innings / strike rate). */
+  detail: string;
+}
+
+export interface TournamentStats {
+  mostRuns: StatLeader[];
+  highestScores: StatLeader[];
+  mostSixes: StatLeader[];
+  mostFours: StatLeader[];
+  bestStrikeRate: StatLeader[];
+  mostWickets: StatLeader[];
+  bestEconomy: StatLeader[];
+}
+
+const fmt1 = (n: number) => n.toFixed(1);
+const fmt2s = (n: number) => n.toFixed(2);
+
+/**
+ * Per-edition leaderboards (Most Runs / Wickets / Sixes / Fours, Highest Score,
+ * Best SR / Economy), folded in JS from the edition's scorecard rows — bounded
+ * to a single tournament edition (a few hundred rows), so no global scan.
+ */
+export async function getTournamentStats(
+  eventName: string | null,
+  season: string | null,
+  limit = 10,
+): Promise<TournamentStats> {
+  const matches = await prisma.careerMatch.findMany({
+    where: { eventName, season },
+    select: { matchId: true, matchClass: true },
+  });
+  const ids = matches.map((m) => m.matchId);
+  if (ids.length === 0)
+    return {
+      mostRuns: [],
+      highestScores: [],
+      mostSixes: [],
+      mostFours: [],
+      bestStrikeRate: [],
+      mostWickets: [],
+      bestEconomy: [],
+    };
+
+  const [batting, bowling] = await Promise.all([
+    prisma.scorecardBatting.findMany({
+      where: { matchId: { in: ids } },
+      select: { cricsheetId: true, name: true, runs: true, balls: true, fours: true, sixes: true, out: true },
+    }),
+    prisma.scorecardBowling.findMany({
+      where: { matchId: { in: ids } },
+      select: { cricsheetId: true, name: true, balls: true, runs: true, wickets: true },
+    }),
+  ]);
+
+  // Limited-overs editions get small ball thresholds for the rate-based boards;
+  // multi-day formats use larger ones so a 2-ball cameo can't top "Best SR".
+  const lo = isLimitedOversClass(matches[0]?.matchClass);
+  const minBatBalls = lo ? 30 : 120;
+  const minBowlBalls = lo ? 60 : 240;
+
+  interface Bat {
+    cricsheetId: string | null;
+    name: string;
+    runs: number;
+    balls: number;
+    fours: number;
+    sixes: number;
+    innings: number;
+  }
+  interface Bowl {
+    cricsheetId: string | null;
+    name: string;
+    balls: number;
+    runs: number;
+    wickets: number;
+  }
+  const bats = new Map<string, Bat>();
+  const bowls = new Map<string, Bowl>();
+  const key = (id: string | null, name: string) => id ?? `name:${name}`;
+
+  for (const b of batting) {
+    const k = key(b.cricsheetId, b.name);
+    let a = bats.get(k);
+    if (!a) bats.set(k, (a = { cricsheetId: b.cricsheetId, name: b.name, runs: 0, balls: 0, fours: 0, sixes: 0, innings: 0 }));
+    a.runs += b.runs;
+    a.balls += b.balls;
+    a.fours += b.fours;
+    a.sixes += b.sixes;
+    a.innings++;
+  }
+  for (const b of bowling) {
+    const k = key(b.cricsheetId, b.name);
+    let a = bowls.get(k);
+    if (!a) bowls.set(k, (a = { cricsheetId: b.cricsheetId, name: b.name, balls: 0, runs: 0, wickets: 0 }));
+    a.balls += b.balls;
+    a.runs += b.runs;
+    a.wickets += b.wickets;
+  }
+
+  const batArr = [...bats.values()];
+  const bowlArr = [...bowls.values()];
+  const top = <T>(arr: T[], cmp: (a: T, b: T) => number, n: number) =>
+    [...arr].sort(cmp).slice(0, n);
+
+  const mostRuns = top(batArr, (a, b) => b.runs - a.runs, limit).map((p) => ({
+    cricsheetId: p.cricsheetId,
+    name: p.name,
+    value: p.runs.toLocaleString(),
+    detail: `${p.innings} inns · SR ${p.balls > 0 ? fmt1((p.runs / p.balls) * 100) : "—"}`,
+  }));
+
+  const highestScores = top(batting, (a, b) => b.runs - a.runs, limit).map((b) => ({
+    cricsheetId: b.cricsheetId,
+    name: b.name,
+    value: `${b.runs}${b.out ? "" : "*"}`,
+    detail: `${b.balls} balls · ${b.fours}×4 ${b.sixes}×6`,
+  }));
+
+  const mostSixes = top(
+    batArr.filter((p) => p.sixes > 0),
+    (a, b) => b.sixes - a.sixes,
+    limit,
+  ).map((p) => ({ cricsheetId: p.cricsheetId, name: p.name, value: String(p.sixes), detail: `${p.runs} runs` }));
+
+  const mostFours = top(
+    batArr.filter((p) => p.fours > 0),
+    (a, b) => b.fours - a.fours,
+    limit,
+  ).map((p) => ({ cricsheetId: p.cricsheetId, name: p.name, value: String(p.fours), detail: `${p.runs} runs` }));
+
+  const bestStrikeRate = top(
+    batArr.filter((p) => p.balls >= minBatBalls),
+    (a, b) => b.runs / b.balls - a.runs / a.balls,
+    limit,
+  ).map((p) => ({
+    cricsheetId: p.cricsheetId,
+    name: p.name,
+    value: fmt1((p.runs / p.balls) * 100),
+    detail: `${p.runs} off ${p.balls}`,
+  }));
+
+  const mostWickets = top(
+    bowlArr.filter((p) => p.wickets > 0),
+    (a, b) => b.wickets - a.wickets || a.runs - b.runs,
+    limit,
+  ).map((p) => ({
+    cricsheetId: p.cricsheetId,
+    name: p.name,
+    value: String(p.wickets),
+    detail: `Econ ${p.balls > 0 ? fmt2s(p.runs / (p.balls / 6)) : "—"}`,
+  }));
+
+  const bestEconomy = top(
+    bowlArr.filter((p) => p.balls >= minBowlBalls),
+    (a, b) => a.runs / a.balls - b.runs / b.balls,
+    limit,
+  ).map((p) => ({
+    cricsheetId: p.cricsheetId,
+    name: p.name,
+    value: fmt2s(p.runs / (p.balls / 6)),
+    detail: `${p.wickets} wkts · ${Math.floor(p.balls / 6)} ov`,
+  }));
+
+  return { mostRuns, highestScores, mostSixes, mostFours, bestStrikeRate, mostWickets, bestEconomy };
+}
+
+export interface EditionSquadMember {
+  cricsheetId: string | null;
+  name: string;
+  appearances: number;
+  runs: number;
+  wickets: number;
+}
+
+export interface EditionSquad {
+  team: string;
+  members: EditionSquadMember[];
+}
+
+/**
+ * Squads per team for an edition: every player who batted (their innings' team)
+ * or bowled (the opposing side that innings), with appearances + runs + wickets.
+ */
+export async function getEditionSquads(
+  eventName: string | null,
+  season: string | null,
+): Promise<EditionSquad[]> {
+  const matches = await prisma.careerMatch.findMany({
+    where: { eventName, season },
+    select: { matchId: true, teamHome: true, teamAway: true },
+  });
+  if (matches.length === 0) return [];
+  const ids = matches.map((m) => m.matchId);
+  const matchById = new Map(matches.map((m) => [m.matchId, m]));
+
+  const [innings, batting, bowling] = await Promise.all([
+    prisma.scorecardInnings.findMany({
+      where: { matchId: { in: ids } },
+      select: { matchId: true, inningsNo: true, battingTeam: true },
+    }),
+    prisma.scorecardBatting.findMany({
+      where: { matchId: { in: ids } },
+      select: { matchId: true, inningsNo: true, cricsheetId: true, name: true, runs: true },
+    }),
+    prisma.scorecardBowling.findMany({
+      where: { matchId: { in: ids } },
+      select: { matchId: true, inningsNo: true, cricsheetId: true, name: true, wickets: true },
+    }),
+  ]);
+
+  const battingTeamOf = new Map<string, string | null>(); // `${matchId}:${inn}` → team
+  for (const i of innings) battingTeamOf.set(`${i.matchId}:${i.inningsNo}`, i.battingTeam);
+
+  // team → playerKey → member
+  const squads = new Map<string, Map<string, EditionSquadMember>>();
+  const seenApp = new Map<string, Set<string>>(); // team → set of `${matchId}:${player}` (dedupe appearances per match)
+  const member = (team: string, id: string | null, name: string): EditionSquadMember => {
+    let byPlayer = squads.get(team);
+    if (!byPlayer) squads.set(team, (byPlayer = new Map()));
+    const k = id ?? `name:${name}`;
+    let m = byPlayer.get(k);
+    if (!m) byPlayer.set(k, (m = { cricsheetId: id, name, appearances: 0, runs: 0, wickets: 0 }));
+    return m;
+  };
+  const bumpAppearance = (team: string, matchId: string, id: string | null, name: string) => {
+    let set = seenApp.get(team);
+    if (!set) seenApp.set(team, (set = new Set()));
+    const k = `${matchId}:${id ?? name}`;
+    if (!set.has(k)) {
+      set.add(k);
+      member(team, id, name).appearances++;
+    }
+  };
+
+  for (const b of batting) {
+    const team = battingTeamOf.get(`${b.matchId}:${b.inningsNo}`);
+    if (!team) continue;
+    member(team, b.cricsheetId, b.name).runs += b.runs;
+    bumpAppearance(team, b.matchId, b.cricsheetId, b.name);
+  }
+  for (const b of bowling) {
+    const battingTeam = battingTeamOf.get(`${b.matchId}:${b.inningsNo}`);
+    const match = matchById.get(b.matchId);
+    if (!match || !battingTeam) continue;
+    // The bowling side is the team that ISN'T batting this innings.
+    const team = battingTeam === match.teamHome ? match.teamAway : match.teamHome;
+    if (!team) continue;
+    member(team, b.cricsheetId, b.name).wickets += b.wickets;
+    bumpAppearance(team, b.matchId, b.cricsheetId, b.name);
+  }
+
+  return [...squads.entries()]
+    .map(([team, byPlayer]) => ({
+      team,
+      members: [...byPlayer.values()].sort(
+        (a, b) => b.appearances - a.appearances || b.runs - a.runs,
+      ),
+    }))
+    .sort((a, b) => a.team.localeCompare(b.team));
+}
+
+export interface EditionVenue {
+  venue: string | null;
+  city: string | null;
+  matches: number;
+}
+
+/** Venues used in an edition with match counts. */
+export async function getEditionVenues(
+  eventName: string | null,
+  season: string | null,
+): Promise<EditionVenue[]> {
+  const groups = await prisma.careerMatch.groupBy({
+    by: ["venue", "city"],
+    where: { eventName, season },
+    _count: { _all: true },
+  });
+  return groups
+    .map((g) => ({ venue: g.venue, city: g.city, matches: g._count._all }))
+    .sort((a, b) => b.matches - a.matches);
+}
+
 // ── Player search / browse ──────────────────────────────────────────────────
 
 export const PLAYERS_PAGE_SIZE = 36;

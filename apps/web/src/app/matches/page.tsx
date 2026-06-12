@@ -45,9 +45,9 @@ export default async function MatchesPage({
               defaultValue={q}
               placeholder="Search team, series, or venue…"
               autoComplete="off"
-              className="flex-1 rounded-xl border border-line bg-white/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
+              className="flex-1 rounded-xl border border-line bg-black/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
             />
-            <button type="submit" className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-black transition-opacity hover:opacity-90">
+            <button type="submit" className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90">
               Search
             </button>
           </form>
@@ -55,7 +55,7 @@ export default async function MatchesPage({
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href={href(q, "", 1)}
-              className={`rounded-full px-3 py-1 text-xs ${cls === "" ? "bg-accent text-black" : "border border-line text-muted hover:text-fg"}`}
+              className={`rounded-full px-3 py-1 text-xs ${cls === "" ? "bg-accent text-white" : "border border-line text-muted hover:text-fg"}`}
             >
               All
             </Link>
@@ -63,7 +63,7 @@ export default async function MatchesPage({
               <Link
                 key={c}
                 href={href(q, c, 1)}
-                className={`rounded-full px-3 py-1 text-xs ${cls === c ? "bg-accent text-black" : "border border-line text-muted hover:text-fg"}`}
+                className={`rounded-full px-3 py-1 text-xs ${cls === c ? "bg-accent text-white" : "border border-line text-muted hover:text-fg"}`}
               >
                 {MATCH_CLASS_LABEL[c]}
               </Link>

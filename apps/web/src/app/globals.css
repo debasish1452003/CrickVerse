@@ -1,26 +1,33 @@
 @import "tailwindcss";
 
-/* ── Design tokens (Tailwind v4, CSS-first) ─────────────────────────────── */
+/* ── Design tokens (Tailwind v4, CSS-first) ───────────────────────────────
+   Light, dense, data-first palette in the spirit of Cricbuzz: a deep-green
+   brand bar, near-white content cards on a light-grey field, a clear cricket
+   green for links/accents, and a red for "live". Most of the app colours its
+   surfaces through these tokens, so the whole UI follows from here. */
 @theme {
-  --color-bg: #07080b;
-  --color-surface: #0d0f15;
-  --color-elevated: #14161f;
-  --color-line: #1d212e;
-  --color-muted: #8b94a9;
-  --color-fg: #eef1f7;
-  --color-accent: #3ddc97;
-  --color-accent-2: #2dd4bf;
-  --color-live: #fb5b6b;
+  --color-bg: #eef1f4; /* page field */
+  --color-surface: #ffffff; /* cards */
+  --color-elevated: #ffffff;
+  --color-line: #e3e7ec; /* hairline borders */
+  --color-muted: #6b7280; /* secondary text */
+  --color-fg: #16181d; /* primary text */
+
+  --color-accent: #119a52; /* cricket green — links, highlights */
+  --color-accent-2: #0e7a45;
+  --color-brand: #0a5c39; /* deep-green header bar */
+  --color-brand-2: #0c6e44;
+  --color-live: #e0322f; /* live / red */
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --radius-xl: 18px;
+  --radius-xl: 12px;
 }
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
     background: var(--color-bg);
@@ -31,66 +38,70 @@
     min-height: 100dvh;
   }
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 30%, transparent);
     color: #04130c;
   }
-  /* Ambient gradient field behind everything. */
+  /* Faint ambient field behind everything. */
   .app-bg {
     position: fixed;
     inset: 0;
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(55rem 38rem at 88% -12%, color-mix(in oklab, var(--color-accent) 13%, transparent), transparent 60%),
-      radial-gradient(48rem 38rem at -6% 2%, color-mix(in oklab, var(--color-accent-2) 11%, transparent), transparent 55%),
+      radial-gradient(60rem 40rem at 92% -16%, color-mix(in oklab, var(--color-accent) 8%, transparent), transparent 60%),
       var(--color-bg);
   }
 }
 
 @layer components {
+  /* The brand bar / any frosted overlay. On light theme this is a solid white
+     panel with a hairline + soft shadow. */
   .glass {
-    background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+    background: var(--color-surface);
     border: 1px solid var(--color-line);
-    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   }
   .card {
     border-radius: var(--radius-xl);
-    background: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--color-elevated) 92%, transparent),
-      var(--color-surface)
-    );
+    background: var(--color-surface);
     border: 1px solid var(--color-line);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
     transition:
-      transform 0.18s ease,
-      border-color 0.18s ease,
-      box-shadow 0.18s ease;
+      transform 0.16s ease,
+      border-color 0.16s ease,
+      box-shadow 0.16s ease;
   }
   .card:hover {
-    transform: translateY(-3px);
-    border-color: color-mix(in oklab, var(--color-accent) 42%, var(--color-line));
-    box-shadow: 0 18px 50px -18px rgba(0, 0, 0, 0.7);
+    border-color: color-mix(in oklab, var(--color-accent) 34%, var(--color-line));
+    box-shadow: 0 8px 24px -12px rgba(16, 24, 40, 0.22);
+  }
+  /* A flat data card that should NOT lift on hover (tables, standings). */
+  .panel {
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   }
   .pill {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    padding: 0.2rem 0.55rem;
-    border-radius: 999px;
-    background: color-mix(in oklab, var(--color-fg) 8%, transparent);
+    padding: 0.18rem 0.5rem;
+    border-radius: 6px;
+    background: color-mix(in oklab, var(--color-fg) 6%, transparent);
     color: var(--color-muted);
   }
   .pill-live {
-    background: color-mix(in oklab, var(--color-live) 16%, transparent);
+    background: color-mix(in oklab, var(--color-live) 14%, transparent);
     color: var(--color-live);
   }
   .pill-accent {
     background: color-mix(in oklab, var(--color-accent) 14%, transparent);
-    color: var(--color-accent);
+    color: var(--color-accent-2);
   }
   .live-dot {
     position: relative;
@@ -107,6 +118,27 @@
     border-radius: 999px;
     background: var(--color-live);
     animation: cv-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  /* Tabbed section nav (Cricbuzz-style underline tabs). */
+  .tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.15rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+  }
+  .tab:hover {
+    color: var(--color-fg);
+  }
+  .tab-active {
+    color: var(--color-accent-2);
+    border-color: var(--color-accent);
   }
 }
 

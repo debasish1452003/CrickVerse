@@ -25,7 +25,7 @@ function Grid({ title, teams }: { title: string; teams: TeamProfileRow[] }) {
     <section className="mt-10">
       <div className="mb-4 flex items-center gap-3">
         <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">{title}</h2>
-        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-muted">{teams.length}</span>
+        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-xs text-muted">{teams.length}</span>
         <div className="h-px flex-1 bg-line" />
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -64,11 +64,11 @@ export default async function TeamsPage({
               defaultValue={q}
               placeholder="Search teams…"
               autoComplete="off"
-              className="flex-1 rounded-xl border border-line bg-white/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
+              className="flex-1 rounded-xl border border-line bg-black/[0.03] px-4 py-2.5 text-sm outline-none transition-colors placeholder:text-muted focus:border-accent/60"
             />
             <button
               type="submit"
-              className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-black transition-opacity hover:opacity-90"
+              className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
             >
               Search
             </button>
