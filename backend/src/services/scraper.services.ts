@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import * as fs from "fs";
+import { CricinfoUrls } from "../utils/url.builder.js";
+import { upsertMatches } from "./db/match.db.service.js";
 
 // ============================================================================
 // 1. GENERIC FETCHER
@@ -126,22 +128,29 @@ export const parseSeriesFixtures = (jsonData: any) => {
   });
 };
 
-// ============================================================================
-// 3. THE ROUTER / CONTROLLER
-// Decides which parser to use based on the URL provided
-// ============================================================================
-export const scrapeCricinfoLink = async (url: string) => {
-  const rawJson = await fetchCricinfoJSON(url);
-  if (!rawJson) return [];
+export const scrapeAndStoreSeries = async (
+  slug: string,
+  id: string | number,
+) => {
+  try {
+    const url = CricinfoUrls.seriesFixtures(slug, String(id));
 
-  // Route 1: Series Fixtures
-  if (url.includes("/match-schedule-fixtures-and-results")) {
-    console.log("📅 Detected Series Fixtures page. Parsing...");
-    return parseSeriesFixtures(rawJson);
+    console.log("📡 Scraping:", url);
+
+    const rawJson = await fetchCricinfoJSON(url);
+    if (!rawJson) return;
+
+    const matches = parseSeriesFixtures(rawJson);
+
+    if (!matches.length) {
+      console.log("⚠️ No matches parsed");
+      return;
+    }
+
+    await upsertMatches(matches);
+
+    console.log("✅ Series synced successfully");
+  } catch (err) {
+    console.error("❌ Scraper failed:", err);
   }
-
-  // Route Fallback: Unknown URL
-  console.log("⚠️ Unknown URL format. Saving dump to unknown_dump.json");
-  fs.writeFileSync("unknown_dump.json", JSON.stringify(rawJson, null, 2));
-  return [];
 };

@@ -1,10 +1,12 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import MatchCard from "./components/MatchCard";
-import "./App.css"; // We will create this below
+import MatchDetail from "./pages/matchDetails";
+import "./App.css";
 
-function App() {
+function Home() {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +15,8 @@ function App() {
       axios
         .get("/api/matches")
         .then((res) => {
-          setMatches(res.data);
+          // 🔥 IMPORTANT FIX
+          setMatches(Array.isArray(res.data.data) ? res.data.data : []);
           setLoading(false);
         })
         .catch((err) => {
@@ -44,6 +47,17 @@ function App() {
         )}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/match/:id" element={<MatchDetail />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

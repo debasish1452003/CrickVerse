@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/* ── Design tokens (Tailwind v4, CSS-first) ─────────────────────────────── */
+@theme {
+  --color-bg: #07080b;
+  --color-surface: #0d0f15;
+  --color-elevated: #14161f;
+  --color-line: #1d212e;
+  --color-muted: #8b94a9;
+  --color-fg: #eef1f7;
+  --color-accent: #3ddc97;
+  --color-accent-2: #2dd4bf;
+  --color-live: #fb5b6b;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-xl: 18px;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    color: #04130c;
+  }
+  /* Ambient gradient field behind everything. */
+  .app-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(55rem 38rem at 88% -12%, color-mix(in oklab, var(--color-accent) 13%, transparent), transparent 60%),
+      radial-gradient(48rem 38rem at -6% 2%, color-mix(in oklab, var(--color-accent-2) 11%, transparent), transparent 55%),
+      var(--color-bg);
+  }
+}
+
+@layer components {
+  .glass {
+    background: color-mix(in oklab, var(--color-surface) 78%, transparent);
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+  .card {
+    border-radius: var(--radius-xl);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-elevated) 92%, transparent),
+      var(--color-surface)
+    );
+    border: 1px solid var(--color-line);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--color-accent) 42%, var(--color-line));
+    box-shadow: 0 18px 50px -18px rgba(0, 0, 0, 0.7);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-fg) 8%, transparent);
+    color: var(--color-muted);
+  }
+  .pill-live {
+    background: color-mix(in oklab, var(--color-live) 16%, transparent);
+    color: var(--color-live);
+  }
+  .pill-accent {
+    background: color-mix(in oklab, var(--color-accent) 14%, transparent);
+    color: var(--color-accent);
+  }
+  .live-dot {
+    position: relative;
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--color-live);
+  }
+  .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: var(--color-live);
+    animation: cv-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes cv-ping {
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}

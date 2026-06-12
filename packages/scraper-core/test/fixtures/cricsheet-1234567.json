@@ -1,0 +1,74 @@
+{
+  "meta": { "data_version": "1.1.0", "created": "2026-01-01", "revision": 1 },
+  "info": {
+    "balls_per_over": 6,
+    "city": "Mumbai",
+    "dates": ["2026-04-01"],
+    "event": { "name": "Indian Premier League", "match_number": 7 },
+    "gender": "male",
+    "match_type": "T20",
+    "outcome": { "winner": "Mumbai Indians", "by": { "runs": 8 } },
+    "overs": 20,
+    "player_of_match": ["SA Yadav"],
+    "players": {
+      "Mumbai Indians": ["RG Sharma", "Ishan Kishan", "SA Yadav", "JJ Bumrah"],
+      "Chennai Super Kings": ["DL Chahar", "RA Jadeja", "MS Dhoni"]
+    },
+    "registry": {
+      "people": {
+        "RG Sharma": "r-sharma-1",
+        "Ishan Kishan": "i-kishan-1",
+        "SA Yadav": "s-yadav-1",
+        "JJ Bumrah": "j-bumrah-1",
+        "DL Chahar": "d-chahar-1",
+        "RA Jadeja": "r-jadeja-1",
+        "MS Dhoni": "m-dhoni-1"
+      }
+    },
+    "season": "2026",
+    "team_type": "club",
+    "teams": ["Mumbai Indians", "Chennai Super Kings"],
+    "toss": { "decision": "field", "winner": "Chennai Super Kings" },
+    "venue": "Wankhede Stadium"
+  },
+  "innings": [
+    {
+      "team": "Mumbai Indians",
+      "overs": [
+        {
+          "over": 0,
+          "deliveries": [
+            { "batter": "RG Sharma", "bowler": "DL Chahar", "non_striker": "Ishan Kishan", "runs": { "batter": 4, "extras": 0, "total": 4 } },
+            { "batter": "RG Sharma", "bowler": "DL Chahar", "non_striker": "Ishan Kishan", "runs": { "batter": 0, "extras": 0, "total": 0 } },
+            { "batter": "RG Sharma", "bowler": "DL Chahar", "non_striker": "Ishan Kishan", "extras": { "wides": 1 }, "runs": { "batter": 0, "extras": 1, "total": 1 } },
+            { "batter": "RG Sharma", "bowler": "DL Chahar", "non_striker": "Ishan Kishan", "runs": { "batter": 1, "extras": 0, "total": 1 } },
+            { "batter": "Ishan Kishan", "bowler": "DL Chahar", "non_striker": "RG Sharma", "runs": { "batter": 0, "extras": 0, "total": 0 }, "wickets": [{ "player_out": "Ishan Kishan", "kind": "caught", "fielders": [{ "name": "MS Dhoni" }] }] },
+            { "batter": "SA Yadav", "bowler": "DL Chahar", "non_striker": "RG Sharma", "runs": { "batter": 6, "extras": 0, "total": 6 } }
+          ]
+        },
+        {
+          "over": 1,
+          "deliveries": [
+            { "batter": "SA Yadav", "bowler": "RA Jadeja", "non_striker": "RG Sharma", "extras": { "noballs": 1 }, "runs": { "batter": 0, "extras": 1, "total": 1 } },
+            { "batter": "SA Yadav", "bowler": "RA Jadeja", "non_striker": "RG Sharma", "extras": { "byes": 2 }, "runs": { "batter": 0, "extras": 2, "total": 2 } },
+            { "batter": "SA Yadav", "bowler": "RA Jadeja", "non_striker": "RG Sharma", "runs": { "batter": 2, "extras": 0, "total": 2 } },
+            { "batter": "SA Yadav", "bowler": "RA Jadeja", "non_striker": "RG Sharma", "runs": { "batter": 1, "extras": 0, "total": 1 }, "wickets": [{ "player_out": "RG Sharma", "kind": "run out", "fielders": [{ "name": "RA Jadeja" }] }] }
+          ]
+        }
+      ]
+    },
+    {
+      "team": "Chennai Super Kings",
+      "overs": [
+        {
+          "over": 0,
+          "deliveries": [
+            { "batter": "MS Dhoni", "bowler": "JJ Bumrah", "non_striker": "RA Jadeja", "runs": { "batter": 6, "extras": 0, "total": 6 } },
+            { "batter": "MS Dhoni", "bowler": "JJ Bumrah", "non_striker": "RA Jadeja", "runs": { "batter": 4, "extras": 0, "total": 4 } },
+            { "batter": "MS Dhoni", "bowler": "JJ Bumrah", "non_striker": "RA Jadeja", "runs": { "batter": 0, "extras": 0, "total": 0 }, "wickets": [{ "player_out": "MS Dhoni", "kind": "bowled" }] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,662 @@
+// CrickVerse data model.
+// Canonical entities use cuid() surrogate PKs. The same real-world entity from
+// ESPNCricinfo (numeric objectId) and Cricsheet (registry id / name) is reconciled
+// into ONE canonical row via the per-entity *ExternalId mapping tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Source {
+  CRICINFO
+  CRICSHEET
+}
+
+enum CrawlMode {
+  LIVE
+  HISTORICAL
+}
+
+enum EntityKind {
+  PLAYER
+  TEAM
+  VENUE
+  SERIES
+  MATCH
+}
+
+enum MatchFormat {
+  T20
+  ODI
+  TEST
+  T10
+  HUNDRED
+  OTHER
+}
+
+// The "class of cricket" (ESPNcricinfo-style), which — unlike MatchFormat —
+// keeps international and domestic/league apart so career stats can be split the
+// way Cricbuzz/ESPNcricinfo do (Tests vs First-class, ODIs vs List A, T20Is vs
+// franchise T20). Derived from Cricsheet's raw match_type.
+enum MatchClass {
+  TEST // international Test (cricsheet "Test")
+  ODI // international ODI (cricsheet "ODI")
+  T20I // international T20 (cricsheet "IT20")
+  FIRST_CLASS // domestic multi-day (cricsheet "MDM")
+  LIST_A // domestic one-day (cricsheet "ODM")
+  T20 // franchise/domestic T20 leagues — IPL, BBL, PSL… (cricsheet "T20")
+  T10 // T10 leagues
+  HUNDRED // The Hundred
+  OTHER
+}
+
+enum MatchState {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  ABANDONED
+}
+
+enum TossDecision {
+  BAT
+  FIELD
+}
+
+enum DismissalKind {
+  BOWLED
+  CAUGHT
+  LBW
+  RUN_OUT
+  STUMPED
+  HIT_WICKET
+  CAUGHT_AND_BOWLED
+  RETIRED_OUT
+  OBSTRUCTING
+  TIMED_OUT
+  NOT_OUT
+  OTHER
+}
+
+// ─── Canonical cricket entities ────────────────────────────────────────────
+
+model Player {
+  id           String   @id @default(cuid())
+  fullName     String
+  knownAs      String?
+  country      String?
+  role         String?
+  battingStyle String?
+  bowlingStyle String?
+  needsReview  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  externalIds            PlayerExternalId[]
+  battingPerfs           BattingPerformance[]
+  bowlingPerfs           BowlingPerformance[]
+  deliveriesAsBatter     Delivery[]           @relation("batter")
+  deliveriesAsBowler     Delivery[]           @relation("bowler")
+  deliveriesAsNonStriker Delivery[]           @relation("nonStriker")
+  dismissals             Delivery[]           @relation("playerOut")
+  favorites              FavoritePlayer[]
+
+  @@index([fullName])
+  @@index([country])
+}
+
+model Team {
+  id           String   @id @default(cuid())
+  name         String
+  shortName    String?
+  country      String?
+  primaryColor String?
+  imageUrl     String?
+  isNational   Boolean  @default(false)
+  needsReview  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  externalIds TeamExternalId[]
+  homeMatches Match[]          @relation("homeTeam")
+  awayMatches Match[]          @relation("awayTeam")
+  tossWins    Match[]          @relation("tossWinner")
+  wins        Match[]          @relation("winner")
+  innings     Innings[]
+  favorites   FavoriteTeam[]
+
+  @@index([name])
+}
+
+model Venue {
+  id          String   @id @default(cuid())
+  name        String
+  city        String?
+  country     String?
+  capacity    Int?
+  needsReview Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  externalIds VenueExternalId[]
+  matches     Match[]
+
+  @@index([name])
+}
+
+model Series {
+  id          String       @id @default(cuid())
+  name        String
+  longName    String?
+  slug        String?
+  season      String?
+  format      MatchFormat?
+  startDate   DateTime?
+  endDate     DateTime?
+  needsReview Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  externalIds SeriesExternalId[]
+  matches     Match[]
+
+  @@index([season])
+}
+
+model Match {
+  id           String        @id @default(cuid())
+  title        String?
+  slug         String?
+  format       MatchFormat   @default(OTHER)
+  // International-vs-league class + the raw Cricsheet match_type it derives from
+  // (kept losslessly for the ML corpus / future reclassification).
+  matchClass   MatchClass?
+  matchType    String?
+  state        MatchState    @default(SCHEDULED)
+  startTime    DateTime?
+  matchDate    DateTime? // date-only; cross-source dedupe key
+  dayNight     Boolean?
+  statusText   String?
+  homeScore    String? // denormalized display score for fast cards
+  awayScore    String?
+  tossDecision TossDecision?
+
+  seriesId     String?
+  series       Series? @relation(fields: [seriesId], references: [id])
+  venueId      String?
+  venue        Venue?  @relation(fields: [venueId], references: [id])
+  homeTeamId   String?
+  homeTeam     Team?   @relation("homeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId   String?
+  awayTeam     Team?   @relation("awayTeam", fields: [awayTeamId], references: [id])
+  tossWinnerId String?
+  tossWinner   Team?   @relation("tossWinner", fields: [tossWinnerId], references: [id])
+  winnerId     String?
+  winner       Team?   @relation("winner", fields: [winnerId], references: [id])
+
+  hasScorecard  Boolean @default(false)
+  hasCommentary Boolean @default(false)
+  hasBallByBall Boolean @default(false)
+
+  // Cricsheet bumps meta.revision when it corrects a published file. We store the
+  // last-ingested revision so the incremental feed re-ingests only on a bump.
+  sourceRevision Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  externalIds MatchExternalId[]
+  innings     Innings[]
+  deliveries  Delivery[]
+  favorites   FavoriteMatch[]
+
+  @@index([state, startTime])
+  @@index([startTime])
+  @@index([seriesId])
+  @@index([venueId])
+  @@index([matchClass])
+  @@index([matchDate, homeTeamId, awayTeamId])
+}
+
+model Innings {
+  id            String  @id @default(cuid())
+  matchId       String
+  match         Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  inningsNo     Int
+  battingTeamId String?
+  battingTeam   Team?   @relation(fields: [battingTeamId], references: [id])
+  runs          Int     @default(0)
+  wickets       Int     @default(0)
+  oversText     String?
+  balls         Int?
+  extras        Int     @default(0)
+
+  battingPerfs BattingPerformance[]
+  bowlingPerfs BowlingPerformance[]
+  deliveries   Delivery[]
+
+  @@unique([matchId, inningsNo])
+  @@index([battingTeamId])
+}
+
+model BattingPerformance {
+  id            String        @id @default(cuid())
+  inningsId     String
+  innings       Innings       @relation(fields: [inningsId], references: [id], onDelete: Cascade)
+  playerId      String
+  player        Player        @relation(fields: [playerId], references: [id])
+  battingPos    Int?
+  runs          Int           @default(0)
+  balls         Int           @default(0)
+  fours         Int           @default(0)
+  sixes         Int           @default(0)
+  strikeRate    Float?
+  dismissal     DismissalKind @default(NOT_OUT)
+  dismissalText String?
+
+  @@unique([inningsId, playerId])
+  @@index([playerId])
+}
+
+model BowlingPerformance {
+  id        String  @id @default(cuid())
+  inningsId String
+  innings   Innings @relation(fields: [inningsId], references: [id], onDelete: Cascade)
+  playerId  String
+  player    Player  @relation(fields: [playerId], references: [id])
+  oversText String?
+  balls     Int     @default(0)
+  maidens   Int     @default(0)
+  runs      Int     @default(0)
+  wickets   Int     @default(0)
+  economy   Float?
+
+  @@unique([inningsId, playerId])
+  @@index([playerId])
+}
+
+// Ball-by-ball (Cricsheet) — the flat ML feature table.
+model Delivery {
+  id            String         @id @default(cuid())
+  matchId       String
+  match         Match          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  inningsId     String
+  innings       Innings        @relation(fields: [inningsId], references: [id], onDelete: Cascade)
+  inningsNo     Int
+  overNo        Int
+  ballInOver    Int
+  batterId      String
+  batter        Player         @relation("batter", fields: [batterId], references: [id])
+  bowlerId      String
+  bowler        Player         @relation("bowler", fields: [bowlerId], references: [id])
+  nonStrikerId  String?
+  nonStriker    Player?        @relation("nonStriker", fields: [nonStrikerId], references: [id])
+  runsBatter    Int            @default(0)
+  runsExtras    Int            @default(0)
+  runsTotal     Int            @default(0)
+  extraType     String?
+  isWicket      Boolean        @default(false)
+  dismissalKind DismissalKind?
+  playerOutId   String?
+  playerOut     Player?        @relation("playerOut", fields: [playerOutId], references: [id])
+  fielders      Json?
+
+  @@unique([matchId, inningsNo, overNo, ballInOver])
+  @@index([batterId])
+  @@index([bowlerId])
+  @@index([batterId, bowlerId])
+  @@index([matchId, inningsNo])
+}
+
+// ─── Dual-source identity mapping ──────────────────────────────────────────
+
+model PlayerExternalId {
+  id         String @id @default(cuid())
+  source     Source
+  externalId String
+  playerId   String
+  player     Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@unique([source, playerId])
+  @@index([playerId])
+}
+
+model TeamExternalId {
+  id         String @id @default(cuid())
+  source     Source
+  externalId String
+  teamId     String
+  team       Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@unique([source, teamId])
+  @@index([teamId])
+}
+
+model VenueExternalId {
+  id         String @id @default(cuid())
+  source     Source
+  externalId String
+  venueId    String
+  venue      Venue  @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@unique([source, venueId])
+  @@index([venueId])
+}
+
+model SeriesExternalId {
+  id         String @id @default(cuid())
+  source     Source
+  externalId String
+  seriesId   String
+  series     Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@unique([source, seriesId])
+  @@index([seriesId])
+}
+
+model MatchExternalId {
+  id         String @id @default(cuid())
+  source     Source
+  externalId String
+  matchId    String
+  match      Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@unique([source, matchId])
+  @@index([matchId])
+}
+
+// Resolver memory: teaches a normalized name -> canonical entity id.
+model NameAlias {
+  id          String     @id @default(cuid())
+  kind        EntityKind
+  alias       String
+  normalized  String
+  canonicalId String
+  source      Source?
+
+  @@unique([kind, normalized])
+  @@index([kind, canonicalId])
+}
+
+// The seed list of pages the scraper tracks ("add a few URLs" lives here).
+model ScrapeSource {
+  id        String    @id @default(cuid())
+  pageType  String // e.g. "series-fixtures"
+  slug      String
+  objectId  String
+  label     String?
+  mode      CrawlMode @default(LIVE)
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([pageType, slug, objectId])
+  @@index([active])
+}
+
+// ─── Gold layer: career aggregates from the Parquet lakehouse ──────────────
+// Bulk-written by DuckDB (over the silver Parquet) via its postgres extension,
+// keyed by Cricsheet player id so the whole corpus's careers fit free Neon
+// without per-row reconciliation. The ball-by-ball corpus stays in Parquet.
+
+model CareerPlayer {
+  cricsheetId   String   @id
+  name          String
+  cricinfoId    String?
+  gender        String?
+  careerMatches Int      @default(0)
+  careerRuns    Int      @default(0)
+  careerWickets Int      @default(0)
+  updatedAt     DateTime @default(now())
+
+  stats CareerStat[]
+
+  @@index([name])
+  @@index([cricinfoId])
+}
+
+model CareerStat {
+  cricsheetId String
+  matchClass  String // TEST | ODI | T20I | FIRST_CLASS | LIST_A | T20 | T10 | HUNDRED | OTHER
+  player      CareerPlayer @relation(fields: [cricsheetId], references: [cricsheetId], onDelete: Cascade)
+
+  // Batting
+  matches         Int    @default(0)
+  batInnings      Int    @default(0)
+  runs            Int    @default(0)
+  ballsFaced      Int    @default(0)
+  notOuts         Int    @default(0)
+  highScore       Int    @default(0)
+  highScoreNotOut Boolean @default(false)
+  fifties         Int    @default(0)
+  hundreds        Int    @default(0)
+  ducks           Int    @default(0)
+  fours           Int    @default(0)
+  sixes           Int    @default(0)
+  battingAvg      Float?
+  strikeRate      Float?
+
+  // Bowling
+  bowlInnings     Int    @default(0)
+  ballsBowled     Int    @default(0)
+  runsConceded    Int    @default(0)
+  wickets         Int    @default(0)
+  bestBowlingWkts Int    @default(0)
+  bestBowlingRuns Int    @default(0)
+  fiveWickets     Int    @default(0)
+  economy         Float?
+  bowlingAvg      Float?
+  bowlingSr       Float?
+
+  @@id([cricsheetId, matchClass])
+  @@index([cricsheetId])
+}
+
+// Gold match + scorecard (one set of rows per Cricsheet match), bulk-written by
+// DuckDB from the silver Parquet. Powers the matches browser + scorecard pages.
+
+model CareerMatch {
+  matchId          String   @id
+  matchClass       String
+  matchType        String?
+  gender           String?
+  season           String?
+  eventName        String?
+  eventMatchNumber Int?
+  venue            String?
+  city             String?
+  matchDate        String? // yyyy-mm-dd (kept as-is from Cricsheet)
+  teamHome         String?
+  teamAway         String?
+  tossWinner       String?
+  tossDecision     String?
+  winner           String?
+  inn1Score        String? // e.g. "187/4 (20)"
+  inn2Score        String?
+
+  innings ScorecardInnings[]
+  batting ScorecardBatting[]
+  bowling ScorecardBowling[]
+
+  @@index([matchClass])
+  @@index([season])
+  @@index([eventName])
+  @@index([matchDate])
+}
+
+model ScorecardInnings {
+  matchId     String
+  inningsNo   Int
+  match       CareerMatch @relation(fields: [matchId], references: [matchId], onDelete: Cascade)
+  battingTeam String?
+  runs        Int         @default(0)
+  wickets     Int         @default(0)
+  balls       Int         @default(0)
+
+  @@id([matchId, inningsNo])
+}
+
+model ScorecardBatting {
+  matchId     String
+  inningsNo   Int
+  battingPos  Int
+  match       CareerMatch @relation(fields: [matchId], references: [matchId], onDelete: Cascade)
+  cricsheetId String?
+  name        String
+  runs        Int         @default(0)
+  balls       Int         @default(0)
+  fours       Int         @default(0)
+  sixes       Int         @default(0)
+  strikeRate  Float?
+  out         Boolean     @default(false)
+  dismissal   String?
+
+  @@id([matchId, inningsNo, battingPos])
+  @@index([matchId])
+}
+
+model ScorecardBowling {
+  matchId     String
+  inningsNo   Int
+  bowlingPos  Int
+  match       CareerMatch @relation(fields: [matchId], references: [matchId], onDelete: Cascade)
+  cricsheetId String?
+  name        String
+  balls       Int         @default(0)
+  maidens     Int         @default(0)
+  runs        Int         @default(0)
+  wickets     Int         @default(0)
+  economy     Float?
+
+  @@id([matchId, inningsNo, bowlingPos])
+  @@index([matchId])
+}
+
+// Watermark/cursor for an incremental ingest feed (one row per Cricsheet archive).
+// Holds the conditional-GET validators (ETag / Last-Modified) so the next run can
+// send If-None-Match / If-Modified-Since and short-circuit on HTTP 304, plus the
+// last run's outcome for ops visibility. `feedKey` matches the ScrapeSource.slug.
+model IngestState {
+  id              String    @id @default(cuid())
+  feedKey         String    @unique
+  etag            String?
+  lastModified    String?
+  lastRunAt       DateTime?
+  lastStatus      String? // "ok" | "not-modified" | "error"
+  lastError       String?
+  matchesIngested Int       @default(0) // cumulative across all runs
+  matchesSkipped  Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// Raw __NEXT_DATA__ snapshots: source of truth for re-parsing without re-fetching.
+model RawSnapshot {
+  id         String   @id @default(cuid())
+  pageType   String
+  url        String
+  paramsHash String
+  payload    Json
+  httpStatus Int      @default(200)
+  fetchedAt  DateTime @default(now())
+
+  @@index([pageType, paramsHash, fetchedAt])
+}
+
+// ─── Auth.js (NextAuth v5) + user-owned data ───────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts        Account[]
+  sessions        Session[]
+  favoritePlayers FavoritePlayer[]
+  favoriteTeams   FavoriteTeam[]
+  favoriteMatches FavoriteMatch[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model FavoritePlayer {
+  userId    String
+  playerId  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@id([userId, playerId])
+  @@index([playerId])
+}
+
+model FavoriteTeam {
+  userId    String
+  teamId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId])
+  @@index([teamId])
+}
+
+model FavoriteMatch {
+  userId    String
+  matchId   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@id([userId, matchId])
+  @@index([matchId])
+}

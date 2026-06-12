@@ -1,19 +1,40 @@
 # dependencies
 node_modules/
-frontend/node_modules/
-backend/node_modules/
+.pnpm-store/
 
-# build
+# build outputs
 dist/
 build/
+.next/
+out/
+*.tsbuildinfo
+
+# turbo
+.turbo/
+
+# prisma generated client / local artifacts
+packages/db/generated/
+packages/db/prisma/*.db
+
+# scraper raw snapshot mirror (dev convenience)
+.snapshots/
+*.snapshot.json
+
+# cricsheet downloads
+.cricsheet-cache/
 
 # env
 .env
-backend/.env
-frontend/.env
+.env.*
+!.env.example
 
 # logs
 *.log
+npm-debug.log*
+pnpm-debug.log*
+
+# coverage / test
+coverage/
 
 # OS
 .DS_Store
@@ -22,3 +43,20 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# legacy debug artifacts
+backend/debug_db_match.json
+
+# Cricsheet scratch data + people.csv cache (Phase 9)
+.cricsheet-data/
+apps/worker/.cache/
+
+# Lakehouse (silver Parquet + DuckDB + staging) — regenerable from Cricsheet
+data/
+*.duckdb
+*.duckdb.wal
+
+# Python ML env
+machine learning/.venv/
+__pycache__/
+*.pyc

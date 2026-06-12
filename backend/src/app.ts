@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
-import matchRoutes from "./routes/match.routes.js";
 import morgan from "morgan";
 import type { Application, Response, Request } from "express";
 import { errorHandler } from "./middleware/error.middleware.js";
-import { startScraper } from "./jobs/scraper.job.js";
-import { getMatches } from "./controllers/match.controller.js";
+import {
+  getMatches,
+  scrapeSeriesController,
+} from "./controllers/match.controller.js";
 
 const app: Application = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/matches", getMatches);
+app.get("/api/scrape/series", scrapeSeriesController);
 app.use(errorHandler);
 //#endregion
 
