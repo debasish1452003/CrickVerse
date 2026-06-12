@@ -259,10 +259,12 @@ export default async function MatchPage({
         ) : (
           match.innings.map((inn: MatchInnings) => {
             const batted = inn.battingPerfs.filter(
-              (b) => b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT",
+              (b: MatchBattingPerf) =>
+                b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT",
             );
             const didNotBat = inn.battingPerfs.filter(
-              (b) => !(b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT"),
+              (b: MatchBattingPerf) =>
+                !(b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT"),
             );
             return (
               <section key={inn.id} className="card mt-6 overflow-hidden">
