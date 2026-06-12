@@ -10,11 +10,32 @@ import {
   MATCH_CLASS_LABEL,
   type FormatCareer,
 } from "@/lib/player-stats";
-import { getCareerPlayer, getPlayerById } from "@/lib/queries";
+import { getCareerPlayer, getPlayerById, getPlayerProfile } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
 const n2 = (n: number | null) => (n == null ? "—" : n.toFixed(2));
+
+/** Whole years between an ISO yyyy-mm-dd birth date and today. */
+function ageFromDob(dob: string | null | undefined): number | null {
+  if (!dob) return null;
+  const d = new Date(dob);
+  if (Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  const m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age -= 1;
+  return age >= 0 && age < 120 ? age : null;
+}
+
+function BioChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-line bg-white/[0.02] px-3 py-2">
+      <div className="text-[10px] uppercase tracking-wider text-muted">{label}</div>
+      <div className="mt-0.5 text-sm font-medium">{value}</div>
+    </div>
+  );
+}
 
 function Table({ head, children }: { head: string[]; children: ReactNode }) {
   return (
@@ -60,15 +81,24 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
   const canonical = gold ? null : await getPlayerById(id);
   if (!gold && !canonical) notFound();
 
+  // Enrichment (photo + bio) is keyed by Cricsheet id — only meaningful on the gold path.
+  const profile = gold ? await getPlayerProfile(id) : null;
+
   const name = gold ? gold.name : canonical!.fullName;
+  const genderLabel =
+    gold?.gender === "female" ? "Women's cricket" : gold?.gender === "male" ? "Men's cricket" : null;
   const subtitle = gold
-    ? gold.gender === "female"
-      ? "Women's cricket"
-      : gold.gender === "male"
-        ? "Men's cricket"
-        : "Player"
+    ? [profile?.role, profile?.birthPlace, genderLabel].filter(Boolean).join(" · ") || "Player"
     : [canonical!.country, canonical!.role, canonical!.battingStyle].filter(Boolean).join(" · ") ||
       "Player";
+  const age = ageFromDob(profile?.dateOfBirth);
+  const bio: { label: string; value: string }[] = [];
+  if (profile?.dateOfBirth)
+    bio.push({ label: "Born", value: age != null ? `${profile.dateOfBirth} (age ${age})` : profile.dateOfBirth });
+  if (profile?.birthPlace) bio.push({ label: "Birthplace", value: profile.birthPlace });
+  if (profile?.role) bio.push({ label: "Role", value: profile.role });
+  if (profile?.battingStyle) bio.push({ label: "Batting", value: profile.battingStyle });
+  if (profile?.bowlingStyle) bio.push({ label: "Bowling", value: profile.bowlingStyle });
 
   const byClass: FormatCareer[] = gold ? careersFromGold(gold.stats) : careerByClass(canonical!);
   const battingRows = byClass.filter((c) => c.batting.innings > 0);
@@ -94,16 +124,39 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             ← All players
           </Link>
           <div className="mt-3 flex items-center gap-4">
-            <PlayerAvatar name={name} size={64} />
+            <PlayerAvatar name={name} src={profile?.photoUrl} size={88} />
             <div>
               <h1 className="text-3xl font-semibold tracking-tight">{name}</h1>
               <p className="mt-1 text-sm text-muted">{subtitle}</p>
+              <p className="mt-3 font-mono text-sm tabular-nums text-muted">
+                {totalMatches} matches · <span className="text-fg">{totalRuns.toLocaleString()}</span> runs ·{" "}
+                <span className="text-fg">{totalWkts}</span> wickets
+              </p>
             </div>
           </div>
-          <p className="mt-4 font-mono text-sm tabular-nums text-muted">
-            {totalMatches} matches · <span className="text-fg">{totalRuns.toLocaleString()}</span> runs ·{" "}
-            <span className="text-fg">{totalWkts}</span> wickets
-          </p>
+
+          {bio.length > 0 && (
+            <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+              {bio.map((b) => (
+                <BioChip key={b.label} label={b.label} value={b.value} />
+              ))}
+            </div>
+          )}
+
+          {profile?.photoUrl && (
+            <p className="mt-4 text-[11px] text-muted">
+              Photo:{" "}
+              <a
+                href={profile.photoFilePage ?? profile.photoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="underline hover:text-fg"
+              >
+                {profile.photoCredit || "Wikimedia Commons"}
+              </a>
+              {profile.photoLicense ? ` · ${profile.photoLicense}` : ""}
+            </p>
+          )}
         </section>
 
         {battingRows.length > 0 && (

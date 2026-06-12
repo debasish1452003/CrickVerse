@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
 import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
-import { searchMatches } from "@/lib/queries";
+import { getTeamProfiles, searchMatches } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,7 @@ export default async function MatchesPage({
   const cls = (sp.class ?? "").trim();
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
   const { items, total, pageCount } = await searchMatches({ q, matchClass: cls || undefined, page });
+  const teams = await getTeamProfiles(items.flatMap((m) => [m.teamHome, m.teamAway]));
 
   return (
     <>
@@ -84,7 +85,7 @@ export default async function MatchesPage({
         ) : (
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((m) => (
-              <MatchRow key={m.matchId} m={m} />
+              <MatchRow key={m.matchId} m={m} teams={teams} />
             ))}
           </div>
         )}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import { getCompetition, NO_SEASON, OTHER_COMPETITION, searchMatches } from "@/lib/queries";
+import { getCompetition, getTeamProfiles, NO_SEASON, OTHER_COMPETITION, searchMatches } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +37,7 @@ export default async function SeriesEditionPage({
     season: seasonValue ?? "",
     page,
   });
+  const teams = await getTeamProfiles(items.flatMap((m) => [m.teamHome, m.teamAway]));
 
   return (
     <>
@@ -68,7 +69,7 @@ export default async function SeriesEditionPage({
         ) : (
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((m) => (
-              <MatchRow key={m.matchId} m={m} />
+              <MatchRow key={m.matchId} m={m} teams={teams} />
             ))}
           </div>
         )}

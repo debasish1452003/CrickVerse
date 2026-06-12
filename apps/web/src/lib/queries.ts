@@ -96,6 +96,219 @@ export function getCareerPlayer(cricsheetId: string): Promise<CareerPlayerWithSt
   return prisma.careerPlayer.findUnique({ where: { cricsheetId }, include: { stats: true } });
 }
 
+// ── Enrichment: player photos + bio, team logos/flags (Wikidata/Commons) ─────
+
+export type PlayerProfileRow = Prisma.PlayerProfileGetPayload<object>;
+export type TeamProfileRow = Prisma.TeamProfileGetPayload<object>;
+
+/** Normalize a team name the same way the enrichment worker does (TeamProfile PK). */
+export function normalizeTeamName(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+/** Enrichment profile (photo + bio) for one player, or null if not enriched. */
+export function getPlayerProfile(cricsheetId: string): Promise<PlayerProfileRow | null> {
+  return prisma.playerProfile.findUnique({ where: { cricsheetId } });
+}
+
+/** TeamProfile (logo/flag/colour) for a raw team name, or null. */
+export function getTeamProfile(name: string | null | undefined): Promise<TeamProfileRow | null> {
+  if (!name) return Promise.resolve(null);
+  return prisma.teamProfile.findUnique({ where: { id: normalizeTeamName(name) } });
+}
+
+/** Image + colour for a team name from a profile map (franchise logo, else flag). */
+export function teamBadgeFor(
+  name: string | null | undefined,
+  teams: Map<string, TeamProfileRow>,
+): { src: string | null; primaryColor: string | null } {
+  const p = name ? teams.get(normalizeTeamName(name)) : undefined;
+  return { src: p?.logoUrl ?? p?.flagUrl ?? null, primaryColor: p?.primaryColor ?? null };
+}
+
+/** Batch TeamProfile lookup by raw team names → Map keyed by normalized name. */
+export async function getTeamProfiles(
+  names: (string | null | undefined)[],
+): Promise<Map<string, TeamProfileRow>> {
+  const ids = [...new Set(names.filter((n): n is string => !!n).map(normalizeTeamName))];
+  if (ids.length === 0) return new Map();
+  const rows = await prisma.teamProfile.findMany({ where: { id: { in: ids } } });
+  return new Map(rows.map((r) => [r.id, r]));
+}
+
+/** Teams for the hub, ordered by match volume; optional name search + national filter. */
+export async function listTeamProfiles(opts: {
+  q?: string;
+  national?: boolean;
+} = {}): Promise<TeamProfileRow[]> {
+  const q = opts.q?.trim();
+  const where: Prisma.TeamProfileWhereInput = {};
+  if (q) where.displayName = { contains: q, mode: "insensitive" };
+  if (opts.national !== undefined) where.isNational = opts.national;
+  return prisma.teamProfile.findMany({ where, orderBy: [{ matchCount: "desc" }, { displayName: "asc" }] });
+}
+
+/** One team's profile by its normalized-name id. */
+export function getTeamProfileById(id: string): Promise<TeamProfileRow | null> {
+  return prisma.teamProfile.findUnique({ where: { id } });
+}
+
+export interface TeamRecord {
+  played: number;
+  won: number;
+  lost: number;
+  noResult: number;
+}
+
+/** Win/loss record for a team across the whole corpus (exact name membership). */
+export async function getTeamRecord(displayName: string): Promise<TeamRecord> {
+  const rows = await prisma.$queryRaw<{ played: bigint; won: bigint; decided: bigint }[]>`
+    SELECT count(*) AS played,
+      count(*) FILTER (WHERE "winner" = ${displayName}) AS won,
+      count(*) FILTER (WHERE "winner" IS NOT NULL) AS decided
+    FROM "CareerMatch"
+    WHERE "teamHome" = ${displayName} OR "teamAway" = ${displayName}`;
+  const r = rows[0] ?? { played: 0n, won: 0n, decided: 0n };
+  const played = Number(r.played);
+  const won = Number(r.won);
+  const decided = Number(r.decided);
+  return { played, won, lost: decided - won, noResult: played - decided };
+}
+
+export interface SquadMember {
+  cricsheetId: string;
+  name: string;
+  innings: number;
+  runs: number;
+}
+
+/** Top squad members for a team (players who batted in the team's innings). */
+export async function getTeamSquad(displayName: string, limit = 30): Promise<SquadMember[]> {
+  const rows = await prisma.$queryRaw<
+    { cricsheetId: string; name: string; innings: bigint; runs: bigint }[]
+  >`
+    SELECT b."cricsheetId", b."name", count(*) AS innings, COALESCE(sum(b."runs"),0) AS runs
+    FROM "ScorecardBatting" b
+    JOIN "ScorecardInnings" i ON i."matchId" = b."matchId" AND i."inningsNo" = b."inningsNo"
+    WHERE i."battingTeam" = ${displayName} AND b."cricsheetId" IS NOT NULL
+    GROUP BY b."cricsheetId", b."name"
+    ORDER BY innings DESC, runs DESC
+    LIMIT ${limit}`;
+  return rows.map((r) => ({
+    cricsheetId: r.cricsheetId,
+    name: r.name,
+    innings: Number(r.innings),
+    runs: Number(r.runs),
+  }));
+}
+
+/** Paginated matches for a team (exact home/away membership), newest first. */
+export async function getTeamMatches(
+  displayName: string,
+  page = 1,
+  pageSize = MATCHES_PAGE_SIZE,
+): Promise<MatchSearchResult> {
+  const where: Prisma.CareerMatchWhereInput = {
+    OR: [{ teamHome: displayName }, { teamAway: displayName }],
+  };
+  const total = await prisma.careerMatch.count({ where });
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  const p = Math.min(Math.max(1, page), pageCount);
+  const items = await prisma.careerMatch.findMany({
+    where,
+    orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
+    skip: (p - 1) * pageSize,
+    take: pageSize,
+    select: {
+      matchId: true,
+      matchClass: true,
+      eventName: true,
+      matchDate: true,
+      venue: true,
+      teamHome: true,
+      teamAway: true,
+      winner: true,
+      inn1Score: true,
+      inn2Score: true,
+    },
+  });
+  return { items, total, page: p, pageSize, pageCount };
+}
+
+/** Top players by career runs or wickets, with photos — for the home leaderboards. */
+export async function getTopPlayers(
+  by: "runs" | "wickets",
+  limit = 10,
+): Promise<CareerPlayerListItem[]> {
+  const rows = await prisma.careerPlayer.findMany({
+    orderBy: by === "runs" ? [{ careerRuns: "desc" }] : [{ careerWickets: "desc" }],
+    take: limit,
+    select: {
+      cricsheetId: true,
+      name: true,
+      cricinfoId: true,
+      gender: true,
+      careerMatches: true,
+      careerRuns: true,
+      careerWickets: true,
+    },
+  });
+  const profiles = await prisma.playerProfile.findMany({
+    where: { cricsheetId: { in: rows.map((r) => r.cricsheetId) } },
+    select: { cricsheetId: true, photoUrl: true, role: true },
+  });
+  const profById = new Map(profiles.map((p) => [p.cricsheetId, p]));
+  return rows.map((r) => ({
+    ...r,
+    photoUrl: profById.get(r.cricsheetId)?.photoUrl ?? null,
+    role: profById.get(r.cricsheetId)?.role ?? null,
+  }));
+}
+
+export interface RankingRow {
+  team: string;
+  played: number;
+  won: number;
+  winPct: number;
+}
+
+/**
+ * Per-class team leaderboards by win%, computed from gold results. Teams with
+ * fewer than `minMatches` in a class are excluded so small samples don't top the
+ * table. Returns Record<matchClass, RankingRow[]> (each list sorted, win% desc).
+ */
+export async function getTeamRankings(minMatches = 25): Promise<Record<string, RankingRow[]>> {
+  const rows = await prisma.$queryRaw<
+    { matchClass: string; team: string; played: bigint; won: bigint }[]
+  >`
+    WITH t AS (
+      SELECT "matchClass", "teamHome" AS team, ("winner" = "teamHome") AS won
+      FROM "CareerMatch" WHERE "teamHome" IS NOT NULL
+      UNION ALL
+      SELECT "matchClass", "teamAway", ("winner" = "teamAway")
+      FROM "CareerMatch" WHERE "teamAway" IS NOT NULL
+    )
+    SELECT "matchClass", team, count(*) AS played, count(*) FILTER (WHERE won) AS won
+    FROM t GROUP BY "matchClass", team
+    HAVING count(*) >= ${minMatches}`;
+
+  const byClass: Record<string, RankingRow[]> = {};
+  for (const r of rows) {
+    const played = Number(r.played);
+    const won = Number(r.won);
+    (byClass[r.matchClass] ??= []).push({
+      team: r.team,
+      played,
+      won,
+      winPct: played > 0 ? (won / played) * 100 : 0,
+    });
+  }
+  for (const cls of Object.keys(byClass)) {
+    byClass[cls]!.sort((a, b) => b.winPct - a.winPct || b.played - a.played);
+  }
+  return byClass;
+}
+
 export interface CareerPlayerListItem {
   cricsheetId: string;
   name: string;
@@ -104,6 +317,8 @@ export interface CareerPlayerListItem {
   careerMatches: number;
   careerRuns: number;
   careerWickets: number;
+  photoUrl: string | null;
+  role: string | null;
 }
 
 export interface CareerSearchResult {
@@ -135,7 +350,7 @@ export async function searchCareerPlayers(opts: {
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const page = Math.min(requested, pageCount);
 
-  const items = await prisma.careerPlayer.findMany({
+  const rows = await prisma.careerPlayer.findMany({
     where,
     orderBy: [{ careerRuns: "desc" }, { cricsheetId: "asc" }],
     skip: (page - 1) * pageSize,
@@ -151,7 +366,45 @@ export async function searchCareerPlayers(opts: {
     },
   });
 
+  // Merge enrichment photos/role for just this page's players (cheap batch).
+  const profiles = await prisma.playerProfile.findMany({
+    where: { cricsheetId: { in: rows.map((r) => r.cricsheetId) } },
+    select: { cricsheetId: true, photoUrl: true, role: true },
+  });
+  const profById = new Map(profiles.map((p) => [p.cricsheetId, p]));
+  const items: CareerPlayerListItem[] = rows.map((r) => ({
+    ...r,
+    photoUrl: profById.get(r.cricsheetId)?.photoUrl ?? null,
+    role: profById.get(r.cricsheetId)?.role ?? null,
+  }));
+
   return { items, total, page, pageSize, pageCount };
+}
+
+// ── Over-by-over rollup (charts) ─────────────────────────────────────────────
+
+/** One over's rollup, as stored in InningsOvers.overs (compact keys). */
+export interface OverPoint {
+  o: number; // over number (0-based as in Cricsheet)
+  r: number; // runs in the over
+  w: number; // wickets in the over
+  f: number; // fours
+  s: number; // sixes
+  c: number; // cumulative runs to end of this over
+}
+
+export interface InningsOversData {
+  inningsNo: number;
+  overs: OverPoint[];
+}
+
+/** Per-innings over arrays for a match (powers worm/Manhattan charts). */
+export async function getInningsOvers(matchId: string): Promise<InningsOversData[]> {
+  const rows = await prisma.inningsOvers.findMany({
+    where: { matchId },
+    orderBy: { inningsNo: "asc" },
+  });
+  return rows.map((r) => ({ inningsNo: r.inningsNo, overs: (r.overs ?? []) as unknown as OverPoint[] }));
 }
 
 // ── Gold matches + scorecards (full corpus) ──────────────────────────────────

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { MatchDTO, TeamDTO } from "@/lib/serialize";
-import { hueFromName } from "./Crest";
+import { TeamBadge } from "./Crest";
 
 const STATE: Record<string, { label: string; cls: string }> = {
   LIVE: { label: "Live", cls: "pill-live" },
@@ -9,36 +9,14 @@ const STATE: Record<string, { label: string; cls: string }> = {
   ABANDONED: { label: "Abandoned", cls: "" },
 };
 
-function initials(t: TeamDTO): string {
-  const base = (t.shortName ?? t.name ?? "?").replace(/[^A-Za-z]/g, "");
-  return (base.slice(0, 3) || "?").toUpperCase();
-}
-
 export function TeamCrest({ team, size = 36 }: { team: TeamDTO; size?: number }) {
-  if (team.logoUrl) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={team.logoUrl}
-        alt={team.name ?? ""}
-        width={size}
-        height={size}
-        className="shrink-0 rounded-lg bg-white/5 object-contain p-1 ring-1 ring-white/10"
-        style={{ width: size, height: size }}
-      />
-    );
-  }
-  // No stored logo or colour → fall back to a deterministic hue from the name so
-  // each team still reads distinctly instead of a uniform slate block.
-  const hue = hueFromName(team.name ?? team.shortName ?? "?");
-  const bg = team.primaryColor ?? `linear-gradient(135deg, hsl(${hue} 55% 32%), hsl(${(hue + 40) % 360} 50% 20%))`;
   return (
-    <div
-      className="grid shrink-0 place-items-center rounded-lg text-[11px] font-bold text-white ring-1 ring-white/10"
-      style={{ width: size, height: size, background: bg }}
-    >
-      {initials(team)}
-    </div>
+    <TeamBadge
+      name={team.name ?? team.shortName}
+      src={team.logoUrl}
+      primaryColor={team.primaryColor}
+      size={size}
+    />
   );
 }
 

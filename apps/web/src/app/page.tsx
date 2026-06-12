@@ -1,70 +1,159 @@
-import { MatchCard } from "@/components/MatchCard";
+import Link from "next/link";
+import { PlayerAvatar, TeamBadge } from "@/components/Crest";
+import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import { listMatches } from "@/lib/queries";
-import { serializeMatch, type MatchDTO } from "@/lib/serialize";
+import {
+  getCompetitions,
+  getTeamProfiles,
+  getTopPlayers,
+  listTeamProfiles,
+  searchMatches,
+  type CareerPlayerListItem,
+} from "@/lib/queries";
 
 // Live data — never statically prerender (and don't hit the DB at build time).
 export const dynamic = "force-dynamic";
 
-function Section({ title, matches }: { title: string; matches: MatchDTO[] }) {
-  if (matches.length === 0) return null;
-  const isLive = title === "Live";
+function SectionHead({ title, href, cta }: { title: string; href?: string; cta?: string }) {
   return (
-    <section className="mt-12">
-      <div className="mb-5 flex items-center gap-3">
-        {isLive && <span className="live-dot" />}
-        <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">{title}</h2>
-        <span className="rounded-full bg-white/5 px-2 py-0.5 text-xs text-muted">{matches.length}</span>
-        <div className="h-px flex-1 bg-line" />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {matches.map((m) => (
-          <MatchCard key={m.id} match={m} />
+    <div className="mb-4 flex items-center gap-3">
+      <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">{title}</h2>
+      <div className="h-px flex-1 bg-line" />
+      {href && (
+        <Link href={href} className="shrink-0 text-xs text-muted transition-colors hover:text-fg">
+          {cta ?? "View all"} →
+        </Link>
+      )}
+    </div>
+  );
+}
+
+function Leaderboard({
+  title,
+  players,
+  metric,
+}: {
+  title: string;
+  players: CareerPlayerListItem[];
+  metric: "runs" | "wickets";
+}) {
+  return (
+    <section className="card overflow-hidden">
+      <h3 className="border-b border-line px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.16em] text-muted">
+        {title}
+      </h3>
+      <ol className="divide-y divide-line/50">
+        {players.map((p, i) => (
+          <li key={p.cricsheetId}>
+            <Link
+              href={`/players/${p.cricsheetId}`}
+              className="flex items-center gap-3 px-5 py-2.5 transition-colors hover:bg-white/[0.02]"
+            >
+              <span className="w-4 shrink-0 font-mono text-xs tabular-nums text-muted">{i + 1}</span>
+              <PlayerAvatar name={p.name} src={p.photoUrl} size={32} />
+              <span className="min-w-0 flex-1 truncate text-sm font-medium">{p.name}</span>
+              <span className="shrink-0 font-mono text-sm tabular-nums text-accent">
+                {(metric === "runs" ? p.careerRuns : p.careerWickets).toLocaleString()}
+              </span>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
 
 export default async function Home() {
-  const all = (await listMatches()).map(serializeMatch);
-  const live = all.filter((m) => m.state === "LIVE");
-  const upcoming = all.filter((m) => m.state === "SCHEDULED");
-  const completed = all
-    .filter((m) => m.state === "COMPLETED" || m.state === "ABANDONED")
-    .reverse();
+  const [recent, topRuns, topWkts, comps, featuredTeams] = await Promise.all([
+    searchMatches({ page: 1, pageSize: 6 }),
+    getTopPlayers("runs", 10),
+    getTopPlayers("wickets", 10),
+    getCompetitions(),
+    listTeamProfiles({ national: true }),
+  ]);
+  const teams = await getTeamProfiles(recent.items.flatMap((m) => [m.teamHome, m.teamAway]));
+  const topComps = comps.filter((c) => c.eventName).slice(0, 12);
+  const topTeams = featuredTeams.slice(0, 12);
 
   return (
     <>
       <Navbar />
       <main className="mx-auto max-w-6xl px-5 pb-24">
-        <section className="py-14 sm:py-20">
+        <section className="py-12 sm:py-16">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3 py-1 text-xs text-muted">
-            <span className="live-dot" /> Live cricket, structured &amp; analyzed
+            <span className="live-dot" /> {recent.total.toLocaleString()} matches · all formats, all eras
           </p>
           <h1 className="max-w-2xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-            Cricket, <span className="text-accent">beautifully</span> analyzed.
+            All of cricket, <span className="text-accent">beautifully</span> organized.
           </h1>
           <p className="mt-4 max-w-xl text-muted">
-            Live scores, full scorecards, and deep player analytics — pulled from the source,
-            structured into a clean model, and served fast.
+            Full scorecards, ball-by-ball charts, and deep player & team analytics across the entire
+            Cricsheet corpus — structured into a clean model and served fast.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3 text-sm">
+            <Link href="/matches" className="rounded-xl bg-accent px-4 py-2.5 font-medium text-black transition-opacity hover:opacity-90">
+              Browse matches
+            </Link>
+            <Link href="/players" className="rounded-xl border border-line px-4 py-2.5 transition-colors hover:border-accent/50">
+              Explore players
+            </Link>
+          </div>
         </section>
 
-        {all.length === 0 ? (
-          <div className="card grid place-items-center gap-2 p-16 text-center">
-            <p className="text-lg font-medium">No matches yet</p>
-            <p className="text-sm text-muted">Run a crawl to populate the database:</p>
-            <code className="mt-2 rounded-lg bg-black/40 px-3 py-1.5 font-mono text-sm text-accent">
-              pnpm --filter @crickverse/worker run seed ipl-2026 1510719
-            </code>
-          </div>
-        ) : (
-          <>
-            <Section title="Live" matches={live} />
-            <Section title="Upcoming" matches={upcoming} />
-            <Section title="Recent Results" matches={completed} />
-          </>
+        {recent.items.length > 0 && (
+          <section className="mt-4">
+            <SectionHead title="Recent results" href="/matches" />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {recent.items.map((m) => (
+                <MatchRow key={m.matchId} m={m} teams={teams} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="mt-12 grid gap-5 lg:grid-cols-2">
+          <Leaderboard title="Most career runs" players={topRuns} metric="runs" />
+          <Leaderboard title="Most career wickets" players={topWkts} metric="wickets" />
+        </section>
+
+        {topComps.length > 0 && (
+          <section className="mt-12">
+            <SectionHead title="Competitions" href="/series" />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {topComps.map((c) => (
+                <Link
+                  key={c.name}
+                  href={`/series/${encodeURIComponent(c.eventName!)}`}
+                  className="card flex items-center justify-between gap-3 p-4"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate font-medium">{c.name}</span>
+                    <span className="text-xs text-muted">
+                      {c.seasons.length} season{c.seasons.length === 1 ? "" : "s"}
+                      {c.latestSeason ? ` · latest ${c.latestSeason}` : ""}
+                    </span>
+                  </span>
+                  <span className="shrink-0 font-mono text-sm tabular-nums text-muted">
+                    {c.totalMatches.toLocaleString()}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {topTeams.length > 0 && (
+          <section className="mt-12">
+            <SectionHead title="International teams" href="/teams" />
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {topTeams.map((t) => (
+                <Link key={t.id} href={`/teams/${encodeURIComponent(t.id)}`} className="card flex items-center gap-3 p-3">
+                  <TeamBadge name={t.displayName} src={t.logoUrl ?? t.flagUrl} primaryColor={t.primaryColor} size={36} />
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium">{t.displayName}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
       </main>
     </>
