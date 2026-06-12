@@ -1,4 +1,5 @@
 import type { Session } from "next-auth";
+import type { NextRequest } from "next/server";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@crickverse/db";
 import NextAuth from "next-auth";
@@ -15,12 +16,17 @@ const hasGoogleAuth =
   typeof process.env.GOOGLE_CLIENT_SECRET === "string" &&
   process.env.GOOGLE_CLIENT_SECRET.length > 0;
 
-const defaultHandlers = {
-  GET: async () => new Response("Not found", { status: 404 }),
-  POST: async () => new Response("Not found", { status: 404 }),
+type AuthHandlers = {
+  GET: (req: NextRequest) => Promise<Response>;
+  POST: (req: NextRequest) => Promise<Response>;
 };
 
-let handlers = defaultHandlers;
+const defaultHandlers: AuthHandlers = {
+  GET: async (_req) => new Response("Not found", { status: 404 }),
+  POST: async (_req) => new Response("Not found", { status: 404 }),
+};
+
+let handlers: AuthHandlers = defaultHandlers;
 let auth: () => Promise<Session | null> = async () => null;
 let signIn: (...args: unknown[]) => Promise<unknown> = async () => {
   throw new Error("Authentication is not configured.");
@@ -44,7 +50,7 @@ if (hasGoogleAuth) {
     pages: { signIn: "/login" },
   });
 
-  handlers = nextAuth.handlers;
+  handlers = nextAuth.handlers as AuthHandlers;
   auth = nextAuth.auth;
   signIn = nextAuth.signIn;
   signOut = nextAuth.signOut;
