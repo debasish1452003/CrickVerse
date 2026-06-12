@@ -12,7 +12,9 @@
     "seed": "tsx prisma/seed.ts"
   },
   "scripts": {
+    "postinstall": "prisma generate",
     "generate": "dotenv -e ../../.env -- prisma generate",
+    "generate:ci": "prisma generate",
     "migrate": "dotenv -e ../../.env -- prisma migrate dev",
     "migrate:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
     "push": "dotenv -e ../../.env -- prisma db push",
