@@ -28,10 +28,10 @@ const defaultHandlers: AuthHandlers = {
 
 let handlers: AuthHandlers = defaultHandlers;
 let auth: () => Promise<Session | null> = async () => null;
-let signIn: (...args: unknown[]) => Promise<unknown> = async () => {
+let signIn: (...args: any[]) => Promise<any> = async () => {
   throw new Error("Authentication is not configured.");
 };
-let signOut: (...args: unknown[]) => Promise<unknown> = async () => {
+let signOut: (...args: any[]) => Promise<any> = async () => {
   throw new Error("Authentication is not configured.");
 };
 
