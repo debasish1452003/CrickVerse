@@ -14,6 +14,8 @@ import { teamLogo } from "@/lib/serialize";
 export const dynamic = "force-dynamic";
 
 type GoldMatchInnings = GoldMatchDetail["innings"][number];
+type GoldMatchBatting = GoldMatchDetail["batting"][number];
+type GoldMatchBowling = GoldMatchDetail["bowling"][number];
 
 const fmt2 = (n: number | null) => (n == null ? "—" : n.toFixed(2));
 const overs = (balls: number) => `${Math.floor(balls / 6)}.${balls % 6}`;
@@ -88,10 +90,10 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
 
         {m.innings.map((inn: GoldMatchInnings) => {
           const batting = m.batting.filter(
-            (b) => b.inningsNo === inn.inningsNo,
+            (b: GoldMatchBatting) => b.inningsNo === inn.inningsNo,
           );
           const bowling = m.bowling.filter(
-            (b) => b.inningsNo === inn.inningsNo,
+            (b: GoldMatchBowling) => b.inningsNo === inn.inningsNo,
           );
           return (
             <section key={inn.inningsNo} className="card mt-6 overflow-hidden">
@@ -111,7 +113,7 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
               </div>
 
               <Table head={["Batter", "", "R", "B", "4s", "6s", "SR"]}>
-                {batting.map((b) => (
+                {batting.map((b: GoldMatchBatting) => (
                   <tr
                     key={`bat-${b.battingPos}`}
                     className="border-t border-line/60"
@@ -153,7 +155,7 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
               {bowling.length > 0 && (
                 <div className="border-t border-line">
                   <Table head={["Bowler", "O", "M", "R", "W", "Econ"]}>
-                    {bowling.map((bw) => (
+                    {bowling.map((bw: GoldMatchBowling) => (
                       <tr
                         key={`bowl-${bw.bowlingPos}`}
                         className="border-t border-line/60"
