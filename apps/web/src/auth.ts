@@ -1,3 +1,4 @@
+import type { Session } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@crickverse/db";
 import NextAuth from "next-auth";
@@ -20,11 +21,11 @@ const defaultHandlers = {
 };
 
 let handlers = defaultHandlers;
-let auth = async () => null;
-let signIn = async () => {
+let auth: () => Promise<Session | null> = async () => null;
+let signIn: (...args: unknown[]) => Promise<unknown> = async () => {
   throw new Error("Authentication is not configured.");
 };
-let signOut = async () => {
+let signOut: (...args: unknown[]) => Promise<unknown> = async () => {
   throw new Error("Authentication is not configured.");
 };
 
