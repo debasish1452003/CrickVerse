@@ -1,4 +1,4 @@
-import type { CareerStat, MatchClass } from "@crickverse/db";
+import type { MatchClass } from "@crickverse/db";
 import type { PlayerWithPerfs } from "./queries";
 
 type BatPerf = PlayerWithPerfs["battingPerfs"][number];
@@ -64,10 +64,47 @@ export const MATCH_CLASS_LABEL: Record<MatchClass, string> = {
   OTHER: "Other",
 };
 
-export const INTERNATIONAL_CLASSES: ReadonlySet<MatchClass> = new Set(["TEST", "ODI", "T20I"]);
+// Local CareerStat shape (matches the gold CareerStat model in the lakehouse).
+export type CareerStat = {
+  cricsheetId: string;
+  matchClass: string;
+  matches: number;
+  // Batting
+  batInnings: number;
+  notOuts: number;
+  runs: number;
+  ballsFaced: number;
+  highScore: number;
+  highScoreNotOut: boolean;
+  fifties: number;
+  hundreds: number;
+  ducks: number;
+  fours: number;
+  sixes: number;
+  battingAvg: number | null;
+  strikeRate: number | null;
+  // Bowling
+  bowlInnings: number;
+  ballsBowled: number;
+  runsConceded: number;
+  wickets: number;
+  bestBowlingWkts: number;
+  bestBowlingRuns: number;
+  fiveWickets: number;
+  economy: number | null;
+  bowlingAvg: number | null;
+  bowlingSr: number | null;
+};
 
-const classOf = (p: { innings: { match: { matchClass: MatchClass | null } } }): MatchClass =>
-  p.innings.match.matchClass ?? "OTHER";
+export const INTERNATIONAL_CLASSES: ReadonlySet<MatchClass> = new Set([
+  "TEST",
+  "ODI",
+  "T20I",
+]);
+
+const classOf = (p: {
+  innings: { match: { matchClass: MatchClass | null } };
+}): MatchClass => p.innings.match.matchClass ?? "OTHER";
 
 export function battingFrom(bp: BatPerf[]): BattingCareer {
   const runs = bp.reduce((s, b) => s + b.runs, 0);
@@ -133,8 +170,10 @@ export function bowlingFrom(wp: BowlPerf[]): BowlingCareer {
 }
 
 // Back-compat: whole-career lines (all formats combined).
-export const battingCareer = (p: PlayerWithPerfs): BattingCareer => battingFrom(p.battingPerfs);
-export const bowlingCareer = (p: PlayerWithPerfs): BowlingCareer => bowlingFrom(p.bowlingPerfs);
+export const battingCareer = (p: PlayerWithPerfs): BattingCareer =>
+  battingFrom(p.battingPerfs);
+export const bowlingCareer = (p: PlayerWithPerfs): BowlingCareer =>
+  bowlingFrom(p.bowlingPerfs);
 
 /**
  * Split a player's career into one line per class of cricket. Matches = distinct
@@ -163,7 +202,9 @@ export function careerByClass(p: PlayerWithPerfs): FormatCareer[] {
     seen(cls).add(w.innings.match.id);
   }
 
-  const classes = MATCH_CLASS_ORDER.filter((c) => batBy.has(c) || bowlBy.has(c));
+  const classes = MATCH_CLASS_ORDER.filter(
+    (c) => batBy.has(c) || bowlBy.has(c),
+  );
   return classes.map((cls) => ({
     matchClass: cls,
     matches: matchIdsBy.get(cls)?.size ?? 0,
@@ -200,7 +241,10 @@ export function careersFromGold(stats: CareerStat[]): FormatCareer[] {
         zeros: s.ducks,
         fours: s.fours,
         sixes: s.sixes,
-        highScore: s.batInnings > 0 ? `${s.highScore}${s.highScoreNotOut ? "*" : ""}` : "—",
+        highScore:
+          s.batInnings > 0
+            ? `${s.highScore}${s.highScoreNotOut ? "*" : ""}`
+            : "—",
       },
       bowling: {
         innings: s.bowlInnings,
@@ -211,7 +255,8 @@ export function careersFromGold(stats: CareerStat[]): FormatCareer[] {
         average: s.bowlingAvg,
         strikeRate: s.bowlingSr,
         fiveWickets: s.fiveWickets,
-        best: s.bowlInnings > 0 ? `${s.bestBowlingWkts}/${s.bestBowlingRuns}` : "—",
+        best:
+          s.bowlInnings > 0 ? `${s.bestBowlingWkts}/${s.bestBowlingRuns}` : "—",
       },
     }));
 }
