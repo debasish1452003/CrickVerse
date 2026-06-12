@@ -1,4 +1,4 @@
-import { DismissalKind, MatchFormat, MatchState } from "@prisma/client";
+import { DismissalKind, MatchClass, MatchFormat, MatchState } from "@prisma/client";
 
 /** Map ESPNCricinfo's format token to our enum. */
 export function toMatchFormat(raw: string | null | undefined): MatchFormat {
@@ -75,6 +75,40 @@ export function toMatchFormatFromCricsheet(raw: string | null | undefined): Matc
       return MatchFormat.HUNDRED;
     default:
       return MatchFormat.OTHER;
+  }
+}
+
+/**
+ * Map Cricsheet's match_type + team_type to the "class of cricket" — the
+ * int'l-vs-domestic distinction MatchFormat throws away. This powers per-format
+ * career splits. CRITICAL: match_type alone can't separate a T20I from a league
+ * T20 (Cricsheet uses "T20" for both); `team_type` ("international"|"club") does.
+ */
+export function toMatchClassFromCricsheet(
+  raw: string | null | undefined,
+  teamType?: string | null | undefined,
+): MatchClass {
+  const intl = (teamType ?? "").toLowerCase() === "international";
+  switch ((raw ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "")) {
+    case "TEST":
+      return intl ? MatchClass.TEST : MatchClass.FIRST_CLASS;
+    case "MDM":
+      return MatchClass.FIRST_CLASS;
+    case "ODI":
+      return intl ? MatchClass.ODI : MatchClass.LIST_A;
+    case "ODM":
+      return MatchClass.LIST_A;
+    case "T20":
+      return intl ? MatchClass.T20I : MatchClass.T20;
+    case "IT20":
+      return MatchClass.T20I;
+    case "T10":
+      return MatchClass.T10;
+    case "HUNDRED":
+    case "THEHUNDRED":
+      return MatchClass.HUNDRED;
+    default:
+      return MatchClass.OTHER;
   }
 }
 

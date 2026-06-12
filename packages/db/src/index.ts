@@ -6,7 +6,16 @@ export { persistEntities } from "./persist";
 
 export { upsertSeriesFixtures, getMatchesNeedingScorecard } from "./repositories/match.repo";
 export { upsertScorecard } from "./repositories/scorecard.repo";
-export { upsertCricsheetMatch, type PeopleIndex } from "./repositories/cricsheet.repo";
+export {
+  upsertCricsheetMatch,
+  findExistingCricsheetMatches,
+  type PeopleIndex,
+} from "./repositories/cricsheet.repo";
+export {
+  getIngestState,
+  updateIngestState,
+  type IngestStatePatch,
+} from "./repositories/ingest-state.repo";
 export { saveSnapshot, findFreshSnapshot, type SaveSnapshotInput } from "./repositories/snapshot.repo";
 export {
   upsertScrapeSource,
@@ -17,6 +26,7 @@ export {
 export {
   toMatchFormat,
   toMatchFormatFromCricsheet,
+  toMatchClassFromCricsheet,
   toMatchState,
   toDismissalKind,
   toDismissalKindFromCricsheet,

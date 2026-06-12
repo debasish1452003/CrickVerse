@@ -8,19 +8,27 @@
     "start": "dotenv -e ../../.env -- tsx src/main.ts",
     "seed": "dotenv -e ../../.env -- tsx src/cli.ts seed",
     "probe": "dotenv -e ../../.env -- tsx src/cli.ts probe",
+    "cricsheet:seed-feeds": "dotenv -e ../../.env -- tsx src/cli.ts cricsheet-seed-feeds",
+    "cricsheet:sync": "dotenv -e ../../.env -- tsx src/cli.ts cricsheet-sync",
+    "cricsheet:export": "dotenv -e ../../.env -- tsx src/cli.ts cricsheet-export-parquet",
+    "cricsheet:gold": "dotenv -e ../../.env -- tsx src/cli.ts cricsheet-build-gold",
+    "lakehouse:refresh": "dotenv -e ../../.env -- tsx src/cli.ts lakehouse-refresh",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "test": "echo \"(no tests in @crickverse/worker)\""
   },
   "dependencies": {
     "@crickverse/db": "workspace:*",
+    "@crickverse/lakehouse": "workspace:^",
     "@crickverse/scraper-core": "workspace:*",
     "@crickverse/types": "workspace:*",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "yauzl": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "@types/node-cron": "^3.0.11",
+    "@types/yauzl": "^3.3.0",
     "dotenv-cli": "^7.4.4",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"

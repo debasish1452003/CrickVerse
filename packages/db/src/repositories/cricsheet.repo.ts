@@ -4,6 +4,7 @@ import { prisma } from "../client";
 import {
   parseDate,
   toDismissalKindFromCricsheet,
+  toMatchClassFromCricsheet,
   toMatchFormatFromCricsheet,
   toUtcDateOnly,
 } from "../mappers/match.mapper";
@@ -19,6 +20,31 @@ export type PeopleIndex = Map<string, string>;
 
 /** createMany chunk size — keeps each round-trip small (the Neon writer is latency-bound). */
 const DELIVERY_CHUNK = 500;
+
+/** `IN (...)` chunk for the skip-known lookup — one round-trip per chunk. */
+const LOOKUP_CHUNK = 1000;
+
+/**
+ * For a set of Cricsheet match ids, return only those already in the DB, mapped
+ * to their last-ingested revision (`Match.sourceRevision`, defaulting to 1). The
+ * incremental feed uses this to skip known matches without decompressing them,
+ * and to re-ingest only when Cricsheet bumps a file's revision. Ids absent from
+ * the returned map are new and must be ingested.
+ */
+export async function findExistingCricsheetMatches(
+  sourceMatchIds: string[],
+): Promise<Map<string, number>> {
+  const found = new Map<string, number>();
+  for (let i = 0; i < sourceMatchIds.length; i += LOOKUP_CHUNK) {
+    const chunk = sourceMatchIds.slice(i, i + LOOKUP_CHUNK);
+    const rows = await prisma.matchExternalId.findMany({
+      where: { source: Source.CRICSHEET, externalId: { in: chunk } },
+      select: { externalId: true, match: { select: { sourceRevision: true } } },
+    });
+    for (const r of rows) found.set(r.externalId, r.match.sourceRevision ?? 1);
+  }
+  return found;
+}
 
 /**
  * Ingest one parsed Cricsheet match into canonical Match/Innings/Delivery rows.
@@ -37,8 +63,8 @@ export async function upsertCricsheetMatch(
   parsed: ParsedCricsheetMatch,
   peopleIndex: PeopleIndex = new Map(),
 ): Promise<{ matchId: string; innings: number; deliveries: number }> {
-  // International formats use country teams; club formats are franchises.
-  const isNational = ["IT20", "ODI", "Test", "MDM", "ODM"].includes(parsed.matchType ?? "");
+  // Cricsheet's team_type is the authoritative international-vs-domestic signal.
+  const isNational = (parsed.teamType ?? "").toLowerCase() === "international";
 
   const seriesId = await resolveSeriesByName(
     prisma,
@@ -71,6 +97,8 @@ export async function upsertCricsheetMatch(
     title:
       parsed.teams.length === 2 ? `${parsed.teams[0]} vs ${parsed.teams[1]}` : undefined,
     format: toMatchFormatFromCricsheet(parsed.matchType),
+    matchClass: toMatchClassFromCricsheet(parsed.matchType, parsed.teamType),
+    matchType: parsed.matchType ?? undefined,
     state: MatchState.COMPLETED, // Cricsheet only publishes completed matches
     startTime: start,
     matchDate: toUtcDateOnly(start),
@@ -83,6 +111,7 @@ export async function upsertCricsheetMatch(
     tossDecision,
     hasScorecard: true,
     hasBallByBall: true,
+    sourceRevision: parsed.revision,
   };
 
   const externalId = parsed.sourceMatchId;

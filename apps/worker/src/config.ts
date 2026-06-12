@@ -12,6 +12,12 @@ export const config = {
   cacheTtlMs: num(process.env.SCRAPER_CACHE_TTL_MS, 6 * 60 * 60 * 1000),
   liveCron: process.env.SCRAPER_LIVE_CRON ?? "*/2 * * * *",
   backfillCron: process.env.SCRAPER_BACKFILL_CRON ?? "17 * * * *",
+  /** Cricsheet conditional-download + ingest; daily 04:00 by default. */
+  cricsheetCron: process.env.SCRAPER_CRICSHEET_CRON ?? "0 4 * * *",
+  /** Lakehouse refresh (re-export silver Parquet + rebuild gold); daily 04:40. */
+  lakehouseCron: process.env.SCRAPER_LAKEHOUSE_CRON ?? "40 4 * * *",
+  /** Gate the lakehouse tick — heavy local CPU/disk; off unless explicitly enabled. */
+  lakehouseEnabled: process.env.SCRAPER_LAKEHOUSE_ENABLED === "true",
   /** Comma-separated "slug-objectId" pairs, used as a fallback seed list. */
   activeSeries: (process.env.SCRAPER_ACTIVE_SERIES ?? "ipl-2026-1510719")
     .split(",")

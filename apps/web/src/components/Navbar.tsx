@@ -22,8 +22,11 @@ export async function Navbar() {
           </span>
         </Link>
         <div className="flex items-center gap-5 text-sm text-muted">
-          <Link href="/" className="transition-colors hover:text-fg">
+          <Link href="/matches" className="transition-colors hover:text-fg">
             Matches
+          </Link>
+          <Link href="/players" className="transition-colors hover:text-fg">
+            Players
           </Link>
           {session?.user ? (
             <>

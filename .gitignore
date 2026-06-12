@@ -50,3 +50,13 @@ backend/debug_db_match.json
 # Cricsheet scratch data + people.csv cache (Phase 9)
 .cricsheet-data/
 apps/worker/.cache/
+
+# Lakehouse (silver Parquet + DuckDB + staging) — regenerable from Cricsheet
+data/
+*.duckdb
+*.duckdb.wal
+
+# Python ML env
+machine learning/.venv/
+__pycache__/
+*.pyc

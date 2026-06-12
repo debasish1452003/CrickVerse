@@ -21,6 +21,7 @@ import { asArray, numOr, numOrNull, strOrNull } from "../util/coerce";
 export function parseCricsheetMatch(raw: unknown, sourceMatchId: string): ParsedCricsheetMatch {
   const root = (raw ?? {}) as Record<string, unknown>;
   const info = (root.info ?? {}) as Record<string, unknown>;
+  const meta = (root.meta ?? {}) as Record<string, unknown>;
 
   const registry = readRegistry(info);
   const ref = (name: unknown): CricsheetPlayerRef | null => {
@@ -41,7 +42,9 @@ export function parseCricsheetMatch(raw: unknown, sourceMatchId: string): Parsed
 
   const parsed: ParsedCricsheetMatch = {
     sourceMatchId,
+    revision: Math.max(1, numOr(meta.revision, 1)),
     matchType: strOrNull(info.match_type),
+    teamType: strOrNull(info.team_type),
     gender: strOrNull(info.gender),
     season: strOrNull(info.season),
     dates: asArray<unknown>(info.dates).map((d) => String(d)),

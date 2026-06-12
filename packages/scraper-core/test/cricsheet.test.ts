@@ -83,4 +83,12 @@ describe("cricsheet parser (golden fixture: IPL T20, match 1234567)", () => {
     const over0 = match.innings[0]!.deliveries.filter((d) => d.overNo === 0);
     expect(over0.map((d) => d.ballInOver)).toEqual([1, 2, 3, 4, 5, 6]);
   });
+
+  it("reads meta.revision (defaults to 1), used by the incremental feed for re-ingest", () => {
+    // The golden fixture has no meta block, so revision defaults to 1.
+    expect(match.revision).toBe(1);
+    // A corrected file carries meta.revision > 1.
+    const corrected = parseCricsheetMatch({ meta: { revision: 3 }, info: {}, innings: [] }, "x");
+    expect(corrected.revision).toBe(3);
+  });
 });

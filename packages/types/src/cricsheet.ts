@@ -62,8 +62,15 @@ export type ParsedCricsheetInnings = z.infer<typeof ParsedCricsheetInningsSchema
 export const ParsedCricsheetMatchSchema = z.object({
   /** Cricsheet match id — the JSON file's name stem (not present in the payload). */
   sourceMatchId: z.string().min(1),
+  /**
+   * Cricsheet's `meta.revision` — bumped each time it republishes a corrected file.
+   * The incremental feed stores this and re-ingests a known match only when it rises.
+   */
+  revision: z.number().int().positive().default(1),
   /** Raw Cricsheet match_type: "Test" | "ODI" | "T20" | "IT20" | "MDM" | "ODM" | "Hundred" ... */
   matchType: z.string().nullable().default(null),
+  /** "international" | "club" — the authoritative int'l-vs-domestic signal (match_type alone can't tell a T20I from a league T20). */
+  teamType: z.string().nullable().default(null),
   gender: z.string().nullable().default(null),
   season: z.string().nullable().default(null),
   /** Match date(s), ISO yyyy-mm-dd. dates[0] is the start. */
