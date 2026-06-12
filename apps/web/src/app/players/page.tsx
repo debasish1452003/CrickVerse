@@ -6,11 +6,12 @@ import { searchCareerPlayers, type CareerPlayerListItem } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 function PlayerCard({ p }: { p: CareerPlayerListItem }) {
-  const subtitle = p.gender === "female" ? "Women's" : p.gender === "male" ? "Men's" : "Player";
+  const genderLabel = p.gender === "female" ? "Women's" : p.gender === "male" ? "Men's" : "Player";
+  const subtitle = [p.role, genderLabel].filter(Boolean).join(" · ");
   return (
     <Link href={`/players/${p.cricsheetId}`} className="card flex flex-col gap-3 p-5">
       <div className="flex items-center gap-3">
-        <PlayerAvatar name={p.name} size={40} />
+        <PlayerAvatar name={p.name} src={p.photoUrl} size={44} />
         <div className="min-w-0">
           <div className="truncate text-base font-semibold tracking-tight">{p.name}</div>
           <div className="mt-0.5 truncate text-xs text-muted">{subtitle}</div>

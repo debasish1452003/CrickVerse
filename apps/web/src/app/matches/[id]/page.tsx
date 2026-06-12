@@ -3,11 +3,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
+import { OverCharts } from "@/components/OverCharts";
 import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
 import {
   getGoldMatch,
+  getInningsOvers,
   getMatchById,
+  getTeamProfiles,
+  teamBadgeFor,
   type GoldMatchDetail,
+  type InningsOversData,
+  type TeamProfileRow,
   type MatchDetail,
 } from "@/lib/queries";
 import { teamLogo } from "@/lib/serialize";
@@ -22,7 +28,7 @@ type MatchBattingPerf = MatchInnings["battingPerfs"][number];
 type MatchBowlingPerf = MatchInnings["bowlingPerfs"][number];
 
 const fmt2 = (n: number | null) => (n == null ? "—" : n.toFixed(2));
-const overs = (balls: number) => `${Math.floor(balls / 6)}.${balls % 6}`;
+const oversText = (balls: number) => `${Math.floor(balls / 6)}.${balls % 6}`;
 
 function Table({ head, children }: { head: string[]; children: ReactNode }) {
   return (
@@ -45,7 +51,15 @@ function Table({ head, children }: { head: string[]; children: ReactNode }) {
 }
 
 /** Full-corpus scorecard from the gold tables (keyed by Cricsheet match id). */
-function GoldScorecard({ m }: { m: GoldMatchDetail }) {
+function GoldScorecard({
+  m,
+  teams,
+  overs,
+}: {
+  m: GoldMatchDetail;
+  teams: Map<string, TeamProfileRow>;
+  overs: InningsOversData[];
+}) {
   const title =
     m.teamHome && m.teamAway
       ? `${m.teamHome} vs ${m.teamAway}`
@@ -54,6 +68,8 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
     m.tossWinner && m.tossDecision
       ? `${m.tossWinner} won the toss and chose to ${m.tossDecision}`
       : null;
+  const inningsLabel = (no: number): string =>
+    m.innings.find((i) => i.inningsNo === no)?.battingTeam ?? `Innings ${no}`;
   return (
     <>
       <Navbar />
@@ -72,11 +88,11 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
           </div>
           {m.teamHome && m.teamAway ? (
             <div className="mt-3 flex items-center gap-3">
-              <TeamBadge name={m.teamHome} size={40} />
+              <TeamBadge name={m.teamHome} {...teamBadgeFor(m.teamHome, teams)} size={40} />
               <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 {title}
               </h1>
-              <TeamBadge name={m.teamAway} size={40} />
+              <TeamBadge name={m.teamAway} {...teamBadgeFor(m.teamAway, teams)} size={40} />
             </div>
           ) : (
             <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -104,14 +120,14 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
               <div className="flex items-center justify-between border-b border-line px-5 py-4">
                 <h3 className="flex items-center gap-2.5 font-semibold">
                   {inn.battingTeam && (
-                    <TeamBadge name={inn.battingTeam} size={28} />
+                    <TeamBadge name={inn.battingTeam} {...teamBadgeFor(inn.battingTeam, teams)} size={28} />
                   )}
                   {inn.battingTeam ?? `Innings ${inn.inningsNo}`}
                 </h3>
                 <span className="font-mono text-lg tabular-nums">
                   {inn.runs}/{inn.wickets}{" "}
                   <span className="text-sm text-muted">
-                    ({overs(inn.balls)} ov)
+                    ({oversText(inn.balls)} ov)
                   </span>
                 </span>
               </div>
@@ -177,7 +193,7 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
                           )}
                         </td>
                         <td className="px-3 text-right font-mono tabular-nums text-muted">
-                          {overs(bw.balls)}
+                          {oversText(bw.balls)}
                         </td>
                         <td className="px-3 text-right font-mono tabular-nums text-muted">
                           {bw.maidens}
@@ -199,6 +215,8 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
             </section>
           );
         })}
+
+        <OverCharts innings={overs} teamLabel={inningsLabel} />
       </main>
     </>
   );
@@ -213,7 +231,13 @@ export default async function MatchPage({
 
   // Full-corpus scorecard (Cricsheet id) first; fall back to the canonical match (cuid).
   const gold = await getGoldMatch(id);
-  if (gold) return <GoldScorecard m={gold} />;
+  if (gold) {
+    const [teams, overs] = await Promise.all([
+      getTeamProfiles([gold.teamHome, gold.teamAway, ...gold.innings.map((i) => i.battingTeam)]),
+      getInningsOvers(id),
+    ]);
+    return <GoldScorecard m={gold} teams={teams} overs={overs} />;
+  }
 
   const match = await getMatchById(id);
   if (!match) notFound();

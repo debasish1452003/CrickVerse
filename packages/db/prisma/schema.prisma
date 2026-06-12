@@ -543,6 +543,70 @@ model ScorecardBowling {
   @@index([matchId])
 }
 
+// ─── Enrichment layer: legal CC images + player bio ────────────────────────
+// Standalone tables (NOT FK-related to the gold CareerPlayer / CareerMatch),
+// keyed by the same stable ids — so a full gold rebuild (which truncates +
+// re-inserts CareerPlayer) never wipes enrichment. Sourced from Wikidata /
+// Wikimedia Commons (joined via ESPNcricinfo id) + a flag CDN, with the
+// generated monogram (components/Crest.tsx) as the universal fallback.
+
+model PlayerProfile {
+  cricsheetId  String  @id // == CareerPlayer.cricsheetId (shared key, no FK)
+  cricinfoId   String? // ESPNcricinfo id — the Wikidata P2697 join key
+  wikidataId   String? // resolved Q-item (e.g. "Q213854")
+  photoUrl     String? // Wikimedia Commons thumbnail URL
+  photoFilePage String? // Commons file page (where full attribution lives)
+  photoCredit  String? // author/attribution string (CC-BY-SA compliance)
+  photoLicense String? // e.g. "CC BY-SA 4.0"
+  dateOfBirth  String? // ISO yyyy-mm-dd (kept as string; age computed in UI)
+  birthPlace   String?
+  role         String? // batter / bowler / all-rounder / wicket-keeper (sparse)
+  battingStyle String? // reserved for later ESPNcricinfo enrichment
+  bowlingStyle String? // reserved for later ESPNcricinfo enrichment
+  enrichedAt   DateTime?
+  updatedAt    DateTime @updatedAt
+
+  @@index([cricinfoId])
+}
+
+// One row per distinct team name seen in the gold matches (CareerMatch.teamHome
+// / teamAway are name strings, not entities), keyed by the normalized name.
+model TeamProfile {
+  id            String  @id // normalized team name (lowercased, trimmed)
+  displayName   String
+  shortName     String?
+  country       String?
+  isNational    Boolean @default(false)
+  logoUrl       String? // franchise crest (Wikimedia Commons) or null
+  flagUrl       String? // national flag (flag CDN) or null
+  primaryColor  String?
+  secondaryColor String?
+  wikidataId    String?
+  logoCredit    String?
+  logoLicense   String?
+  matchCount    Int     @default(0) // popularity, for ordering the Teams hub
+  enrichedAt    DateTime?
+  updatedAt     DateTime @updatedAt
+
+  @@index([isNational])
+  @@index([matchCount])
+}
+
+// Per-innings over-by-over summary (one row per innings ≈ 49k rows), for the
+// match page's worm/Manhattan charts + over panel. `overs` is a compact JSON
+// array [{o,r,w,f,s,c}] (over no, runs, wickets, fours, sixes, cumulative runs)
+// derived from the silver deliveries by the `build-overs` task — the 11.2M raw
+// balls stay in Parquet; only this small rollup lands in Neon. Standalone (no FK)
+// so a gold rebuild can't cascade-delete it; keyed by the stable Cricsheet ids.
+model InningsOvers {
+  matchId   String
+  inningsNo Int
+  overs     Json
+
+  @@id([matchId, inningsNo])
+  @@index([matchId])
+}
+
 // Watermark/cursor for an incremental ingest feed (one row per Cricsheet archive).
 // Holds the conditional-GET validators (ETag / Last-Modified) so the next run can
 // send If-None-Match / If-Modified-Since and short-circuit on HTTP 304, plus the

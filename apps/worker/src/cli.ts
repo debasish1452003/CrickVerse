@@ -9,6 +9,9 @@ import { backfillMatchClass } from "./tasks/backfill-match-class";
 import { exportParquet } from "./tasks/export-parquet";
 import { buildGoldTask } from "./tasks/build-gold";
 import { refreshLakehouse } from "./tasks/refresh-lakehouse";
+import { enrichPlayers } from "./tasks/enrich-players";
+import { enrichTeams } from "./tasks/enrich-teams";
+import { buildOversTask } from "./tasks/build-overs";
 
 async function main(): Promise<void> {
   const [, , command, ...rest] = process.argv;
@@ -88,6 +91,28 @@ async function main(): Promise<void> {
       await refreshLakehouse({ force: rest.includes("--force") });
       break;
     }
+    case "enrich-players": {
+      const limitArg = rest.find((a) => a.startsWith("--limit="));
+      const res = await enrichPlayers({
+        dryRun: rest.includes("--dry-run"),
+        force: rest.includes("--force"),
+        limit: limitArg ? Number(limitArg.split("=")[1]) : undefined,
+      });
+      console.log(res);
+      break;
+    }
+    case "enrich-teams": {
+      const res = await enrichTeams({
+        dryRun: rest.includes("--dry-run"),
+        force: rest.includes("--force"),
+      });
+      console.log(res);
+      break;
+    }
+    case "build-overs": {
+      await buildOversTask();
+      break;
+    }
     default:
       console.log("Usage:");
       console.log("  tsx src/cli.ts probe <slug> <objectId>            # fetch+parse only, no DB");
@@ -102,6 +127,10 @@ async function main(): Promise<void> {
       console.log("                                                    # build the silver Parquet corpus (default: all)");
       console.log("  tsx src/cli.ts cricsheet-build-gold               # silver Parquet -> career aggregates -> Neon (gold)");
       console.log("  tsx src/cli.ts lakehouse-refresh [--force]        # conditional: re-export silver + rebuild gold if archive changed");
+      console.log("  tsx src/cli.ts enrich-players [--dry-run] [--force] [--limit=N]");
+      console.log("                                                    # Wikidata/Commons photos + bio → PlayerProfile");
+      console.log("  tsx src/cli.ts enrich-teams [--dry-run] [--force] # flags + franchise logos → TeamProfile");
+      console.log("  tsx src/cli.ts build-overs                        # per-innings over rollup → InningsOvers (charts)");
   }
 }
 

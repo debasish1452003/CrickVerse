@@ -28,8 +28,14 @@ export async function Navbar() {
           <Link href="/series" className="transition-colors hover:text-fg">
             Series
           </Link>
+          <Link href="/teams" className="transition-colors hover:text-fg">
+            Teams
+          </Link>
           <Link href="/players" className="transition-colors hover:text-fg">
             Players
+          </Link>
+          <Link href="/rankings" className="transition-colors hover:text-fg">
+            Rankings
           </Link>
           {session?.user ? (
             <>

@@ -12,3 +12,4 @@ export {
 export { ParquetSink, type SinkSummary } from "./sink";
 export { buildGold, type BuildGoldResult } from "./gold";
 export { buildMatchGold, type BuildMatchGoldResult } from "./gold-matches";
+export { computeInningsOvers, type OverPoint, type InningsOversRow } from "./overs";
