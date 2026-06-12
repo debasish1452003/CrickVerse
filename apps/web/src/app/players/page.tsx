@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PlayerAvatar } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { searchCareerPlayers, type CareerPlayerListItem } from "@/lib/queries";
 
@@ -8,9 +9,12 @@ function PlayerCard({ p }: { p: CareerPlayerListItem }) {
   const subtitle = p.gender === "female" ? "Women's" : p.gender === "male" ? "Men's" : "Player";
   return (
     <Link href={`/players/${p.cricsheetId}`} className="card flex flex-col gap-3 p-5">
-      <div>
-        <div className="truncate text-base font-semibold tracking-tight">{p.name}</div>
-        <div className="mt-0.5 truncate text-xs text-muted">{subtitle}</div>
+      <div className="flex items-center gap-3">
+        <PlayerAvatar name={p.name} size={40} />
+        <div className="min-w-0">
+          <div className="truncate text-base font-semibold tracking-tight">{p.name}</div>
+          <div className="mt-0.5 truncate text-xs text-muted">{subtitle}</div>
+        </div>
       </div>
       <div className="mt-auto flex gap-4 text-sm">
         <span className="text-muted">

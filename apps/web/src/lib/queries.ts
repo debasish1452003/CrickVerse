@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Prisma } from "@crickverse/db";
 import { prisma } from "./db";
 
@@ -198,6 +199,10 @@ export const MATCHES_PAGE_SIZE = 30;
 export async function searchMatches(opts: {
   q?: string;
   matchClass?: string;
+  /** Exact competition name — powers the series/tournament edition page. */
+  eventName?: string;
+  /** Exact season — used together with eventName to scope to one edition. */
+  season?: string;
   page?: number;
   pageSize?: number;
 }): Promise<MatchSearchResult> {
@@ -216,6 +221,10 @@ export async function searchMatches(opts: {
     });
   }
   if (opts.matchClass) and.push({ matchClass: opts.matchClass });
+  // Exact event/season filters (the series edition view). `eventName: null` is the
+  // bilateral/"Other" bucket; an explicit null filter selects exactly those rows.
+  if (opts.eventName !== undefined) and.push({ eventName: opts.eventName || null });
+  if (opts.season !== undefined) and.push({ season: opts.season || null });
   const where: Prisma.CareerMatchWhereInput = and.length ? { AND: and } : {};
 
   const total = await prisma.careerMatch.count({ where });
@@ -242,6 +251,86 @@ export async function searchMatches(opts: {
   });
 
   return { items, total, page, pageSize, pageCount };
+}
+
+// ── Series / Tournaments (competitions grouped from gold matches) ────────────
+
+/** URL segment standing in for matches with no eventName (bilateral / unlabelled). */
+export const OTHER_COMPETITION = "__other__";
+/** Display name for the no-event bucket. */
+export const OTHER_COMPETITION_LABEL = "Other / Bilateral matches";
+/** URL segment standing in for a season-less edition (rare, but keeps URLs valid). */
+export const NO_SEASON = "__noseason__";
+
+export interface CompetitionSeason {
+  season: string | null;
+  matches: number;
+}
+
+export interface Competition {
+  /** Raw eventName, or null for the bilateral/"Other" bucket. */
+  eventName: string | null;
+  /** Display name (eventName, or the Other label for the null bucket). */
+  name: string;
+  seasons: CompetitionSeason[];
+  totalMatches: number;
+  latestSeason: string | null;
+}
+
+// Newest season first; null seasons sink to the bottom. Seasons are strings like
+// "2024" or "2007/08", so a plain string compare orders them well enough.
+function bySeasonDesc(a: CompetitionSeason, b: CompetitionSeason): number {
+  if (a.season === b.season) return 0;
+  if (a.season == null) return 1;
+  if (b.season == null) return -1;
+  return b.season.localeCompare(a.season);
+}
+
+/**
+ * Every competition in the corpus, folded from a single groupBy over the gold
+ * matches. One DB round-trip powers both the series index and the per-event page,
+ * so it's wrapped in React `cache()` to dedupe within a request. groupBy returns
+ * only the distinct (eventName, season) pairs — cheap even over 22k matches, and
+ * eventName/season are both indexed on CareerMatch.
+ */
+export const getCompetitions = cache(async (): Promise<Competition[]> => {
+  const groups = await prisma.careerMatch.groupBy({
+    by: ["eventName", "season"],
+    _count: { _all: true },
+  });
+
+  const byEvent = new Map<string | null, Competition>();
+  for (const g of groups) {
+    const key = g.eventName ?? null;
+    let comp = byEvent.get(key);
+    if (!comp) {
+      comp = {
+        eventName: key,
+        name: key ?? OTHER_COMPETITION_LABEL,
+        seasons: [],
+        totalMatches: 0,
+        latestSeason: null,
+      };
+      byEvent.set(key, comp);
+    }
+    comp.seasons.push({ season: g.season ?? null, matches: g._count._all });
+    comp.totalMatches += g._count._all;
+  }
+
+  const comps = [...byEvent.values()];
+  for (const c of comps) {
+    c.seasons.sort(bySeasonDesc);
+    c.latestSeason = c.seasons.find((s) => s.season != null)?.season ?? null;
+  }
+  // Most-played competitions first; the Other bucket is treated like any event.
+  comps.sort((a, b) => b.totalMatches - a.totalMatches);
+  return comps;
+});
+
+/** Look up one competition by its raw eventName (null for the Other bucket). */
+export async function getCompetition(eventName: string | null): Promise<Competition | null> {
+  const comps = await getCompetitions();
+  return comps.find((c) => c.eventName === eventName) ?? null;
 }
 
 // ── Player search / browse ──────────────────────────────────────────────────

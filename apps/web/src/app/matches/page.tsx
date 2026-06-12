@@ -1,40 +1,12 @@
 import Link from "next/link";
+import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
 import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
-import { searchMatches, type GoldMatchListItem } from "@/lib/queries";
+import { searchMatches } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
 const CLASSES = ["TEST", "ODI", "T20I", "T20", "LIST_A", "FIRST_CLASS", "T10", "HUNDRED"] as const;
-
-function MatchRow({ m }: { m: GoldMatchListItem }) {
-  const title = m.teamHome && m.teamAway ? `${m.teamHome} vs ${m.teamAway}` : m.eventName ?? "Match";
-  const result = m.winner ? `${m.winner} won` : "—";
-  return (
-    <Link
-      href={`/matches/${m.matchId}`}
-      className="card flex flex-col gap-2 p-4 transition-colors hover:border-accent/40"
-    >
-      <div className="flex items-center justify-between gap-3">
-        <span className="truncate text-sm font-semibold tracking-tight">{title}</span>
-        <span className="shrink-0 rounded-full bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted">
-          {MATCH_CLASS_LABEL[m.matchClass as keyof typeof MATCH_CLASS_LABEL] ?? m.matchClass}
-        </span>
-      </div>
-      <div className="flex items-center justify-between gap-3 font-mono text-xs tabular-nums text-muted">
-        <span className="truncate">
-          {[m.inn1Score, m.inn2Score].filter(Boolean).join("  •  ") || "—"}
-        </span>
-        <span className="shrink-0">{m.matchDate ?? ""}</span>
-      </div>
-      <div className="truncate text-xs text-muted">
-        {result}
-        {m.eventName ? ` · ${m.eventName}` : ""}
-        {m.venue ? ` · ${m.venue}` : ""}
-      </div>
-    </Link>
-  );
-}
 
 function href(q: string, cls: string, page: number): string {
   const p = new URLSearchParams();

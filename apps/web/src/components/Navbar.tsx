@@ -25,6 +25,9 @@ export async function Navbar() {
           <Link href="/matches" className="transition-colors hover:text-fg">
             Matches
           </Link>
+          <Link href="/series" className="transition-colors hover:text-fg">
+            Series
+          </Link>
           <Link href="/players" className="transition-colors hover:text-fg">
             Players
           </Link>

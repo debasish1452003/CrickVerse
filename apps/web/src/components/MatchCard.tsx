@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { MatchDTO, TeamDTO } from "@/lib/serialize";
+import { hueFromName } from "./Crest";
 
 const STATE: Record<string, { label: string; cls: string }> = {
   LIVE: { label: "Live", cls: "pill-live" },
@@ -27,10 +28,14 @@ export function TeamCrest({ team, size = 36 }: { team: TeamDTO; size?: number })
       />
     );
   }
+  // No stored logo or colour → fall back to a deterministic hue from the name so
+  // each team still reads distinctly instead of a uniform slate block.
+  const hue = hueFromName(team.name ?? team.shortName ?? "?");
+  const bg = team.primaryColor ?? `linear-gradient(135deg, hsl(${hue} 55% 32%), hsl(${(hue + 40) % 360} 50% 20%))`;
   return (
     <div
       className="grid shrink-0 place-items-center rounded-lg text-[11px] font-bold text-white ring-1 ring-white/10"
-      style={{ width: size, height: size, background: team.primaryColor ?? "#334155" }}
+      style={{ width: size, height: size, background: bg }}
     >
       {initials(team)}
     </div>

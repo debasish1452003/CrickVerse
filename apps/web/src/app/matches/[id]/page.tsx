@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
 import { getGoldMatch, getMatchById, type GoldMatchDetail } from "@/lib/queries";
@@ -43,7 +44,15 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
             <span className="pill">{MATCH_CLASS_LABEL[m.matchClass as keyof typeof MATCH_CLASS_LABEL] ?? m.matchClass}</span>
             {m.eventName && <span className="truncate">{m.eventName}</span>}
           </div>
-          <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+          {m.teamHome && m.teamAway ? (
+            <div className="mt-3 flex items-center gap-3">
+              <TeamBadge name={m.teamHome} size={40} />
+              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+              <TeamBadge name={m.teamAway} size={40} />
+            </div>
+          ) : (
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1>
+          )}
           <p className="mt-2 text-sm font-medium text-accent">{m.winner ? `${m.winner} won` : "Result —"}</p>
           <p className="mt-1 text-xs text-muted">
             {[m.matchDate, m.venue, m.city].filter(Boolean).join(" · ")}
@@ -57,7 +66,10 @@ function GoldScorecard({ m }: { m: GoldMatchDetail }) {
           return (
             <section key={inn.inningsNo} className="card mt-6 overflow-hidden">
               <div className="flex items-center justify-between border-b border-line px-5 py-4">
-                <h3 className="font-semibold">{inn.battingTeam ?? `Innings ${inn.inningsNo}`}</h3>
+                <h3 className="flex items-center gap-2.5 font-semibold">
+                  {inn.battingTeam && <TeamBadge name={inn.battingTeam} size={28} />}
+                  {inn.battingTeam ?? `Innings ${inn.inningsNo}`}
+                </h3>
                 <span className="font-mono text-lg tabular-nums">
                   {inn.runs}/{inn.wickets} <span className="text-sm text-muted">({overs(inn.balls)} ov)</span>
                 </span>
@@ -235,8 +247,10 @@ function TeamLine({
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={logo} alt={name} width={40} height={40} className="rounded-lg bg-white/5 object-contain p-1 ring-1 ring-white/10" style={{ width: 40, height: 40 }} />
+      ) : color ? (
+        <div className="size-10 shrink-0 rounded-lg ring-1 ring-white/10" style={{ background: color }} />
       ) : (
-        <div className="size-10 shrink-0 rounded-lg ring-1 ring-white/10" style={{ background: color ?? "#334155" }} />
+        <TeamBadge name={name} size={40} />
       )}
       <span className="flex-1 truncate font-medium">{name}</span>
       <span className="font-mono text-lg tabular-nums">{score ?? "—"}</span>

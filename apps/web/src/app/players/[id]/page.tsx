@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PlayerAvatar } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import {
   careerByClass,
@@ -92,9 +93,14 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           <Link href="/players" className="text-xs text-muted transition-colors hover:text-fg">
             ← All players
           </Link>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">{name}</h1>
-          <p className="mt-1 text-sm text-muted">{subtitle}</p>
-          <p className="mt-3 font-mono text-sm tabular-nums text-muted">
+          <div className="mt-3 flex items-center gap-4">
+            <PlayerAvatar name={name} size={64} />
+            <div>
+              <h1 className="text-3xl font-semibold tracking-tight">{name}</h1>
+              <p className="mt-1 text-sm text-muted">{subtitle}</p>
+            </div>
+          </div>
+          <p className="mt-4 font-mono text-sm tabular-nums text-muted">
             {totalMatches} matches · <span className="text-fg">{totalRuns.toLocaleString()}</span> runs ·{" "}
             <span className="text-fg">{totalWkts}</span> wickets
           </p>
