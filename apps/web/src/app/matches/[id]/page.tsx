@@ -317,7 +317,9 @@ export default async function MatchPage({
                     <span className="font-medium text-fg/70">
                       Did not bat:{" "}
                     </span>
-                    {didNotBat.map((b) => b.player.fullName).join(", ")}
+                    {didNotBat
+                      .map((b: MatchBattingPerf) => b.player.fullName)
+                      .join(", ")}
                   </p>
                 )}
                 {inn.bowlingPerfs.length > 0 && (
