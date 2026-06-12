@@ -8,6 +8,7 @@ import {
   getGoldMatch,
   getMatchById,
   type GoldMatchDetail,
+  type MatchDetail,
 } from "@/lib/queries";
 import { teamLogo } from "@/lib/serialize";
 
@@ -16,6 +17,9 @@ export const dynamic = "force-dynamic";
 type GoldMatchInnings = GoldMatchDetail["innings"][number];
 type GoldMatchBatting = GoldMatchDetail["batting"][number];
 type GoldMatchBowling = GoldMatchDetail["bowling"][number];
+type MatchInnings = MatchDetail["innings"][number];
+type MatchBattingPerf = MatchInnings["battingPerfs"][number];
+type MatchBowlingPerf = MatchInnings["bowlingPerfs"][number];
 
 const fmt2 = (n: number | null) => (n == null ? "—" : n.toFixed(2));
 const overs = (balls: number) => `${Math.floor(balls / 6)}.${balls % 6}`;
@@ -253,7 +257,7 @@ export default async function MatchPage({
             Scorecard not ingested yet for this match.
           </p>
         ) : (
-          match.innings.map((inn) => {
+          match.innings.map((inn: MatchInnings) => {
             const batted = inn.battingPerfs.filter(
               (b) => b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT",
             );
@@ -274,7 +278,7 @@ export default async function MatchPage({
                   </span>
                 </div>
                 <Table head={["Batter", "R", "B", "4s", "6s", "SR"]}>
-                  {batted.map((b) => (
+                  {batted.map((b: MatchBattingPerf) => (
                     <tr key={b.id} className="border-t border-line/60">
                       <td className="px-5 py-2.5">
                         <Link
@@ -317,7 +321,7 @@ export default async function MatchPage({
                 {inn.bowlingPerfs.length > 0 && (
                   <div className="border-t border-line">
                     <Table head={["Bowler", "O", "M", "R", "W", "Econ"]}>
-                      {inn.bowlingPerfs.map((bw) => (
+                      {inn.bowlingPerfs.map((bw: MatchBowlingPerf) => (
                         <tr key={bw.id} className="border-t border-line/60">
                           <td className="px-5 py-2.5">
                             <Link
