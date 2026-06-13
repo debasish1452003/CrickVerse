@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { TeamBadge } from "@/components/Crest";
+import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { Navbar } from "@/components/Navbar";
-import { getCompetitions, OTHER_COMPETITION, type Competition } from "@/lib/queries";
+import {
+  competitionLogoFor,
+  getCompetitionLogos,
+  getCompetitions,
+  OTHER_COMPETITION,
+  type Competition,
+} from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +16,7 @@ function eventSegment(c: Competition): string {
   return c.eventName == null ? OTHER_COMPETITION : encodeURIComponent(c.eventName);
 }
 
-function CompetitionCard({ c }: { c: Competition }) {
+function CompetitionCard({ c, logo }: { c: Competition; logo: string | null }) {
   const span =
     c.seasons.length > 1
       ? `${c.seasons.length} seasons`
@@ -22,7 +28,7 @@ function CompetitionCard({ c }: { c: Competition }) {
       href={`/series/${eventSegment(c)}`}
       className="card flex items-center gap-4 p-5 transition-colors hover:border-accent/40"
     >
-      <TeamBadge name={c.name} size={44} />
+      <CompetitionBadge name={c.name} src={logo} size={44} />
       <div className="min-w-0 flex-1">
         <div className="truncate text-base font-semibold tracking-tight">{c.name}</div>
         <div className="mt-0.5 text-xs text-muted">
@@ -48,6 +54,7 @@ export default async function SeriesPage({
   const all = await getCompetitions();
   const ql = q.toLowerCase();
   const comps = ql ? all.filter((c) => c.name.toLowerCase().includes(ql)) : all;
+  const logos = await getCompetitionLogos(comps.map((c) => c.eventName));
 
   return (
     <>
@@ -91,7 +98,11 @@ export default async function SeriesPage({
         ) : (
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {comps.map((c) => (
-              <CompetitionCard key={c.eventName ?? OTHER_COMPETITION} c={c} />
+              <CompetitionCard
+                key={c.eventName ?? OTHER_COMPETITION}
+                c={c}
+                logo={competitionLogoFor(c.eventName, logos)}
+              />
             ))}
           </div>
         )}

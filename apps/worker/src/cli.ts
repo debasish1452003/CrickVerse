@@ -9,6 +9,7 @@ import { backfillMatchClass } from "./tasks/backfill-match-class";
 import { exportParquet } from "./tasks/export-parquet";
 import { buildGoldTask } from "./tasks/build-gold";
 import { refreshLakehouse } from "./tasks/refresh-lakehouse";
+import { enrichLogos } from "./tasks/enrich-logos";
 import { enrichPlayers } from "./tasks/enrich-players";
 import { enrichTeams } from "./tasks/enrich-teams";
 import { buildOversTask } from "./tasks/build-overs";
@@ -113,6 +114,17 @@ async function main(): Promise<void> {
       await buildOversTask();
       break;
     }
+    case "enrich-logos": {
+      const compArg = rest.find((a) => a.startsWith("--comp-limit="));
+      const teamArg = rest.find((a) => a.startsWith("--team-limit="));
+      const res = await enrichLogos({
+        force: rest.includes("--force"),
+        compLimit: compArg ? Number(compArg.split("=")[1]) : undefined,
+        teamLimit: teamArg ? Number(teamArg.split("=")[1]) : undefined,
+      });
+      console.log(res);
+      break;
+    }
     default:
       console.log("Usage:");
       console.log("  tsx src/cli.ts probe <slug> <objectId>            # fetch+parse only, no DB");
@@ -131,6 +143,8 @@ async function main(): Promise<void> {
       console.log("                                                    # Wikidata/Commons photos + bio → PlayerProfile");
       console.log("  tsx src/cli.ts enrich-teams [--dry-run] [--force] # flags + franchise logos → TeamProfile");
       console.log("  tsx src/cli.ts build-overs                        # per-innings over rollup → InningsOvers (charts)");
+      console.log("  tsx src/cli.ts enrich-logos [--force] [--comp-limit=N] [--team-limit=N]");
+      console.log("                                                    # real league/franchise logos from Wikipedia → CompetitionProfile + TeamProfile");
   }
 }
 

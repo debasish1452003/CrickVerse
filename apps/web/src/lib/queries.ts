@@ -309,6 +309,154 @@ export async function getTeamRankings(minMatches = 25): Promise<Record<string, R
   return byClass;
 }
 
+// ── Elo-based team rankings (opponent-strength weighted) ─────────────────────
+
+export interface EloRankingRow {
+  team: string;
+  played: number;
+  won: number;
+  lost: number;
+  rating: number;
+}
+
+/**
+ * Team rankings by an Elo rating instead of raw win% — so beating a strong side
+ * is worth far more than beating a minnow. This is what keeps associate teams
+ * (who rack up a high win% against other weak teams but rarely beat Full
+ * Members) from topping the table the way they do under naive win%. Matches are
+ * replayed in date order; draws/ties/no-results count as a half result. Wrapped
+ * in React cache() since the rankings page asks for several classes at once.
+ */
+export const getTeamEloRankings = cache(
+  async (classes: string[], minMatches = 15): Promise<Record<string, EloRankingRow[]>> => {
+    const matches = await prisma.careerMatch.findMany({
+      where: { matchClass: { in: classes }, teamHome: { not: null }, teamAway: { not: null } },
+      select: { matchClass: true, matchDate: true, matchId: true, teamHome: true, teamAway: true, winner: true },
+    });
+    // Chronological replay (nulls sort first — rare and harmless).
+    matches.sort((a, b) => {
+      const da = a.matchDate ?? "";
+      const db = b.matchDate ?? "";
+      if (da !== db) return da < db ? -1 : 1;
+      return a.matchId < b.matchId ? -1 : 1;
+    });
+
+    const K = 32;
+    const BASE = 1500;
+    const ratings: Record<string, Map<string, number>> = {};
+    const stats: Record<string, Map<string, { played: number; won: number; lost: number }>> = {};
+    for (const c of classes) {
+      ratings[c] = new Map();
+      stats[c] = new Map();
+    }
+    const rOf = (c: string, t: string) => ratings[c]!.get(t) ?? BASE;
+    const sOf = (c: string, t: string) => {
+      let s = stats[c]!.get(t);
+      if (!s) stats[c]!.set(t, (s = { played: 0, won: 0, lost: 0 }));
+      return s;
+    };
+
+    for (const m of matches) {
+      const c = m.matchClass;
+      if (!ratings[c]) continue;
+      const h = m.teamHome!;
+      const a = m.teamAway!;
+      const rh = rOf(c, h);
+      const ra = rOf(c, a);
+      const sh = sOf(c, h);
+      const sa = sOf(c, a);
+      sh.played++;
+      sa.played++;
+      const eh = 1 / (1 + Math.pow(10, (ra - rh) / 400));
+      let scoreH: number;
+      if (m.winner === h) {
+        scoreH = 1;
+        sh.won++;
+        sa.lost++;
+      } else if (m.winner === a) {
+        scoreH = 0;
+        sa.won++;
+        sh.lost++;
+      } else {
+        scoreH = 0.5; // draw / tie / no-result
+      }
+      ratings[c]!.set(h, rh + K * (scoreH - eh));
+      ratings[c]!.set(a, ra + K * (1 - scoreH - (1 - eh)));
+    }
+
+    const out: Record<string, EloRankingRow[]> = {};
+    for (const c of classes) {
+      const rows: EloRankingRow[] = [];
+      for (const [team, s] of stats[c]!) {
+        if (s.played < minMatches) continue;
+        rows.push({ team, played: s.played, won: s.won, lost: s.lost, rating: Math.round(rOf(c, team)) });
+      }
+      rows.sort((x, y) => y.rating - x.rating || y.won - x.won);
+      out[c] = rows;
+    }
+    return out;
+  },
+);
+
+// ── Player rankings (per-format leaderboards from gold CareerStat) ────────────
+
+export interface PlayerLeaderRow {
+  cricsheetId: string;
+  name: string;
+  matches: number;
+  value: string;
+  detail: string;
+  photoUrl: string | null;
+}
+
+/** Top run-scorers and wicket-takers in a format, from the gold per-class stats. */
+export async function getPlayerLeaders(
+  matchClass: string,
+  limit = 10,
+): Promise<{ batters: PlayerLeaderRow[]; bowlers: PlayerLeaderRow[] }> {
+  const [batStats, bowlStats] = await Promise.all([
+    prisma.careerStat.findMany({
+      where: { matchClass, runs: { gt: 0 } },
+      orderBy: { runs: "desc" },
+      take: limit,
+      include: { player: { select: { name: true } } },
+    }),
+    prisma.careerStat.findMany({
+      where: { matchClass, wickets: { gt: 0 } },
+      orderBy: { wickets: "desc" },
+      take: limit,
+      include: { player: { select: { name: true } } },
+    }),
+  ]);
+
+  const ids = [...new Set([...batStats, ...bowlStats].map((s) => s.cricsheetId))];
+  const profiles = ids.length
+    ? await prisma.playerProfile.findMany({
+        where: { cricsheetId: { in: ids } },
+        select: { cricsheetId: true, photoUrl: true },
+      })
+    : [];
+  const photo = new Map(profiles.map((p) => [p.cricsheetId, p.photoUrl]));
+
+  const batters: PlayerLeaderRow[] = batStats.map((s) => ({
+    cricsheetId: s.cricsheetId,
+    name: s.player.name,
+    matches: s.matches,
+    value: s.runs.toLocaleString(),
+    detail: `${s.matches} M · avg ${s.battingAvg != null ? s.battingAvg.toFixed(1) : "—"}`,
+    photoUrl: photo.get(s.cricsheetId) ?? null,
+  }));
+  const bowlers: PlayerLeaderRow[] = bowlStats.map((s) => ({
+    cricsheetId: s.cricsheetId,
+    name: s.player.name,
+    matches: s.matches,
+    value: String(s.wickets),
+    detail: `${s.matches} M · econ ${s.economy != null ? s.economy.toFixed(2) : "—"}`,
+    photoUrl: photo.get(s.cricsheetId) ?? null,
+  }));
+  return { batters, bowlers };
+}
+
 export interface CareerPlayerListItem {
   cricsheetId: string;
   name: string;
@@ -584,6 +732,39 @@ export const getCompetitions = cache(async (): Promise<Competition[]> => {
 export async function getCompetition(eventName: string | null): Promise<Competition | null> {
   const comps = await getCompetitions();
   return comps.find((c) => c.eventName === eventName) ?? null;
+}
+
+// ── Competition logos (real Wikipedia logos, generated-crest fallback) ────────
+
+/** Logo URL for one competition by raw eventName, or null (→ generated crest). */
+export async function getCompetitionLogo(eventName: string | null | undefined): Promise<string | null> {
+  if (!eventName) return null;
+  const row = await prisma.competitionProfile.findUnique({
+    where: { id: normalizeTeamName(eventName) },
+    select: { logoUrl: true },
+  });
+  return row?.logoUrl ?? null;
+}
+
+/** Batch competition-logo lookup by raw eventNames → Map<normalizedName, logoUrl>. */
+export async function getCompetitionLogos(
+  names: (string | null | undefined)[],
+): Promise<Map<string, string>> {
+  const ids = [...new Set(names.filter((n): n is string => !!n).map(normalizeTeamName))];
+  if (ids.length === 0) return new Map();
+  const rows = await prisma.competitionProfile.findMany({
+    where: { id: { in: ids }, logoUrl: { not: null } },
+    select: { id: true, logoUrl: true },
+  });
+  return new Map(rows.map((r) => [r.id, r.logoUrl!]));
+}
+
+/** Logo for a competition name from a profile map (helper for list pages). */
+export function competitionLogoFor(
+  name: string | null | undefined,
+  logos: Map<string, string>,
+): string | null {
+  return name ? (logos.get(normalizeTeamName(name)) ?? null) : null;
 }
 
 // ── Tournament edition: points table (NRR), stats, squads, venues ────────────

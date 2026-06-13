@@ -108,6 +108,11 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
   const totalRuns = byClass.reduce((s, c) => s + c.batting.runs, 0);
   const totalWkts = byClass.reduce((s, c) => s + c.bowling.wickets, 0);
 
+  // Our records come from Cricsheet ball-by-ball data, which begins ~2002. Test
+  // / ODI players who debuted earlier therefore show only the covered portion of
+  // their careers — flag that so partial totals don't read as wrong.
+  const mayBePartial = Boolean(gold) && byClass.some((c) => c.matchClass === "TEST" || c.matchClass === "ODI");
+
   // Recent innings is a canonical-only extra (gold has aggregates, not per-innings).
   const recent = canonical
     ? [...canonical.battingPerfs]
@@ -158,6 +163,15 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </p>
           )}
         </section>
+
+        {mayBePartial && (
+          <p className="mt-4 rounded-lg border border-line bg-black/[0.02] px-4 py-2.5 text-xs text-muted">
+            <span className="font-medium text-fg">Note on coverage:</span> career records are compiled
+            from ball-by-ball data available from ~2002 onward. Matches before then (and a few that
+            never had ball-by-ball recorded) may not be included, so totals for players who debuted
+            earlier are partial.
+          </p>
+        )}
 
         {battingRows.length > 0 && (
           <>

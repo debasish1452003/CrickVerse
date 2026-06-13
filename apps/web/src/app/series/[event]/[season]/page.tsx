@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { PlayerAvatar, TeamBadge } from "@/components/Crest";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
@@ -8,6 +9,7 @@ import { StandingsTable } from "@/components/StandingsTable";
 import { StatBoard } from "@/components/StatBoard";
 import {
   getCompetition,
+  getCompetitionLogo,
   getEditionSquads,
   getEditionVenues,
   getStandings,
@@ -83,7 +85,10 @@ export default async function SeriesEditionPage({
   const comp = await getCompetition(eventName);
   if (!comp || !comp.seasons.some((s) => s.season === seasonValue)) notFound();
 
-  const meta = await getEditionMeta(eventName, seasonValue);
+  const [meta, logo] = await Promise.all([
+    getEditionMeta(eventName, seasonValue),
+    getCompetitionLogo(eventName),
+  ]);
   const showTable = isLimitedOversClass(meta.dominantClass);
 
   const allTabs: SeriesTab[] = [
@@ -109,23 +114,26 @@ export default async function SeriesEditionPage({
     <>
       <Navbar />
       <main className="mx-auto max-w-6xl px-5 pb-24">
-        <section className="pt-8">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
-            <Link href="/series" className="transition-colors hover:text-accent">
-              Series
-            </Link>
-            <span>/</span>
-            <Link href={`/series/${event}`} className="truncate transition-colors hover:text-accent">
+        <section className="flex items-center gap-4 pt-8">
+          <CompetitionBadge name={comp.name} src={logo} size={60} />
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+              <Link href="/series" className="transition-colors hover:text-accent">
+                Series
+              </Link>
+              <span>/</span>
+              <Link href={`/series/${event}`} className="truncate transition-colors hover:text-accent">
+                {comp.name}
+              </Link>
+            </div>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
               {comp.name}
-            </Link>
-          </div>
-          <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-            {comp.name}
-            {seasonValue ? <span className="text-muted"> · {seasonValue}</span> : null}
-          </h1>
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
-            <span>{meta.matches.toLocaleString()} match{meta.matches === 1 ? "" : "es"}</span>
-            {span && <span>{span}</span>}
+              {seasonValue ? <span className="text-muted"> · {seasonValue}</span> : null}
+            </h1>
+            <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+              <span>{meta.matches.toLocaleString()} match{meta.matches === 1 ? "" : "es"}</span>
+              {span && <span>{span}</span>}
+            </div>
           </div>
         </section>
 

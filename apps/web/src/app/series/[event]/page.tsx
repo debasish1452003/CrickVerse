@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TeamBadge } from "@/components/Crest";
+import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { Navbar } from "@/components/Navbar";
 import {
   getCompetition,
+  getCompetitionLogo,
   NO_SEASON,
   OTHER_COMPETITION,
   type CompetitionSeason,
@@ -29,13 +30,14 @@ export default async function CompetitionPage({
   const eventName = decodeEvent(event);
   const comp = await getCompetition(eventName);
   if (!comp) notFound();
+  const logo = await getCompetitionLogo(eventName);
 
   return (
     <>
       <Navbar />
       <main className="mx-auto max-w-5xl px-5 pb-24">
         <section className="card mt-10 flex items-center gap-4 p-6 sm:p-8">
-          <TeamBadge name={comp.name} size={56} />
+          <CompetitionBadge name={comp.name} src={logo} size={56} />
           <div className="min-w-0">
             <Link href="/series" className="text-xs text-muted transition-colors hover:text-fg">
               ← All competitions

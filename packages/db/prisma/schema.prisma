@@ -592,6 +592,22 @@ model TeamProfile {
   @@index([matchCount])
 }
 
+// One row per competition (gold CareerMatch.eventName), keyed by the normalized
+// event name. Holds a real league/tournament logo resolved from Wikipedia (the
+// generated CompetitionBadge crest is the fallback when logoUrl is null).
+// Standalone (no FK) so a gold rebuild can't cascade-delete it.
+model CompetitionProfile {
+  id         String    @id // normalized eventName (lowercased, trimmed)
+  name       String
+  logoUrl    String? // Wikipedia file URL (Special:FilePath) or null
+  wikiTitle  String? // resolved Wikipedia article title
+  matchCount Int       @default(0)
+  enrichedAt DateTime?
+  updatedAt  DateTime  @updatedAt
+
+  @@index([matchCount])
+}
+
 // Per-innings over-by-over summary (one row per innings ≈ 49k rows), for the
 // match page's worm/Manhattan charts + over panel. `overs` is a compact JSON
 // array [{o,r,w,f,s,c}] (over no, runs, wickets, fours, sixes, cumulative runs)

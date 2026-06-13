@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { PlayerAvatar, TeamBadge } from "@/components/Crest";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
 import {
+  competitionLogoFor,
+  getCompetitionLogos,
   getCompetitions,
   getTeamProfiles,
   getTopPlayers,
@@ -71,9 +74,12 @@ export default async function Home() {
     getCompetitions(),
     listTeamProfiles({ national: true }),
   ]);
-  const teams = await getTeamProfiles(recent.items.flatMap((m) => [m.teamHome, m.teamAway]));
   const topComps = comps.filter((c) => c.eventName).slice(0, 12);
   const topTeams = featuredTeams.slice(0, 12);
+  const [teams, compLogos] = await Promise.all([
+    getTeamProfiles(recent.items.flatMap((m) => [m.teamHome, m.teamAway])),
+    getCompetitionLogos(topComps.map((c) => c.eventName)),
+  ]);
 
   return (
     <>
@@ -124,9 +130,10 @@ export default async function Home() {
                 <Link
                   key={c.name}
                   href={`/series/${encodeURIComponent(c.eventName!)}`}
-                  className="card flex items-center justify-between gap-3 p-4"
+                  className="card flex items-center gap-3 p-4"
                 >
-                  <span className="min-w-0">
+                  <CompetitionBadge name={c.name} src={competitionLogoFor(c.eventName, compLogos)} size={40} />
+                  <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{c.name}</span>
                     <span className="text-xs text-muted">
                       {c.seasons.length} season{c.seasons.length === 1 ? "" : "s"}

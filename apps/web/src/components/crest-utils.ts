@@ -22,6 +22,19 @@ export function teamInitials(name: string): string {
   return w.slice(0, 3).map((s) => s[0]).join("").toUpperCase();
 }
 
+/**
+ * Competition acronym for a generated tournament crest: word-initials of the
+ * significant words, up to 4 ("Indian Premier League" → "IPL", "Pakistan Super
+ * League" → "PSL"). One-letter tokens (e.g. the "s" from "Men's") are dropped
+ * unless they carry a digit (so "T20" survives).
+ */
+export function competitionInitials(name: string): string {
+  const w = words(name).filter((t) => t.length > 1 || /\d/.test(t));
+  if (w.length === 0) return "?";
+  if (w.length === 1) return w[0]!.slice(0, 3).toUpperCase();
+  return w.slice(0, 4).map((s) => s[0]).join("").toUpperCase();
+}
+
 /** Player avatar initials: first + last initial ("Virat Kohli" → "VK"). */
 export function playerInitials(name: string): string {
   const w = words(name);

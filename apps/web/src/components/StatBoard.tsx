@@ -9,7 +9,7 @@ export function StatBoard({
   metricLabel,
 }: {
   title: string;
-  leaders: StatLeader[];
+  leaders: (StatLeader & { photoUrl?: string | null })[];
   metricLabel: string;
 }) {
   return (
@@ -26,7 +26,7 @@ export function StatBoard({
             const body = (
               <div className="flex items-center gap-3 px-4 py-2.5">
                 <span className="w-4 shrink-0 font-mono text-xs tabular-nums text-muted">{i + 1}</span>
-                <PlayerAvatar name={p.name} size={30} />
+                <PlayerAvatar name={p.name} src={p.photoUrl ?? null} size={30} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium">{p.name}</span>
                   <span className="block truncate text-[11px] text-muted">{p.detail}</span>
