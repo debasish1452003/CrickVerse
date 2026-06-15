@@ -361,12 +361,41 @@ export async function upsertPlayerProfile(db: Db, source: Source, p: ParsedPlaye
   });
   if (existing) {
     await db.player.update({ where: { id: existing.playerId }, data });
+    await upsertGoldPlayerProfiles(db, externalId, p);
     playerCache.set(cacheKey(source, externalId), existing.playerId);
     return existing.playerId;
   }
   const created = await db.player.create({
     data: { ...data, externalIds: { create: { source, externalId } } },
   });
+  await upsertGoldPlayerProfiles(db, externalId, p);
   playerCache.set(cacheKey(source, externalId), created.id);
   return created.id;
+}
+
+async function upsertGoldPlayerProfiles(db: Db, cricinfoId: string, p: ParsedPlayer): Promise<void> {
+  const rows = await db.careerPlayer.findMany({
+    where: { cricinfoId },
+    select: { cricsheetId: true },
+  });
+  for (const row of rows) {
+    await db.playerProfile.upsert({
+      where: { cricsheetId: row.cricsheetId },
+      create: {
+        cricsheetId: row.cricsheetId,
+        cricinfoId,
+        role: p.role ?? undefined,
+        battingStyle: p.battingStyle ?? undefined,
+        bowlingStyle: p.bowlingStyle ?? undefined,
+        enrichedAt: new Date(),
+      },
+      update: {
+        cricinfoId,
+        role: p.role ?? undefined,
+        battingStyle: p.battingStyle ?? undefined,
+        bowlingStyle: p.bowlingStyle ?? undefined,
+        enrichedAt: new Date(),
+      },
+    });
+  }
 }

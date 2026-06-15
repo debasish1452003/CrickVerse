@@ -7,6 +7,7 @@ const fwd = (p: string): string => p.replace(/\\/g, "/");
 export interface BuildGoldResult {
   careerPlayers: number;
   careerStats: number;
+  careerCoverage: number;
 }
 
 /**
@@ -39,9 +40,11 @@ export async function buildGold(opts: {
   log("aggregating careers from silver Parquet…");
   await conn.run(`CREATE TEMP TABLE career AS ${CAREER_SQL(deliveries)}`);
   await conn.run(`CREATE TEMP TABLE career_player AS ${CAREER_PLAYER_SQL(deliveries, players)}`);
+  await conn.run(`CREATE TEMP TABLE career_coverage AS ${COVERAGE_SQL(deliveries)}`);
 
   log("writing gold → Neon (truncate + insert)…");
   // CareerStat has a FK to CareerPlayer; clear children first.
+  await conn.run(`DELETE FROM pg."CareerCoverage"`);
   await conn.run(`DELETE FROM pg."CareerStat"`);
   await conn.run(`DELETE FROM pg."CareerPlayer"`);
 
@@ -59,10 +62,21 @@ export async function buildGold(opts: {
       `bowl_innings, balls_bowled, runs_conceded, wickets, best_bowling_wkts, best_bowling_runs, five_wickets, economy, bowling_avg, bowling_sr ` +
       `FROM career WHERE cricsheet_id IS NOT NULL`,
   );
+  await conn.run(
+    `INSERT INTO pg."CareerCoverage" (` +
+      `"cricsheetId","matchClass","source","firstMatchDate","lastMatchDate","matchesCovered","coverageNote") ` +
+      `SELECT cricsheet_id, match_class, 'CRICSHEET', first_match_date, last_match_date, matches_covered, ` +
+      `'Open Cricsheet ball-by-ball coverage only; not an official complete career total.' ` +
+      `FROM career_coverage WHERE cricsheet_id IS NOT NULL`,
+  );
 
   const n = async (t: string): Promise<number> =>
     Number((await conn.runAndReadAll(`SELECT count(*) c FROM ${t}`)).getRowObjects()[0]?.c ?? 0);
-  const result = { careerPlayers: await n("career_player"), careerStats: await n("career") };
+  const result = {
+    careerPlayers: await n("career_player"),
+    careerStats: await n("career"),
+    careerCoverage: await n("career_coverage"),
+  };
   conn.closeSync();
   return result;
 }
@@ -186,5 +200,25 @@ LEFT JOIN pp ON pp.cricsheet_id = a.pid
 LEFT JOIN runs_w r ON r.pid = a.pid
 LEFT JOIN wkts_w w ON w.pid = a.pid
 GROUP BY a.pid
+`;
+}
+
+/** Per-(player, class) date window represented in the ball-by-ball corpus. */
+function COVERAGE_SQL(deliveries: string): string {
+  return `
+WITH d AS (SELECT * FROM read_parquet('${deliveries}', hive_partitioning=true)),
+appear AS (
+  SELECT batter_id AS pid, match_class, match_id, match_date FROM d WHERE batter_id IS NOT NULL
+  UNION
+  SELECT bowler_id AS pid, match_class, match_id, match_date FROM d WHERE bowler_id IS NOT NULL
+)
+SELECT
+  pid AS cricsheet_id,
+  match_class,
+  min(match_date) AS first_match_date,
+  max(match_date) AS last_match_date,
+  count(DISTINCT match_id) AS matches_covered
+FROM appear
+GROUP BY pid, match_class
 `;
 }

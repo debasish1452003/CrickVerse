@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { battingCareer, bowlingCareer, careerByClass, careersFromGold } from "@/lib/player-stats";
-import { getCareerPlayer, getPlayerById } from "@/lib/queries";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -12,25 +11,25 @@ export const dynamic = "force-dynamic";
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const gold = await getCareerPlayer(id);
+  const gold = await services.players.careerPlayer(id);
   if (gold) {
     return NextResponse.json({
       success: true,
       source: "lakehouse",
       data: {
-        cricsheetId: gold.cricsheetId,
+        cricsheetId: gold.id,
         name: gold.name,
         cricinfoId: gold.cricinfoId,
         gender: gold.gender,
         careerMatches: gold.careerMatches,
         careerRuns: gold.careerRuns,
         careerWickets: gold.careerWickets,
-        byFormat: careersFromGold(gold.stats),
+        byFormat: gold.byFormat(),
       },
     });
   }
 
-  const player = await getPlayerById(id);
+  const player = await services.players.canonicalPlayer(id);
   if (!player) {
     return NextResponse.json({ success: false, error: "player not found" }, { status: 404 });
   }
@@ -42,8 +41,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       fullName: player.fullName,
       country: player.country,
       role: player.role,
-      career: { batting: battingCareer(player), bowling: bowlingCareer(player) },
-      byFormat: careerByClass(player),
+      career: { batting: player.battingCareer(), bowling: player.bowlingCareer() },
+      byFormat: player.careerByClass(),
     },
   });
 }

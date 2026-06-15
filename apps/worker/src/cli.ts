@@ -52,7 +52,7 @@ async function main(): Promise<void> {
       break;
     }
     case "cricsheet-seed-feeds": {
-      // Remaining args are feed keys (e.g. "ipl t20i"); none ⇒ default set.
+      // Remaining args are feed keys (e.g. "all odi test"); none => default set.
       await seedCricsheetFeeds(rest.filter((a) => !a.startsWith("--")));
       break;
     }
@@ -131,7 +131,7 @@ async function main(): Promise<void> {
       console.log("  tsx src/cli.ts seed  <slug> <objectId> [LIVE|HISTORICAL]   # crawl + persist");
       console.log("  tsx src/cli.ts cricsheet-probe <match.json>       # parse a Cricsheet file, no DB");
       console.log("  tsx src/cli.ts cricsheet-ingest <file-or-dir>     # parse + persist ball-by-ball (manual)");
-      console.log("  tsx src/cli.ts cricsheet-seed-feeds [keys...]     # register feeds (default: recently ipl)");
+      console.log("  tsx src/cli.ts cricsheet-seed-feeds [keys...]     # register feeds (default: all recently)");
       console.log("  tsx src/cli.ts cricsheet-sync [feedKey] [--dry-run] [--force] [--revision-sweep] [--from-cache] [--refresh-register]");
       console.log("                                                    # conditional download + incremental ingest");
       console.log("  tsx src/cli.ts backfill-match-class               # set matchClass on pre-existing matches (one-time)");

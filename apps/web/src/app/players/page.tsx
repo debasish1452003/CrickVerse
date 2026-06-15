@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { PlayerAvatar } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
-import { searchCareerPlayers, type CareerPlayerListItem } from "@/lib/queries";
+import type { CareerPlayerListItem } from "@/dto/player-dto";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +49,7 @@ export default async function PlayersPage({
   const sp = await searchParams;
   const q = (sp.q ?? "").trim();
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
-  const { items, total, pageCount } = await searchCareerPlayers({ q, page });
+  const { items, total, pageCount } = await services.players.searchCareerPlayers({ q, page });
 
   return (
     <>

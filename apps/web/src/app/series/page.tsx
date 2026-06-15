@@ -1,20 +1,10 @@
 import Link from "next/link";
 import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { Navbar } from "@/components/Navbar";
-import {
-  competitionLogoFor,
-  getCompetitionLogos,
-  getCompetitions,
-  OTHER_COMPETITION,
-  type Competition,
-} from "@/lib/queries";
+import { Competition } from "@/domain/competition/competition";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
-
-/** URL segment for a competition: the encoded eventName, or the Other sentinel. */
-function eventSegment(c: Competition): string {
-  return c.eventName == null ? OTHER_COMPETITION : encodeURIComponent(c.eventName);
-}
 
 function CompetitionCard({ c, logo }: { c: Competition; logo: string | null }) {
   const span =
@@ -25,7 +15,7 @@ function CompetitionCard({ c, logo }: { c: Competition; logo: string | null }) {
         : "1 edition";
   return (
     <Link
-      href={`/series/${eventSegment(c)}`}
+      href={`/series/${c.segment}`}
       className="card flex items-center gap-4 p-5 transition-colors hover:border-accent/40"
     >
       <CompetitionBadge name={c.name} src={logo} size={44} />
@@ -51,10 +41,10 @@ export default async function SeriesPage({
 }) {
   const sp = await searchParams;
   const q = (sp.q ?? "").trim();
-  const all = await getCompetitions();
+  const all = await services.competitions.list();
   const ql = q.toLowerCase();
   const comps = ql ? all.filter((c) => c.name.toLowerCase().includes(ql)) : all;
-  const logos = await getCompetitionLogos(comps.map((c) => c.eventName));
+  const logos = await services.competitions.logosByNames(comps.map((c) => c.eventName));
 
   return (
     <>
@@ -99,9 +89,9 @@ export default async function SeriesPage({
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {comps.map((c) => (
               <CompetitionCard
-                key={c.eventName ?? OTHER_COMPETITION}
+                key={c.segment}
                 c={c}
-                logo={competitionLogoFor(c.eventName, logos)}
+                logo={c.logoKey ? logos.get(c.logoKey) ?? null : null}
               />
             ))}
           </div>

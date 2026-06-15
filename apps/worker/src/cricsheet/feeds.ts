@@ -51,7 +51,7 @@ export const KNOWN_FEEDS: Record<string, CricsheetFeed> = {
 };
 
 /** The default seed set when none is given to `cricsheet-seed-feeds`. */
-export const DEFAULT_SEED_FEEDS = ["recently", "ipl"] as const;
+export const DEFAULT_SEED_FEEDS = ["all", "recently"] as const;
 
 /** Build the download URL for a feed file name. */
 export function feedUrl(file: string): string {

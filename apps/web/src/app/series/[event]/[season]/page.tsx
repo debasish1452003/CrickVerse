@@ -7,28 +7,11 @@ import { Navbar } from "@/components/Navbar";
 import { SeriesTabs, type SeriesTab, type SeriesTabKey } from "@/components/SeriesTabs";
 import { StandingsTable } from "@/components/StandingsTable";
 import { StatBoard } from "@/components/StatBoard";
-import {
-  getCompetition,
-  getCompetitionLogo,
-  getEditionSquads,
-  getEditionVenues,
-  getStandings,
-  getTeamProfiles,
-  getTournamentStats,
-  isLimitedOversClass,
-  NO_SEASON,
-  OTHER_COMPETITION,
-  searchMatches,
-  teamBadgeFor,
-  type TeamProfileRow,
-} from "@/lib/queries";
-import { prisma } from "@/lib/db";
+import { MatchClasses } from "@/core/match-class";
+import { Competition } from "@/domain/competition/competition";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
-
-function decodeEvent(segment: string): string | null {
-  return segment === OTHER_COMPETITION ? null : decodeURIComponent(segment);
-}
 
 function pageHref(base: string, tab: SeriesTabKey, page: number): string {
   const params = new URLSearchParams();
@@ -36,36 +19,6 @@ function pageHref(base: string, tab: SeriesTabKey, page: number): string {
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return qs ? `${base}?${qs}` : base;
-}
-
-interface EditionMeta {
-  matches: number;
-  firstDate: string | null;
-  lastDate: string | null;
-  dominantClass: string | null;
-}
-
-async function getEditionMeta(eventName: string | null, season: string | null): Promise<EditionMeta> {
-  const [agg, classes] = await Promise.all([
-    prisma.careerMatch.aggregate({
-      where: { eventName, season },
-      _count: { _all: true },
-      _min: { matchDate: true },
-      _max: { matchDate: true },
-    }),
-    prisma.careerMatch.groupBy({
-      by: ["matchClass"],
-      where: { eventName, season },
-      _count: { _all: true },
-    }),
-  ]);
-  const dominant = classes.sort((a, b) => b._count._all - a._count._all)[0]?.matchClass ?? null;
-  return {
-    matches: agg._count._all,
-    firstDate: agg._min.matchDate,
-    lastDate: agg._max.matchDate,
-    dominantClass: dominant,
-  };
 }
 
 export default async function SeriesEditionPage({
@@ -79,17 +32,17 @@ export default async function SeriesEditionPage({
   const sp = await searchParams;
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
 
-  const eventName = decodeEvent(event);
-  const seasonValue = season === NO_SEASON ? null : decodeURIComponent(season);
+  const eventName = Competition.decodeEvent(event);
+  const seasonValue = Competition.decodeSeason(season);
 
-  const comp = await getCompetition(eventName);
-  if (!comp || !comp.seasons.some((s) => s.season === seasonValue)) notFound();
+  const comp = await services.competitions.byEventName(eventName);
+  if (!comp || !comp.hasSeason(seasonValue)) notFound();
 
   const [meta, logo] = await Promise.all([
-    getEditionMeta(eventName, seasonValue),
-    getCompetitionLogo(eventName),
+    services.matches.editionMeta(eventName, seasonValue),
+    services.competitions.logo(eventName),
   ]);
-  const showTable = isLimitedOversClass(meta.dominantClass);
+  const showTable = MatchClasses.isLimitedOvers(meta.dominantClass);
 
   const allTabs: SeriesTab[] = [
     { key: "overview", label: "Overview" },
@@ -164,11 +117,11 @@ async function OverviewTab({
   base: string;
 }) {
   const [standings, stats, recent] = await Promise.all([
-    showTable ? getStandings(eventName, season) : Promise.resolve([]),
-    getTournamentStats(eventName, season, 5),
-    searchMatches({ eventName: eventName ?? "", season: season ?? "", page: 1, pageSize: 5 }),
+    showTable ? services.stats.standings(eventName, season) : Promise.resolve([]),
+    services.stats.tournamentStats(eventName, season, 5),
+    services.matches.search({ eventName: eventName ?? "", season: season ?? "", page: 1, pageSize: 5 }),
   ]);
-  const teams = await getTeamProfiles([
+  const teams = await services.teams.badgeIndex([
     ...standings.map((s) => s.team),
     ...recent.items.flatMap((m) => [m.teamHome, m.teamAway]),
   ]);
@@ -216,13 +169,13 @@ async function MatchesTab({
   page: number;
   base: string;
 }) {
-  const { items, pageCount } = await searchMatches({
+  const { items, pageCount } = await services.matches.search({
     eventName: eventName ?? "",
     season: season ?? "",
     page,
     pageSize: 30,
   });
-  const teams = await getTeamProfiles(items.flatMap((m) => [m.teamHome, m.teamAway]));
+  const teams = await services.teams.badgeIndex(items.flatMap((m) => [m.teamHome, m.teamAway]));
 
   // Group consecutive matches by date (the list is already newest-first).
   const groups: { date: string | null; matches: typeof items }[] = [];
@@ -277,15 +230,15 @@ async function MatchesTab({
 // ── Points Table ────────────────────────────────────────────────────────────
 
 async function PointsTableTab({ eventName, season }: { eventName: string | null; season: string | null }) {
-  const standings = await getStandings(eventName, season);
-  const teams = await getTeamProfiles(standings.map((s) => s.team));
+  const standings = await services.stats.standings(eventName, season);
+  const teams = await services.teams.badgeIndex(standings.map((s) => s.team));
   return <StandingsTable rows={standings} teams={teams} />;
 }
 
 // ── Stats ───────────────────────────────────────────────────────────────────
 
 async function StatsTab({ eventName, season }: { eventName: string | null; season: string | null }) {
-  const stats = await getTournamentStats(eventName, season, 10);
+  const stats = await services.stats.tournamentStats(eventName, season, 10);
   return (
     <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       <StatBoard title="Most Runs" leaders={stats.mostRuns} metricLabel="Runs" />
@@ -302,16 +255,16 @@ async function StatsTab({ eventName, season }: { eventName: string | null; seaso
 // ── Squads ──────────────────────────────────────────────────────────────────
 
 async function SquadsTab({ eventName, season }: { eventName: string | null; season: string | null }) {
-  const squads = await getEditionSquads(eventName, season);
-  const teams = await getTeamProfiles(squads.map((s) => s.team));
+  const squads = await services.stats.editionSquads(eventName, season);
+  const teams = await services.teams.badgeIndex(squads.map((s) => s.team));
   if (squads.length === 0) {
     return <p className="panel mt-6 p-12 text-center text-sm text-muted">No squad data for this edition.</p>;
   }
   return (
     <div className="mt-6 grid gap-5 md:grid-cols-2">
       {squads.map((sq) => {
-        const badge = teamBadgeFor(sq.team, teams);
-        const id = teams.get(sq.team.trim().toLowerCase())?.id;
+        const badge = teams.badgeFor(sq.team);
+        const id = teams.idFor(sq.team);
         return (
           <section key={sq.team} className="panel overflow-hidden">
             <div className="flex items-center gap-2.5 border-b border-line px-4 py-3">
@@ -359,7 +312,7 @@ async function SquadsTab({ eventName, season }: { eventName: string | null; seas
 // ── Venues ──────────────────────────────────────────────────────────────────
 
 async function VenuesTab({ eventName, season }: { eventName: string | null; season: string | null }) {
-  const venues = await getEditionVenues(eventName, season);
+  const venues = await services.stats.editionVenues(eventName, season);
   if (venues.length === 0) {
     return <p className="panel mt-6 p-12 text-center text-sm text-muted">No venue data.</p>;
   }
@@ -367,10 +320,10 @@ async function VenuesTab({ eventName, season }: { eventName: string | null; seas
     <div className="panel mt-6 overflow-hidden">
       <ul className="divide-y divide-line/60">
         {venues.map((v, i) => (
-          <li key={`${v.venue ?? "?"}-${i}`} className="flex items-center gap-3 px-4 py-3">
+          <li key={`${v.name ?? "?"}-${i}`} className="flex items-center gap-3 px-4 py-3">
             <span className="grid size-8 shrink-0 place-items-center rounded-md bg-accent/10 text-sm">📍</span>
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium">{v.venue ?? "Unknown venue"}</span>
+              <span className="block truncate text-sm font-medium">{v.displayName}</span>
               {v.city && <span className="block truncate text-xs text-muted">{v.city}</span>}
             </span>
             <span className="shrink-0 font-mono text-sm tabular-nums text-muted">

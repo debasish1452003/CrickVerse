@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
-import { teamBadgeFor, type StandingRow, type TeamProfileRow } from "@/lib/queries";
+import type { StandingRow } from "@/domain/competition/standings";
+import { TeamBadgeIndex } from "@/domain/team/team-profile";
 
 const nrrText = (n: number) => `${n > 0 ? "+" : ""}${n.toFixed(3)}`;
 
@@ -10,7 +11,7 @@ export function StandingsTable({
   teams,
 }: {
   rows: StandingRow[];
-  teams: Map<string, TeamProfileRow>;
+  teams: TeamBadgeIndex;
 }) {
   if (rows.length === 0) {
     return (
@@ -37,8 +38,8 @@ export function StandingsTable({
           </thead>
           <tbody>
             {rows.map((r, i) => {
-              const badge = teamBadgeFor(r.team, teams);
-              const id = teams.get(r.team.trim().toLowerCase())?.id;
+              const badge = teams.badgeFor(r.team);
+              const id = teams.idFor(r.team);
               return (
                 <tr key={r.team} className="border-b border-line/70 last:border-0 hover:bg-black/[0.02]">
                   <td className="px-4 py-3 font-mono text-xs tabular-nums text-muted">{i + 1}</td>

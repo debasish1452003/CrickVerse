@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
-import { getTeamProfiles, searchMatches } from "@/lib/queries";
+import { MatchClasses } from "@/core/match-class";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -26,8 +26,8 @@ export default async function MatchesPage({
   const q = (sp.q ?? "").trim();
   const cls = (sp.class ?? "").trim();
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
-  const { items, total, pageCount } = await searchMatches({ q, matchClass: cls || undefined, page });
-  const teams = await getTeamProfiles(items.flatMap((m) => [m.teamHome, m.teamAway]));
+  const { items, total, pageCount } = await services.matches.search({ q, matchClass: cls || undefined, page });
+  const teams = await services.teams.badgeIndex(items.flatMap((m) => [m.teamHome, m.teamAway]));
 
   return (
     <>
@@ -65,14 +65,14 @@ export default async function MatchesPage({
                 href={href(q, c, 1)}
                 className={`rounded-full px-3 py-1 text-xs ${cls === c ? "bg-accent text-white" : "border border-line text-muted hover:text-fg"}`}
               >
-                {MATCH_CLASS_LABEL[c]}
+                {MatchClasses.label(c)}
               </Link>
             ))}
           </div>
 
           <p className="mt-4 text-xs uppercase tracking-wider text-muted">
             {total.toLocaleString()} match{total === 1 ? "" : "es"}
-            {cls ? ` · ${MATCH_CLASS_LABEL[cls as keyof typeof MATCH_CLASS_LABEL] ?? cls}` : ""}
+            {cls ? ` · ${MatchClasses.label(cls)}` : ""}
             {q ? ` · “${q}”` : ""}
           </p>
         </section>

@@ -2,24 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { Navbar } from "@/components/Navbar";
-import {
-  getCompetition,
-  getCompetitionLogo,
-  NO_SEASON,
-  OTHER_COMPETITION,
-  type CompetitionSeason,
-} from "@/lib/queries";
+import { Competition } from "@/domain/competition/competition";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
-
-/** Resolve the `[event]` segment to a raw eventName (null for the Other bucket). */
-function decodeEvent(segment: string): string | null {
-  return segment === OTHER_COMPETITION ? null : decodeURIComponent(segment);
-}
-
-function seasonSegment(s: CompetitionSeason): string {
-  return s.season == null ? NO_SEASON : encodeURIComponent(s.season);
-}
 
 export default async function CompetitionPage({
   params,
@@ -27,10 +13,10 @@ export default async function CompetitionPage({
   params: Promise<{ event: string }>;
 }) {
   const { event } = await params;
-  const eventName = decodeEvent(event);
-  const comp = await getCompetition(eventName);
+  const eventName = Competition.decodeEvent(event);
+  const comp = await services.competitions.byEventName(eventName);
   if (!comp) notFound();
-  const logo = await getCompetitionLogo(eventName);
+  const logo = await services.competitions.logo(eventName);
 
   return (
     <>
@@ -58,8 +44,8 @@ export default async function CompetitionPage({
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {comp.seasons.map((s) => (
             <Link
-              key={s.season ?? NO_SEASON}
-              href={`/series/${event}/${seasonSegment(s)}`}
+              key={Competition.seasonSegment(s.season)}
+              href={`/series/${event}/${Competition.seasonSegment(s.season)}`}
               className="card flex items-center justify-between gap-3 p-4 transition-colors hover:border-accent/40"
             >
               <span className="text-base font-semibold tracking-tight">

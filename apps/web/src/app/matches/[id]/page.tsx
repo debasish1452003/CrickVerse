@@ -4,31 +4,28 @@ import { notFound } from "next/navigation";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { OverCharts } from "@/components/OverCharts";
-import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
+import { MatchClasses } from "@/core/match-class";
 import {
-  getGoldMatch,
-  getInningsOvers,
-  getMatchById,
-  getTeamProfiles,
-  teamBadgeFor,
-  type GoldMatchDetail,
-  type InningsOversData,
-  type TeamProfileRow,
-  type MatchDetail,
-} from "@/lib/queries";
-import { teamLogo } from "@/lib/serialize";
+  CanonicalMatch,
+  type CanonicalBattingPerfRow,
+  type CanonicalBowlingPerfRow,
+  type CanonicalInningsRow,
+  type MatchTeamLine,
+} from "@/domain/match/canonical-match";
+import {
+  GoldMatch,
+  oversText,
+  type GoldBattingRow,
+  type GoldBowlingRow,
+  type GoldInningsRow,
+} from "@/domain/match/gold-match";
+import { TeamBadgeIndex } from "@/domain/team/team-profile";
+import type { InningsOversData } from "@/dto/match-dto";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
-type GoldMatchInnings = GoldMatchDetail["innings"][number];
-type GoldMatchBatting = GoldMatchDetail["batting"][number];
-type GoldMatchBowling = GoldMatchDetail["bowling"][number];
-type MatchInnings = MatchDetail["innings"][number];
-type MatchBattingPerf = MatchInnings["battingPerfs"][number];
-type MatchBowlingPerf = MatchInnings["bowlingPerfs"][number];
-
 const fmt2 = (n: number | null) => (n == null ? "—" : n.toFixed(2));
-const oversText = (balls: number) => `${Math.floor(balls / 6)}.${balls % 6}`;
 
 function Table({ head, children }: { head: string[]; children: ReactNode }) {
   return (
@@ -56,20 +53,10 @@ function GoldScorecard({
   teams,
   overs,
 }: {
-  m: GoldMatchDetail;
-  teams: Map<string, TeamProfileRow>;
+  m: GoldMatch;
+  teams: TeamBadgeIndex;
   overs: InningsOversData[];
 }) {
-  const title =
-    m.teamHome && m.teamAway
-      ? `${m.teamHome} vs ${m.teamAway}`
-      : (m.eventName ?? "Match");
-  const toss =
-    m.tossWinner && m.tossDecision
-      ? `${m.tossWinner} won the toss and chose to ${m.tossDecision}`
-      : null;
-  const inningsLabel = (no: number): string =>
-    m.innings.find((i) => i.inningsNo === no)?.battingTeam ?? `Innings ${no}`;
   return (
     <>
       <Navbar />
@@ -79,65 +66,44 @@ function GoldScorecard({
             <Link href="/matches" className="transition-colors hover:text-fg">
               ← Matches
             </Link>
-            <span className="pill">
-              {MATCH_CLASS_LABEL[
-                m.matchClass as keyof typeof MATCH_CLASS_LABEL
-              ] ?? m.matchClass}
-            </span>
+            <span className="pill">{MatchClasses.label(m.matchClass)}</span>
             {m.eventName && <span className="truncate">{m.eventName}</span>}
           </div>
-          {m.teamHome && m.teamAway ? (
+          {m.hasBothTeams ? (
             <div className="mt-3 flex items-center gap-3">
-              <TeamBadge name={m.teamHome} {...teamBadgeFor(m.teamHome, teams)} size={40} />
-              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                {title}
-              </h1>
-              <TeamBadge name={m.teamAway} {...teamBadgeFor(m.teamAway, teams)} size={40} />
+              <TeamBadge name={m.teamHome} {...teams.badgeFor(m.teamHome)} size={40} />
+              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{m.title}</h1>
+              <TeamBadge name={m.teamAway} {...teams.badgeFor(m.teamAway)} size={40} />
             </div>
           ) : (
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-              {title}
-            </h1>
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">{m.title}</h1>
           )}
-          <p className="mt-2 text-sm font-medium text-accent">
-            {m.winner ? `${m.winner} won` : "Result —"}
-          </p>
-          <p className="mt-1 text-xs text-muted">
-            {[m.matchDate, m.venue, m.city].filter(Boolean).join(" · ")}
-          </p>
-          {toss && <p className="mt-1 text-xs text-muted">{toss}</p>}
+          <p className="mt-2 text-sm font-medium text-accent">{m.resultText}</p>
+          <p className="mt-1 text-xs text-muted">{m.metaLine}</p>
+          {m.tossText && <p className="mt-1 text-xs text-muted">{m.tossText}</p>}
         </section>
 
-        {m.innings.map((inn: GoldMatchInnings) => {
-          const batting = m.batting.filter(
-            (b: GoldMatchBatting) => b.inningsNo === inn.inningsNo,
-          );
-          const bowling = m.bowling.filter(
-            (b: GoldMatchBowling) => b.inningsNo === inn.inningsNo,
-          );
+        {m.innings.map((inn: GoldInningsRow) => {
+          const batting = m.battingIn(inn.inningsNo);
+          const bowling = m.bowlingIn(inn.inningsNo);
           return (
             <section key={inn.inningsNo} className="card mt-6 overflow-hidden">
               <div className="flex items-center justify-between border-b border-line px-5 py-4">
                 <h3 className="flex items-center gap-2.5 font-semibold">
                   {inn.battingTeam && (
-                    <TeamBadge name={inn.battingTeam} {...teamBadgeFor(inn.battingTeam, teams)} size={28} />
+                    <TeamBadge name={inn.battingTeam} {...teams.badgeFor(inn.battingTeam)} size={28} />
                   )}
                   {inn.battingTeam ?? `Innings ${inn.inningsNo}`}
                 </h3>
                 <span className="font-mono text-lg tabular-nums">
                   {inn.runs}/{inn.wickets}{" "}
-                  <span className="text-sm text-muted">
-                    ({oversText(inn.balls)} ov)
-                  </span>
+                  <span className="text-sm text-muted">({oversText(inn.balls)} ov)</span>
                 </span>
               </div>
 
               <Table head={["Batter", "", "R", "B", "4s", "6s", "SR"]}>
-                {batting.map((b: GoldMatchBatting) => (
-                  <tr
-                    key={`bat-${b.battingPos}`}
-                    className="border-t border-line/60"
-                  >
+                {batting.map((b: GoldBattingRow) => (
+                  <tr key={`bat-${b.battingPos}`} className="border-t border-line/60">
                     <td className="px-5 py-2.5">
                       {b.cricsheetId ? (
                         <Link
@@ -153,18 +119,10 @@ function GoldScorecard({
                     <td className="px-3 py-2.5 text-right text-xs text-muted">
                       {b.out ? (b.dismissal ?? "out") : "not out"}
                     </td>
-                    <td className="px-3 text-right font-mono tabular-nums">
-                      {b.runs}
-                    </td>
-                    <td className="px-3 text-right font-mono tabular-nums text-muted">
-                      {b.balls}
-                    </td>
-                    <td className="px-3 text-right font-mono tabular-nums text-muted">
-                      {b.fours}
-                    </td>
-                    <td className="px-3 text-right font-mono tabular-nums text-muted">
-                      {b.sixes}
-                    </td>
+                    <td className="px-3 text-right font-mono tabular-nums">{b.runs}</td>
+                    <td className="px-3 text-right font-mono tabular-nums text-muted">{b.balls}</td>
+                    <td className="px-3 text-right font-mono tabular-nums text-muted">{b.fours}</td>
+                    <td className="px-3 text-right font-mono tabular-nums text-muted">{b.sixes}</td>
                     <td className="px-5 text-right font-mono tabular-nums text-muted">
                       {fmt2(b.strikeRate)}
                     </td>
@@ -175,11 +133,8 @@ function GoldScorecard({
               {bowling.length > 0 && (
                 <div className="border-t border-line">
                   <Table head={["Bowler", "O", "M", "R", "W", "Econ"]}>
-                    {bowling.map((bw: GoldMatchBowling) => (
-                      <tr
-                        key={`bowl-${bw.bowlingPos}`}
-                        className="border-t border-line/60"
-                      >
+                    {bowling.map((bw: GoldBowlingRow) => (
+                      <tr key={`bowl-${bw.bowlingPos}`} className="border-t border-line/60">
                         <td className="px-5 py-2.5">
                           {bw.cricsheetId ? (
                             <Link
@@ -216,7 +171,7 @@ function GoldScorecard({
           );
         })}
 
-        <OverCharts innings={overs} teamLabel={inningsLabel} />
+        <OverCharts innings={overs} teamLabel={(no) => m.inningsLabel(no)} />
       </main>
     </>
   );
@@ -230,16 +185,16 @@ export default async function MatchPage({
   const { id } = await params;
 
   // Full-corpus scorecard (Cricsheet id) first; fall back to the canonical match (cuid).
-  const gold = await getGoldMatch(id);
+  const gold = await services.matches.goldMatch(id);
   if (gold) {
     const [teams, overs] = await Promise.all([
-      getTeamProfiles([gold.teamHome, gold.teamAway, ...gold.innings.map((i) => i.battingTeam)]),
-      getInningsOvers(id),
+      services.teams.badgeIndex(gold.teamNames),
+      services.matches.inningsOvers(id),
     ]);
     return <GoldScorecard m={gold} teams={teams} overs={overs} />;
   }
 
-  const match = await getMatchById(id);
+  const match = await services.matches.canonicalMatch(id);
   if (!match) notFound();
 
   return (
@@ -248,48 +203,27 @@ export default async function MatchPage({
       <main className="mx-auto max-w-5xl px-5 pb-24">
         <section className="card mt-10 p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
-            <span className="truncate">{match.series?.name ?? "Match"}</span>
+            <span className="truncate">{match.seriesName}</span>
             {match.format && <span className="pill">{match.format}</span>}
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <TeamLine
-              name={match.homeTeam?.name ?? "TBD"}
-              color={match.homeTeam?.primaryColor}
-              logo={teamLogo(match.homeTeam?.imageUrl)}
-              score={match.homeScore}
-            />
-            <TeamLine
-              name={match.awayTeam?.name ?? "TBD"}
-              color={match.awayTeam?.primaryColor}
-              logo={teamLogo(match.awayTeam?.imageUrl)}
-              score={match.awayScore}
-            />
+            <TeamLine {...match.homeLine} />
+            <TeamLine {...match.awayLine} />
           </div>
-          <p className="mt-5 text-sm font-medium text-accent">
-            {match.statusText ?? match.state}
-          </p>
-          {match.venue?.name && (
+          <p className="mt-5 text-sm font-medium text-accent">{match.statusLine}</p>
+          {match.venueName && (
             <p className="mt-1 text-xs text-muted">
-              {match.venue.name}
-              {match.venue.city ? `, ${match.venue.city}` : ""}
+              {match.venueName}
+              {match.venueCity ? `, ${match.venueCity}` : ""}
             </p>
           )}
         </section>
 
         {match.innings.length === 0 ? (
-          <p className="mt-8 text-sm text-muted">
-            Scorecard not ingested yet for this match.
-          </p>
+          <p className="mt-8 text-sm text-muted">Scorecard not ingested yet for this match.</p>
         ) : (
-          match.innings.map((inn: MatchInnings) => {
-            const batted = inn.battingPerfs.filter(
-              (b: MatchBattingPerf) =>
-                b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT",
-            );
-            const didNotBat = inn.battingPerfs.filter(
-              (b: MatchBattingPerf) =>
-                !(b.balls > 0 || b.runs > 0 || b.dismissal !== "NOT_OUT"),
-            );
+          match.innings.map((inn: CanonicalInningsRow) => {
+            const { batted, didNotBat } = CanonicalMatch.splitBatting(inn.battingPerfs);
             return (
               <section key={inn.id} className="card mt-6 overflow-hidden">
                 <div className="flex items-center justify-between border-b border-line px-5 py-4">
@@ -298,13 +232,11 @@ export default async function MatchPage({
                   </h3>
                   <span className="font-mono text-lg tabular-nums">
                     {inn.runs}/{inn.wickets}{" "}
-                    <span className="text-sm text-muted">
-                      ({inn.oversText ?? "—"} ov)
-                    </span>
+                    <span className="text-sm text-muted">({inn.oversText ?? "—"} ov)</span>
                   </span>
                 </div>
                 <Table head={["Batter", "R", "B", "4s", "6s", "SR"]}>
-                  {batted.map((b: MatchBattingPerf) => (
+                  {batted.map((b: CanonicalBattingPerfRow) => (
                     <tr key={b.id} className="border-t border-line/60">
                       <td className="px-5 py-2.5">
                         <Link
@@ -314,22 +246,13 @@ export default async function MatchPage({
                           {b.player.fullName}
                         </Link>
                         <span className="ml-2 text-xs text-muted">
-                          {b.dismissalText ??
-                            (b.dismissal === "NOT_OUT" ? "not out" : "")}
+                          {b.dismissalText ?? (b.dismissal === "NOT_OUT" ? "not out" : "")}
                         </span>
                       </td>
-                      <td className="px-3 text-right font-mono tabular-nums">
-                        {b.runs}
-                      </td>
-                      <td className="px-3 text-right font-mono tabular-nums text-muted">
-                        {b.balls}
-                      </td>
-                      <td className="px-3 text-right font-mono tabular-nums text-muted">
-                        {b.fours}
-                      </td>
-                      <td className="px-3 text-right font-mono tabular-nums text-muted">
-                        {b.sixes}
-                      </td>
+                      <td className="px-3 text-right font-mono tabular-nums">{b.runs}</td>
+                      <td className="px-3 text-right font-mono tabular-nums text-muted">{b.balls}</td>
+                      <td className="px-3 text-right font-mono tabular-nums text-muted">{b.fours}</td>
+                      <td className="px-3 text-right font-mono tabular-nums text-muted">{b.sixes}</td>
                       <td className="px-5 text-right font-mono tabular-nums text-muted">
                         {fmt2(b.strikeRate)}
                       </td>
@@ -338,18 +261,14 @@ export default async function MatchPage({
                 </Table>
                 {didNotBat.length > 0 && (
                   <p className="border-t border-line/60 px-5 py-3 text-xs text-muted">
-                    <span className="font-medium text-fg/70">
-                      Did not bat:{" "}
-                    </span>
-                    {didNotBat
-                      .map((b: MatchBattingPerf) => b.player.fullName)
-                      .join(", ")}
+                    <span className="font-medium text-fg/70">Did not bat: </span>
+                    {didNotBat.map((b: CanonicalBattingPerfRow) => b.player.fullName).join(", ")}
                   </p>
                 )}
                 {inn.bowlingPerfs.length > 0 && (
                   <div className="border-t border-line">
                     <Table head={["Bowler", "O", "M", "R", "W", "Econ"]}>
-                      {inn.bowlingPerfs.map((bw: MatchBowlingPerf) => (
+                      {inn.bowlingPerfs.map((bw: CanonicalBowlingPerfRow) => (
                         <tr key={bw.id} className="border-t border-line/60">
                           <td className="px-5 py-2.5">
                             <Link
@@ -388,17 +307,7 @@ export default async function MatchPage({
   );
 }
 
-function TeamLine({
-  name,
-  color,
-  logo,
-  score,
-}: {
-  name: string;
-  color?: string | null;
-  logo?: string | null;
-  score?: string | null;
-}) {
+function TeamLine({ name, color, logo, score }: MatchTeamLine) {
   return (
     <div className="flex items-center gap-3 rounded-xl bg-black/[0.02] p-4">
       {logo ? (

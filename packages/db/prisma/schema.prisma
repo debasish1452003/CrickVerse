@@ -421,6 +421,7 @@ model CareerPlayer {
   updatedAt     DateTime @default(now())
 
   stats CareerStat[]
+  coverage CareerCoverage[]
 
   @@index([name])
   @@index([cricinfoId])
@@ -460,6 +461,45 @@ model CareerStat {
   bowlingSr       Float?
 
   @@id([cricsheetId, matchClass])
+  @@index([cricsheetId])
+}
+
+// Actual ball-by-ball coverage windows present in the open Cricsheet corpus.
+// These rows do not claim complete careers; they describe the analytical sample
+// behind CareerStat so old-era players can be labelled honestly in the UI.
+model CareerCoverage {
+  cricsheetId String
+  matchClass  String
+  player      CareerPlayer @relation(fields: [cricsheetId], references: [cricsheetId], onDelete: Cascade)
+
+  source       Source   @default(CRICSHEET)
+  firstMatchDate String?
+  lastMatchDate  String?
+  matchesCovered Int     @default(0)
+  coverageNote   String?
+  updatedAt      DateTime @default(now())
+
+  @@id([cricsheetId, matchClass, source])
+  @@index([cricsheetId])
+  @@index([matchClass])
+}
+
+// Optional official/scorecard career totals imported from a trusted source.
+// These are displayed separately from ball-by-ball analytics when present.
+model OfficialCareerStat {
+  cricsheetId String
+  matchClass  String
+
+  source       String
+  matches      Int?
+  runs         Int?
+  wickets      Int?
+  battingAvg   Float?
+  bowlingAvg   Float?
+  sourceUrl    String?
+  importedAt   DateTime @default(now())
+
+  @@id([cricsheetId, matchClass, source])
   @@index([cricsheetId])
 }
 

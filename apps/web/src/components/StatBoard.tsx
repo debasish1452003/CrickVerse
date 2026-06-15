@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PlayerAvatar } from "@/components/Crest";
-import type { StatLeader } from "@/lib/queries";
+import type { StatLeader } from "@/dto/stats-dto";
 
 /** One leaderboard panel (e.g. "Most Runs") with up to N ranked players. */
 export function StatBoard({

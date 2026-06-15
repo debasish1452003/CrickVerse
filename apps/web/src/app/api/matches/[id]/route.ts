@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getMatchById } from "@/lib/queries";
-import { serializeMatch } from "@/lib/serialize";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +8,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const match = await getMatchById(id);
+  const match = await services.matches.dto(id);
   if (!match) {
     return NextResponse.json({ success: false, message: "Match not found" }, { status: 404 });
   }
-  return NextResponse.json({ success: true, data: serializeMatch(match) });
+  return NextResponse.json({ success: true, data: match });
 }

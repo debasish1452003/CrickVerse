@@ -3,6 +3,7 @@ import { createLogger } from "../logger";
 import { feedUrl, resolveFeed } from "../cricsheet/feeds";
 import { exportParquet } from "./export-parquet";
 import { buildGoldTask } from "./build-gold";
+import { buildOversTask } from "./build-overs";
 
 const LAKEHOUSE_FEED_KEY = "lakehouse-all";
 
@@ -38,6 +39,7 @@ export async function refreshLakehouse(opts: { force?: boolean } = {}): Promise<
   logger.info("archive changed (or forced) — rebuilding silver + gold");
   await exportParquet({ feedKey: "all", force: true });
   await buildGoldTask();
+  await buildOversTask();
   await updateIngestState(LAKEHOUSE_FEED_KEY, {
     lastModified,
     lastRunAt: new Date(),

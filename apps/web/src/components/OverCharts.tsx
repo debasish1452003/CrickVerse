@@ -2,7 +2,7 @@
 // Worm = cumulative runs per over (innings overlaid); Manhattan = runs per over
 // with wickets flagged. Pure presentational; safe in a server component.
 
-import type { InningsOversData, OverPoint } from "@/lib/queries";
+import type { InningsOversData, OverPoint } from "@/dto/match-dto";
 
 const SERIES_COLORS = ["#22c55e", "#38bdf8", "#f59e0b", "#f472b6"];
 

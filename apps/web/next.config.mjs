@@ -1,9 +1,36 @@
 import path from "node:path";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Monorepo root (apps/web -> ../../).
 const monorepoRoot = path.join(__dirname, "..", "..");
+
+function configurePrismaEngine() {
+  if (process.env.PRISMA_QUERY_ENGINE_LIBRARY) return;
+  const engineName =
+    process.platform === "win32"
+      ? "query_engine-windows.dll.node"
+      : "libquery_engine-rhel-openssl-3.0.x.so.node";
+  const candidates = [
+    path.join(monorepoRoot, "node_modules", ".pnpm"),
+    path.join(__dirname, "node_modules", ".pnpm"),
+  ];
+  for (const store of candidates) {
+    if (!fs.existsSync(store)) continue;
+    const clientDir = fs
+      .readdirSync(store)
+      .find((name) => name.startsWith("@prisma+client@") && name.includes("prisma@"));
+    if (!clientDir) continue;
+    const engine = path.join(store, clientDir, "node_modules", ".prisma", "client", engineName);
+    if (fs.existsSync(engine)) {
+      process.env.PRISMA_QUERY_ENGINE_LIBRARY = engine;
+      return;
+    }
+  }
+}
+
+configurePrismaEngine();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

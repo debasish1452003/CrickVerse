@@ -3,16 +3,8 @@ import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { PlayerAvatar, TeamBadge } from "@/components/Crest";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import {
-  competitionLogoFor,
-  getCompetitionLogos,
-  getCompetitions,
-  getTeamProfiles,
-  getTopPlayers,
-  listTeamProfiles,
-  searchMatches,
-  type CareerPlayerListItem,
-} from "@/lib/queries";
+import type { CareerPlayerListItem } from "@/dto/player-dto";
+import { services } from "@/services";
 
 // Live data — never statically prerender (and don't hit the DB at build time).
 export const dynamic = "force-dynamic";
@@ -68,17 +60,17 @@ function Leaderboard({
 
 export default async function Home() {
   const [recent, topRuns, topWkts, comps, featuredTeams] = await Promise.all([
-    searchMatches({ page: 1, pageSize: 6 }),
-    getTopPlayers("runs", 10),
-    getTopPlayers("wickets", 10),
-    getCompetitions(),
-    listTeamProfiles({ national: true }),
+    services.matches.search({ page: 1, pageSize: 6 }),
+    services.players.topPlayers("runs", 10),
+    services.players.topPlayers("wickets", 10),
+    services.competitions.list(),
+    services.teams.listProfiles({ national: true }),
   ]);
   const topComps = comps.filter((c) => c.eventName).slice(0, 12);
   const topTeams = featuredTeams.slice(0, 12);
   const [teams, compLogos] = await Promise.all([
-    getTeamProfiles(recent.items.flatMap((m) => [m.teamHome, m.teamAway])),
-    getCompetitionLogos(topComps.map((c) => c.eventName)),
+    services.teams.badgeIndex(recent.items.flatMap((m) => [m.teamHome, m.teamAway])),
+    services.competitions.logosByNames(topComps.map((c) => c.eventName)),
   ]);
 
   return (
@@ -132,7 +124,7 @@ export default async function Home() {
                   href={`/series/${encodeURIComponent(c.eventName!)}`}
                   className="card flex items-center gap-3 p-4"
                 >
-                  <CompetitionBadge name={c.name} src={competitionLogoFor(c.eventName, compLogos)} size={40} />
+                  <CompetitionBadge name={c.name} src={c.logoKey ? compLogos.get(c.logoKey) ?? null : null} size={40} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{c.name}</span>
                     <span className="text-xs text-muted">

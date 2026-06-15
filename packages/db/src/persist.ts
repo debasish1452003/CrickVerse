@@ -1,7 +1,9 @@
-import type { ParsedScorecard, ParsedSeriesFixtures } from "@crickverse/types";
+import type { ParsedPlayer, ParsedScorecard, ParsedSeriesFixtures } from "@crickverse/types";
 import { Source } from "@prisma/client";
 import { upsertSeriesFixtures } from "./repositories/match.repo";
 import { upsertScorecard } from "./repositories/scorecard.repo";
+import { prisma } from "./client";
+import { upsertPlayerProfile } from "./resolve/resolve";
 
 /**
  * Dispatch normalized entities from the scraper engine to the right repository.
@@ -20,7 +22,7 @@ export async function persistEntities(
       await upsertScorecard(entities as ParsedScorecard, source);
       return;
     case "player-profile":
-      // Enabled in Phase 7 (needs a confirmed player payload shape).
+      await upsertPlayerProfile(prisma, source, entities as ParsedPlayer);
       return;
     default:
       throw new Error(`No persister registered for page type "${pageType}"`);

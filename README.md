@@ -30,8 +30,9 @@ re-fetching).
 
 **Two ID namespaces, one canonical row.** Entities use `cuid()` PKs; ESPNCricinfo `objectId`s and
 Cricsheet registry ids map in via per-entity `*ExternalId` tables, so both sources resolve to the
-same Player/Team/Venue/Series/Match. `Delivery` (ball-by-ball, from Cricsheet) is the flat ML
-feature table.
+same Player/Team/Venue/Series/Match. Cricsheet is the canonical open ball-by-ball source: the full
+corpus is exported to Parquet for ML, while Postgres stores app-facing gold summaries, scorecards,
+coverage windows, and enrichment.
 
 ## Tech stack
 
@@ -58,8 +59,10 @@ Then create the schema and run:
 
 ```bash
 pnpm db:migrate                 # create tables on Neon
-pnpm db:seed                    # register IPL 2026 as a scrape source
+pnpm db:seed                    # register IPL 2026 + full/recent Cricsheet feeds
 pnpm --filter @crickverse/worker run seed ipl-2026 1510719   # scrape -> Postgres
+pnpm --filter @crickverse/worker run cricsheet:export all     # Cricsheet -> Parquet silver
+pnpm --filter @crickverse/worker run cricsheet:gold           # Parquet silver -> Postgres gold
 pnpm --filter @crickverse/web dev                            # http://localhost:3000
 ```
 
@@ -70,8 +73,20 @@ pnpm --filter @crickverse/web dev                            # http://localhost:
 | `pnpm typecheck` / `pnpm test` | Typecheck all packages / run unit tests |
 | `pnpm --filter @crickverse/worker run probe <slug> <id>` | Fetch + parse a series, **no DB writes** ("does this URL parse?") |
 | `pnpm --filter @crickverse/worker run seed <slug> <id> [LIVE\|HISTORICAL]` | Crawl a series into Postgres |
+| `pnpm --filter @crickverse/worker run cricsheet:seed-feeds` | Register default Cricsheet feeds (`all`, `recently`) |
+| `pnpm --filter @crickverse/worker run cricsheet:export all` | Build the full available open ball-by-ball Parquet corpus |
+| `pnpm --filter @crickverse/worker run cricsheet:gold` | Rebuild app-facing career/match/coverage summaries from Parquet |
+| `pnpm --filter @crickverse/worker run lakehouse:refresh` | Conditional full archive refresh + gold/over rebuild |
 | `pnpm --filter @crickverse/worker start` | Run the cron scheduler (live + backfill ticks) |
 | `pnpm db:studio` | Browse the database |
+
+## Historical data policy
+
+Cricsheet is treated as the legal/open source of truth for ball-by-ball analytics. Its coverage is
+excellent for modern cricket but not universal for older careers, so player pages label the exact
+Cricsheet coverage window per format and do not present those analytics as official complete career
+totals. Optional official totals can be imported into `OfficialCareerStat` and displayed separately
+from ball-by-ball-derived `CareerStat` rows.
 
 ## Adding a series to scrape
 
@@ -84,8 +99,8 @@ pnpm --filter @crickverse/web dev                            # http://localhost:
 
 - [x] **0–4** Monorepo, types, scraper-core (golden tests 10/10), Prisma data model
 - [x] **6** Scorecard parser (live-verified)
-- [x] **7** Cron scheduler (live + backfill) — *player-profile descriptor still TODO*
+- [x] **7** Cron scheduler (live + backfill) + player-profile persistence
 - [ ] **5/6 runtime** migrate + seed + render (needs Neon `DATABASE_URL`)
 - [ ] **8** shadcn/ui polish + Auth.js Google + favorites/dashboard + SSE live; remove legacy apps
-- [ ] **9** Cricsheet historical/ball-by-ball backfill
+- [x] **9** Cricsheet historical/ball-by-ball lakehouse backfill path
 - [ ] **later** Python FastAPI ML service over `Delivery`

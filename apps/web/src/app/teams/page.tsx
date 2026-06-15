@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
-import { listTeamProfiles, type TeamProfileRow } from "@/lib/queries";
+import { TeamProfile } from "@/domain/team/team-profile";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
-function TeamCard({ t }: { t: TeamProfileRow }) {
+function TeamCard({ t }: { t: TeamProfile }) {
   return (
     <Link href={`/teams/${encodeURIComponent(t.id)}`} className="card flex items-center gap-3 p-4">
       <TeamBadge name={t.displayName} src={t.logoUrl ?? t.flagUrl} primaryColor={t.primaryColor} size={44} />
@@ -19,7 +20,7 @@ function TeamCard({ t }: { t: TeamProfileRow }) {
   );
 }
 
-function Grid({ title, teams }: { title: string; teams: TeamProfileRow[] }) {
+function Grid({ title, teams }: { title: string; teams: TeamProfile[] }) {
   if (teams.length === 0) return null;
   return (
     <section className="mt-10">
@@ -44,7 +45,7 @@ export default async function TeamsPage({
 }) {
   const sp = await searchParams;
   const q = (sp.q ?? "").trim();
-  const all = await listTeamProfiles({ q: q || undefined });
+  const all = await services.teams.listProfiles({ q: q || undefined });
   const national = all.filter((t) => t.isNational);
   const leagues = all.filter((t) => !t.isNational);
 

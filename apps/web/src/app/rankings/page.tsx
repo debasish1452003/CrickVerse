@@ -2,15 +2,11 @@ import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { StatBoard } from "@/components/StatBoard";
-import { MATCH_CLASS_LABEL } from "@/lib/player-stats";
-import {
-  getPlayerLeaders,
-  getTeamEloRankings,
-  getTeamProfiles,
-  normalizeTeamName,
-  type EloRankingRow,
-  type TeamProfileRow,
-} from "@/lib/queries";
+import { MatchClasses } from "@/core/match-class";
+import { normalizeName } from "@/core/naming";
+import type { EloRankingRow } from "@/domain/ranking/elo-league";
+import { TeamBadgeIndex } from "@/domain/team/team-profile";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +14,7 @@ export const dynamic = "force-dynamic";
 const FORMATS = ["TEST", "ODI", "T20I"] as const;
 const TOP_N = 10;
 
-function TeamRankBoard({ rows, teams }: { rows: EloRankingRow[]; teams: Map<string, TeamProfileRow> }) {
+function TeamRankBoard({ rows, teams }: { rows: EloRankingRow[]; teams: TeamBadgeIndex }) {
   const top = rows.slice(0, TOP_N);
   return (
     <section className="panel overflow-hidden">
@@ -32,16 +28,15 @@ function TeamRankBoard({ rows, teams }: { rows: EloRankingRow[]; teams: Map<stri
         <table className="w-full text-sm">
           <tbody>
             {top.map((r, i) => {
-              const p = teams.get(normalizeTeamName(r.team));
               return (
                 <tr key={r.team} className="border-t border-line/60 first:border-0 hover:bg-black/[0.02]">
                   <td className="w-8 px-4 py-2.5 text-center font-mono text-xs tabular-nums text-muted">{i + 1}</td>
                   <td className="py-2.5">
                     <Link
-                      href={`/teams/${encodeURIComponent(normalizeTeamName(r.team))}`}
+                      href={`/teams/${encodeURIComponent(teams.idFor(r.team) ?? normalizeName(r.team))}`}
                       className="flex items-center gap-2.5 font-medium transition-colors hover:text-accent"
                     >
-                      <TeamBadge name={r.team} src={p?.logoUrl ?? p?.flagUrl} primaryColor={p?.primaryColor} size={24} />
+                      <TeamBadge name={r.team} {...teams.badgeFor(r.team)} size={24} />
                       <span className="truncate">{r.team}</span>
                     </Link>
                   </td>
@@ -61,10 +56,10 @@ function TeamRankBoard({ rows, teams }: { rows: EloRankingRow[]; teams: Map<stri
 }
 
 export default async function RankingsPage() {
-  const elo = await getTeamEloRankings([...FORMATS]);
-  const leaders = await Promise.all(FORMATS.map((f) => getPlayerLeaders(f, TOP_N)));
+  const elo = await services.rankings.teamEloRankings([...FORMATS]);
+  const leaders = await Promise.all(FORMATS.map((f) => services.rankings.playerLeaders(f, TOP_N)));
   const names = FORMATS.flatMap((f) => (elo[f] ?? []).slice(0, TOP_N).map((r) => r.team));
-  const teams = await getTeamProfiles(names);
+  const teams = await services.teams.badgeIndex(names);
 
   return (
     <>
@@ -83,7 +78,7 @@ export default async function RankingsPage() {
           <section key={f} className="mt-10">
             <div className="mb-4 flex items-center gap-3">
               <h2 className="text-lg font-bold tracking-tight">
-                {MATCH_CLASS_LABEL[f]}
+                {MatchClasses.label(f)}
               </h2>
               <div className="h-px flex-1 bg-line" />
             </div>

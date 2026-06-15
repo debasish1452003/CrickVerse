@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { listMatches } from "@/lib/queries";
-import { serializeMatch } from "@/lib/serialize";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const matches = (await listMatches()).map(serializeMatch);
+  const matches = await services.matches.listDTOs();
   return NextResponse.json({ success: true, count: matches.length, data: matches });
 }

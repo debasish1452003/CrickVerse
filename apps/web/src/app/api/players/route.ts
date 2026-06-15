@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { searchCareerPlayers } from "@/lib/queries";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -8,6 +8,6 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const q = url.searchParams.get("q") ?? undefined;
   const page = Number(url.searchParams.get("page")) || 1;
-  const result = await searchCareerPlayers({ q, page });
+  const result = await services.players.searchCareerPlayers({ q, page });
   return NextResponse.json({ success: true, ...result });
 }

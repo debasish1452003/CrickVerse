@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { MatchDTO, TeamDTO } from "@/lib/serialize";
+import type { MatchDTO, TeamDTO } from "@/dto/match-dto";
 import { TeamBadge } from "./Crest";
 
 const STATE: Record<string, { label: string; cls: string }> = {

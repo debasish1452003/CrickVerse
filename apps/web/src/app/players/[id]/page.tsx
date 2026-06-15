@@ -3,14 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PlayerAvatar } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
-import {
-  careerByClass,
-  careersFromGold,
-  INTERNATIONAL_CLASSES,
-  MATCH_CLASS_LABEL,
-  type FormatCareer,
-} from "@/lib/player-stats";
-import { getCareerPlayer, getPlayerById, getPlayerProfile } from "@/lib/queries";
+import { FormatCareer } from "@/domain/player/format-career";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -57,12 +51,12 @@ function Table({ head, children }: { head: string[]; children: ReactNode }) {
 }
 
 function FormatCell({ fc }: { fc: FormatCareer }) {
-  const intl = INTERNATIONAL_CLASSES.has(fc.matchClass);
+  const intl = fc.isInternational;
   return (
     <td className="whitespace-nowrap px-3 py-2.5 text-left font-medium">
       <span className="inline-flex items-center gap-2">
         {intl && <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />}
-        {MATCH_CLASS_LABEL[fc.matchClass]}
+        {fc.label}
       </span>
     </td>
   );
@@ -72,21 +66,24 @@ function Num({ children }: { children: ReactNode }) {
   return <td className="px-3 py-2.5 text-right font-mono tabular-nums">{children}</td>;
 }
 
+function fmtDate(d: string | null | undefined): string {
+  return d || "unknown";
+}
+
 export default async function PlayerPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   // Prefer the gold (full-corpus) record, keyed by Cricsheet id. Fall back to the
   // canonical Player (cuid) so existing match-scorecard links still resolve.
-  const gold = await getCareerPlayer(id);
-  const canonical = gold ? null : await getPlayerById(id);
+  const gold = await services.players.careerPlayer(id);
+  const canonical = gold ? null : await services.players.canonicalPlayer(id);
   if (!gold && !canonical) notFound();
 
   // Enrichment (photo + bio) is keyed by Cricsheet id — only meaningful on the gold path.
-  const profile = gold ? await getPlayerProfile(id) : null;
+  const profile = gold ? await services.players.profile(id) : null;
 
   const name = gold ? gold.name : canonical!.fullName;
-  const genderLabel =
-    gold?.gender === "female" ? "Women's cricket" : gold?.gender === "male" ? "Men's cricket" : null;
+  const genderLabel = gold?.genderLabel ?? null;
   const subtitle = gold
     ? [profile?.role, profile?.birthPlace, genderLabel].filter(Boolean).join(" · ") || "Player"
     : [canonical!.country, canonical!.role, canonical!.battingStyle].filter(Boolean).join(" · ") ||
@@ -100,25 +97,26 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
   if (profile?.battingStyle) bio.push({ label: "Batting", value: profile.battingStyle });
   if (profile?.bowlingStyle) bio.push({ label: "Bowling", value: profile.bowlingStyle });
 
-  const byClass: FormatCareer[] = gold ? careersFromGold(gold.stats) : careerByClass(canonical!);
-  const battingRows = byClass.filter((c) => c.batting.innings > 0);
-  const bowlingRows = byClass.filter((c) => c.bowling.innings > 0);
+  const byClass: FormatCareer[] = gold ? gold.byFormat() : canonical!.careerByClass();
+  const battingRows = byClass.filter((c) => c.hasBatting);
+  const bowlingRows = byClass.filter((c) => c.hasBowling);
 
-  const totalMatches = byClass.reduce((s, c) => s + c.matches, 0);
-  const totalRuns = byClass.reduce((s, c) => s + c.batting.runs, 0);
-  const totalWkts = byClass.reduce((s, c) => s + c.bowling.wickets, 0);
+  const { matches: totalMatches, runs: totalRuns, wickets: totalWkts } = FormatCareer.totals(byClass);
 
-  // Our records come from Cricsheet ball-by-ball data, which begins ~2002. Test
-  // / ODI players who debuted earlier therefore show only the covered portion of
-  // their careers — flag that so partial totals don't read as wrong.
-  const mayBePartial = Boolean(gold) && byClass.some((c) => c.matchClass === "TEST" || c.matchClass === "ODI");
+  const formatRows = gold
+    ? byClass
+        .map((c) => ({
+          career: c,
+          coverage: gold.coverageFor(c.matchClass),
+          official: gold.officialFor(c.matchClass),
+        }))
+    : [];
+  const coverageRows = formatRows.filter((r) => r.coverage);
+  const showCoverageNote = Boolean(gold);
+  const officialRows = formatRows.filter((r) => r.official);
 
   // Recent innings is a canonical-only extra (gold has aggregates, not per-innings).
-  const recent = canonical
-    ? [...canonical.battingPerfs]
-        .sort((a, b) => matchTime(b) - matchTime(a))
-        .slice(0, 12)
-    : [];
+  const recent = canonical ? canonical.recentBatting(12) : [];
 
   return (
     <>
@@ -164,13 +162,55 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           )}
         </section>
 
-        {mayBePartial && (
+        {showCoverageNote && (
           <p className="mt-4 rounded-lg border border-line bg-black/[0.02] px-4 py-2.5 text-xs text-muted">
-            <span className="font-medium text-fg">Note on coverage:</span> career records are compiled
-            from ball-by-ball data available from ~2002 onward. Matches before then (and a few that
-            never had ball-by-ball recorded) may not be included, so totals for players who debuted
-            earlier are partial.
+            <span className="font-medium text-fg">Cricsheet ball-by-ball coverage only:</span> the analytics
+            below are computed from open ball-by-ball files currently present in the lakehouse. They are not
+            official complete career totals for players whose careers include matches outside that corpus.
           </p>
+        )}
+
+        {coverageRows.length > 0 && (
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {coverageRows.map(({ career, coverage }) => (
+              <div key={career.matchClass} className="rounded-lg border border-line bg-white px-3 py-2 text-xs">
+                <div className="font-medium text-fg">{career.label}</div>
+                <div className="mt-1 text-muted">
+                  {coverage!.matchesCovered} covered matches, {fmtDate(coverage!.firstMatchDate)} to{" "}
+                  {fmtDate(coverage!.lastMatchDate)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {officialRows.length > 0 && (
+          <>
+            <h2 className="mb-3 mt-8 text-sm font-semibold uppercase tracking-[0.16em] text-muted">
+              Official totals
+            </h2>
+            <Table head={["Format", "Source", "M", "Runs", "Wkts", "Bat Avg", "Bowl Avg"]}>
+              {officialRows.map(({ career, official }) => (
+                <tr key={`${career.matchClass}-${official!.source}`} className="transition-colors hover:bg-black/[0.03]">
+                  <FormatCell fc={career} />
+                  <td className="px-3 py-2.5 text-right text-xs text-muted">
+                    {official!.sourceUrl ? (
+                      <a href={official!.sourceUrl} target="_blank" rel="noreferrer" className="underline hover:text-fg">
+                        {official!.source}
+                      </a>
+                    ) : (
+                      official!.source
+                    )}
+                  </td>
+                  <Num>{official!.matches ?? "-"}</Num>
+                  <Num>{official!.runs ?? "-"}</Num>
+                  <Num>{official!.wickets ?? "-"}</Num>
+                  <Num>{n2(official!.battingAvg)}</Num>
+                  <Num>{n2(official!.bowlingAvg)}</Num>
+                </tr>
+              ))}
+            </Table>
+          </>
         )}
 
         {battingRows.length > 0 && (
@@ -253,8 +293,4 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
       </main>
     </>
   );
-}
-
-function matchTime(b: { innings: { match: { matchDate: Date | null; startTime: Date | null } } }): number {
-  return (b.innings.match.matchDate ?? b.innings.match.startTime)?.getTime() ?? 0;
 }

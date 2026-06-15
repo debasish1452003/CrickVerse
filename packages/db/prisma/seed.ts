@@ -1,6 +1,6 @@
 import { prisma } from "../src/client";
 
-/** Seed the initial list of pages to scrape. */
+/** Seed the initial list of pages and Cricsheet feeds to scrape. */
 async function main(): Promise<void> {
   const source = await prisma.scrapeSource.upsert({
     where: {
@@ -19,7 +19,32 @@ async function main(): Promise<void> {
       mode: "LIVE",
     },
   });
-  console.log(`✅ Seeded ScrapeSource: ${source.label} (${source.slug}-${source.objectId})`);
+  console.log(`Seeded ScrapeSource: ${source.label} (${source.slug}-${source.objectId})`);
+
+  const feeds = [
+    { slug: "all", objectId: "all_json.zip", label: "All Cricsheet matches" },
+    { slug: "recently", objectId: "recently_added_30_json.zip", label: "Recently added Cricsheet matches" },
+  ];
+  for (const feed of feeds) {
+    const row = await prisma.scrapeSource.upsert({
+      where: {
+        pageType_slug_objectId: {
+          pageType: "cricsheet-feed",
+          slug: feed.slug,
+          objectId: feed.objectId,
+        },
+      },
+      update: { active: true, label: feed.label, mode: "HISTORICAL" },
+      create: {
+        pageType: "cricsheet-feed",
+        slug: feed.slug,
+        objectId: feed.objectId,
+        label: feed.label,
+        mode: "HISTORICAL",
+      },
+    });
+    console.log(`Seeded Cricsheet feed: ${row.label} (${row.objectId})`);
+  }
 }
 
 main()

@@ -3,13 +3,7 @@ import { notFound } from "next/navigation";
 import { TeamBadge, PlayerAvatar } from "@/components/Crest";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import {
-  getTeamMatches,
-  getTeamProfileById,
-  getTeamProfiles,
-  getTeamRecord,
-  getTeamSquad,
-} from "@/lib/queries";
+import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
 
@@ -34,16 +28,16 @@ export default async function TeamPage({
   const sp = await searchParams;
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
 
-  const profile = await getTeamProfileById(id);
+  const profile = await services.teams.profileById(id);
   if (!profile) notFound();
 
   const [record, squad, matches] = await Promise.all([
-    getTeamRecord(profile.displayName),
-    getTeamSquad(profile.displayName),
-    getTeamMatches(profile.displayName, page),
+    services.teams.record(profile.displayName),
+    services.teams.squad(profile.displayName),
+    services.matches.forTeam(profile.displayName, page),
   ]);
-  const teamMap = await getTeamProfiles(matches.items.flatMap((m) => [m.teamHome, m.teamAway]));
-  const winPct = record.played > 0 ? ((record.won / record.played) * 100).toFixed(1) : "—";
+  const teamMap = await services.teams.badgeIndex(matches.items.flatMap((m) => [m.teamHome, m.teamAway]));
+  const winPct = record.winPctText;
 
   return (
     <>
