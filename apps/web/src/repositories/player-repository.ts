@@ -72,14 +72,40 @@ export interface PlayerProfileRow {
 export class PlayerRepository extends BaseRepository {
   /** Full gold career record (stats included), keyed by Cricsheet id. */
   async careerPlayer(cricsheetId: string): Promise<CareerPlayerRow | null> {
-    const [player, officialStats] = await Promise.all([
-      this.prisma.careerPlayer.findUnique({
-        where: { cricsheetId },
-        include: { stats: true, coverage: true },
-      }),
+    const player = await this.prisma.careerPlayer.findUnique({
+      where: { cricsheetId },
+      include: { stats: true, coverage: true },
+    });
+    if (!player) return null;
+    // Official totals are keyed by Cricsheet id; the per-innings Statsguru
+    // recovery is keyed by ESPNcricinfo id, so it only joins when one is known.
+    const [officialStats, inningsHistory] = await Promise.all([
       this.prisma.officialCareerStat.findMany({ where: { cricsheetId } }),
+      player.cricinfoId
+        ? this.prisma.playerInningsHistory.findMany({
+            where: { cricinfoId: player.cricinfoId },
+            select: {
+              source: true,
+              matchClass: true,
+              discipline: true,
+              matchDate: true,
+              opposition: true,
+              ground: true,
+              didBat: true,
+              runs: true,
+              notOut: true,
+              ballsFaced: true,
+              fours: true,
+              sixes: true,
+              dismissal: true,
+              ballsBowled: true,
+              runsConceded: true,
+              wickets: true,
+            },
+          })
+        : Promise.resolve([]),
     ]);
-    return player ? { ...player, officialStats } : null;
+    return { ...player, officialStats, inningsHistory };
   }
 
   /** Canonical player aggregate (cuid) with batting/bowling performances. */
@@ -112,13 +138,63 @@ export class PlayerRepository extends BaseRepository {
     return new Map(rows.map((p) => [p.cricsheetId, p.photoUrl]));
   }
 
-  /** Top career run-scorers or wicket-takers (gold). */
+  /**
+   * Top career run-scorers / wicket-takers, ranked by the COMPLETE career total —
+   * the recovered Statsguru figure (incl. pre-2000) where a player has been
+   * recovered, falling back to the Cricsheet gold total otherwise. This is why a
+   * legend with a mostly pre-Cricsheet career (e.g. Tendulkar's 15,921 Test runs)
+   * surfaces here even though the open ball-by-ball corpus only holds part of it.
+   *
+   * Caveat: recovered totals are international-only (Statsguru class), while the
+   * Cricsheet fallback spans all classes — so the two grains are mixed until every
+   * ranked player is recovered. Recovered players use their international total.
+   */
   topByMetric(by: "runs" | "wickets", limit: number): Promise<CareerPlayerListRow[]> {
-    return this.prisma.careerPlayer.findMany({
-      orderBy: by === "runs" ? [{ careerRuns: "desc" }] : [{ careerWickets: "desc" }],
-      take: limit,
-      select: careerListSelect,
-    });
+    // A player may transiently hold rows from >1 source (bulk stand-in + scrape).
+    // We sum ONLY the highest-precedence source's rows (scrape > bulk) so the
+    // total is never double-counted across sources.
+    if (by === "runs") {
+      return this.prisma.$queryRaw<CareerPlayerListRow[]>`
+        WITH pref AS (
+          SELECT DISTINCT ON ("cricinfoId") "cricinfoId", source
+          FROM "PlayerInningsHistory"
+          ORDER BY "cricinfoId",
+            CASE source WHEN 'CRICINFO_STATSGURU' THEN 0 WHEN 'CRICINFO_BULK' THEN 1 ELSE 2 END
+        )
+        SELECT cp."cricsheetId", cp.name, cp."cricinfoId", cp.gender, cp."careerMatches",
+          COALESCE(pi.runs, cp."careerRuns")::int AS "careerRuns",
+          cp."careerWickets"
+        FROM "CareerPlayer" cp
+        LEFT JOIN (
+          SELECT p."cricinfoId", SUM(p.runs)::int AS runs
+          FROM "PlayerInningsHistory" p
+          JOIN pref ON pref."cricinfoId" = p."cricinfoId" AND pref.source = p.source
+          WHERE p.discipline = 'batting' AND p."didBat" = true AND p.runs IS NOT NULL
+          GROUP BY p."cricinfoId"
+        ) pi ON pi."cricinfoId" = cp."cricinfoId"
+        ORDER BY COALESCE(pi.runs, cp."careerRuns") DESC
+        LIMIT ${limit}`;
+    }
+    return this.prisma.$queryRaw<CareerPlayerListRow[]>`
+      WITH pref AS (
+        SELECT DISTINCT ON ("cricinfoId") "cricinfoId", source
+        FROM "PlayerInningsHistory"
+        ORDER BY "cricinfoId",
+          CASE source WHEN 'CRICINFO_STATSGURU' THEN 0 WHEN 'CRICINFO_BULK' THEN 1 ELSE 2 END
+      )
+      SELECT cp."cricsheetId", cp.name, cp."cricinfoId", cp.gender, cp."careerMatches",
+        cp."careerRuns",
+        COALESCE(pw.wkts, cp."careerWickets")::int AS "careerWickets"
+      FROM "CareerPlayer" cp
+      LEFT JOIN (
+        SELECT p."cricinfoId", SUM(p.wickets)::int AS wkts
+        FROM "PlayerInningsHistory" p
+        JOIN pref ON pref."cricinfoId" = p."cricinfoId" AND pref.source = p.source
+        WHERE p.discipline = 'bowling' AND p.wickets IS NOT NULL
+        GROUP BY p."cricinfoId"
+      ) pw ON pw."cricinfoId" = cp."cricinfoId"
+      ORDER BY COALESCE(pw.wkts, cp."careerWickets") DESC
+      LIMIT ${limit}`;
   }
 
   private static careerWhere(q?: string): Prisma.CareerPlayerWhereInput {

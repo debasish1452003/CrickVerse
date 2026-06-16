@@ -2,6 +2,7 @@ import { MatchClasses, type MatchClass } from "@/core/match-class";
 import { BattingCareer } from "./batting-career";
 import { BowlingCareer } from "./bowling-career";
 import { FormatCareer } from "./format-career";
+import { StatsguruCareer, type PlayerInningsHistoryRow } from "./statsguru-career";
 
 /** One gold per-format career stat row (lakehouse `CareerStat`). */
 export interface CareerStatRow {
@@ -66,6 +67,8 @@ export interface CareerPlayerRow {
   stats: CareerStatRow[];
   coverage: CareerCoverageRow[];
   officialStats: OfficialCareerStatRow[];
+  /** Per-innings Statsguru recovery (complete career incl. pre-2000); may be empty. */
+  inningsHistory: PlayerInningsHistoryRow[];
 }
 
 /**
@@ -156,5 +159,15 @@ export class CareerPlayer {
 
   hasOfficialStats(): boolean {
     return this.row.officialStats.length > 0;
+  }
+
+  /**
+   * The complete career aggregated from the per-innings Statsguru recovery, or
+   * null when none has been recovered yet. Spans the whole career (incl. the
+   * pre-2000 years absent from the Cricsheet ball-by-ball corpus).
+   */
+  statsguruCareer(): StatsguruCareer | null {
+    const sg = new StatsguruCareer(this.row.inningsHistory ?? []);
+    return sg.hasData ? sg : null;
   }
 }

@@ -116,17 +116,19 @@ export class MatchRepository extends BaseRepository {
   }
 
   countMatches(filter: MatchFilter): Promise<number> {
-    return this.prisma.careerMatch.count({ where: MatchRepository.where(filter) });
+    return this.retryRead(() => this.prisma.careerMatch.count({ where: MatchRepository.where(filter) }));
   }
 
   pageMatches(filter: MatchFilter, skip: number, take: number): Promise<GoldMatchListItem[]> {
-    return this.prisma.careerMatch.findMany({
-      where: MatchRepository.where(filter),
-      orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
-      skip,
-      take,
-      select: listSelect,
-    });
+    return this.retryRead(() =>
+      this.prisma.careerMatch.findMany({
+        where: MatchRepository.where(filter),
+        orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
+        skip,
+        take,
+        select: listSelect,
+      }),
+    );
   }
 
   private static teamWhere(displayName: string): Prisma.CareerMatchWhereInput {
@@ -134,17 +136,19 @@ export class MatchRepository extends BaseRepository {
   }
 
   countTeamMatches(displayName: string): Promise<number> {
-    return this.prisma.careerMatch.count({ where: MatchRepository.teamWhere(displayName) });
+    return this.retryRead(() => this.prisma.careerMatch.count({ where: MatchRepository.teamWhere(displayName) }));
   }
 
   pageTeamMatches(displayName: string, skip: number, take: number): Promise<GoldMatchListItem[]> {
-    return this.prisma.careerMatch.findMany({
-      where: MatchRepository.teamWhere(displayName),
-      orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
-      skip,
-      take,
-      select: listSelect,
-    });
+    return this.retryRead(() =>
+      this.prisma.careerMatch.findMany({
+        where: MatchRepository.teamWhere(displayName),
+        orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
+        skip,
+        take,
+        select: listSelect,
+      }),
+    );
   }
 
   /** Aggregate facts for one tournament edition (count, date span, dominant class). */

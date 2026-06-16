@@ -13,3 +13,5 @@ export { ParquetSink, type SinkSummary } from "./sink";
 export { buildGold, type BuildGoldResult } from "./gold";
 export { buildMatchGold, type BuildMatchGoldResult } from "./gold-matches";
 export { computeInningsOvers, type OverPoint, type InningsOversRow } from "./overs";
+export { buildMlFeatures, type BuildMlFeaturesResult } from "./ml-features";
+export { exportHistoricalSilver, type ExportHistoricalSilverResult } from "./historical-silver";

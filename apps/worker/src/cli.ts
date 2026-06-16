@@ -13,6 +13,16 @@ import { enrichLogos } from "./tasks/enrich-logos";
 import { enrichPlayers } from "./tasks/enrich-players";
 import { enrichTeams } from "./tasks/enrich-teams";
 import { buildOversTask } from "./tasks/build-overs";
+import { importOfficialStats } from "./tasks/import-official-stats";
+import { coverageAudit } from "./tasks/coverage-audit";
+import { importCricsheetMissing } from "./tasks/import-cricsheet-missing";
+import { importHistoricalScorecards } from "./tasks/import-historical-scorecards";
+import { discoverCricinfoHistorical, syncCricinfoHistorical } from "./tasks/cricinfo-historical-recovery";
+import { recoverPlayerCareers } from "./tasks/recover-player-careers";
+import { importBulkInnings } from "./tasks/import-bulk-innings";
+import { importKaggleInnings } from "./tasks/import-kaggle-innings";
+import { buildMlFeaturesTask } from "./tasks/build-ml-features";
+import { historicalExportSilver } from "./tasks/historical-export-silver";
 
 async function main(): Promise<void> {
   const [, , command, ...rest] = process.argv;
@@ -125,6 +135,161 @@ async function main(): Promise<void> {
       console.log(res);
       break;
     }
+    case "official-stats-import": {
+      const path = rest.find((a) => !a.startsWith("--"));
+      const sourceArg = rest.find((a) => a.startsWith("--source="));
+      if (!path || !sourceArg) {
+        console.error(
+          "Usage: tsx src/cli.ts official-stats-import <csv-or-json> --source=NAME [--source-url=URL] [--license=TEXT] [--notes=TEXT] [--dry-run]",
+        );
+        process.exitCode = 1;
+        break;
+      }
+      const res = await importOfficialStats({
+        path,
+        source: sourceArg.split("=").slice(1).join("="),
+        sourceUrl: rest.find((a) => a.startsWith("--source-url="))?.split("=").slice(1).join("="),
+        license: rest.find((a) => a.startsWith("--license="))?.split("=").slice(1).join("="),
+        notes: rest.find((a) => a.startsWith("--notes="))?.split("=").slice(1).join("="),
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "cricsheet-missing-import": {
+      const urlArg = rest.find((a) => a.startsWith("--url="));
+      const res = await importCricsheetMissing({
+        url: urlArg?.split("=").slice(1).join("="),
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "historical-scorecard-import": {
+      const path = rest.find((a) => !a.startsWith("--"));
+      const sourceArg = rest.find((a) => a.startsWith("--source="));
+      if (!path || !sourceArg) {
+        console.error(
+          "Usage: tsx src/cli.ts historical-scorecard-import <csv-or-json> --source=NAME [--source-url=URL] [--license=TEXT] [--notes=TEXT] [--dry-run]",
+        );
+        process.exitCode = 1;
+        break;
+      }
+      const res = await importHistoricalScorecards({
+        path,
+        source: sourceArg.split("=").slice(1).join("="),
+        sourceUrl: rest.find((a) => a.startsWith("--source-url="))?.split("=").slice(1).join("="),
+        license: rest.find((a) => a.startsWith("--license="))?.split("=").slice(1).join("="),
+        notes: rest.find((a) => a.startsWith("--notes="))?.split("=").slice(1).join("="),
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "cricinfo-historical-discover": {
+      const formatArg = rest.find((a) => a.startsWith("--format="));
+      const fromYearArg = rest.find((a) => a.startsWith("--from-year="));
+      const toYearArg = rest.find((a) => a.startsWith("--to-year="));
+      const outDirArg = rest.find((a) => a.startsWith("--out-dir="));
+      const seedUrlArg = rest.find((a) => a.startsWith("--seed-url="));
+      const wikipediaTitleArg = rest.find((a) => a.startsWith("--wikipedia-title="));
+      const res = await discoverCricinfoHistorical({
+        fromCricsheetMissing: rest.includes("--from-cricsheet-missing"),
+        format: formatArg?.split("=").slice(1).join("="),
+        fromYear: fromYearArg ? Number(fromYearArg.split("=").slice(1).join("=")) : undefined,
+        toYear: toYearArg ? Number(toYearArg.split("=").slice(1).join("=")) : undefined,
+        seedUrl: seedUrlArg?.split("=").slice(1).join("="),
+        wikipediaTitle: wikipediaTitleArg?.split("=").slice(1).join("="),
+        outDir: outDirArg?.split("=").slice(1).join("="),
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "cricinfo-historical-sync": {
+      const manifestArg = rest.find((a) => a.startsWith("--manifest="));
+      const limitArg = rest.find((a) => a.startsWith("--limit="));
+      const delayArg = rest.find((a) => a.startsWith("--delay-ms="));
+      if (!manifestArg) {
+        console.error("Usage: tsx src/cli.ts cricinfo-historical-sync --manifest=PATH [--limit=N] [--delay-ms=3000] [--dry-run]");
+        process.exitCode = 1;
+        break;
+      }
+      const res = await syncCricinfoHistorical({
+        manifest: manifestArg.split("=").slice(1).join("="),
+        limit: limitArg ? Number(limitArg.split("=").slice(1).join("=")) : undefined,
+        delayMs: delayArg ? Number(delayArg.split("=").slice(1).join("=")) : undefined,
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "recover-player-careers": {
+      const limitArg = rest.find((a) => a.startsWith("--limit="));
+      const delayArg = rest.find((a) => a.startsWith("--delay-ms="));
+      const idArg = rest.find((a) => a.startsWith("--cricinfo-id="));
+      const concArg = rest.find((a) => a.startsWith("--concurrency="));
+      const shardArg = rest.find((a) => a.startsWith("--shard="));
+      let shard: { index: number; total: number } | undefined;
+      if (shardArg) {
+        const [i, t] = shardArg.split("=").slice(1).join("=").split("/").map(Number);
+        if (Number.isFinite(i) && Number.isFinite(t) && t! > 0 && i! >= 0 && i! < t!) {
+          shard = { index: i!, total: t! };
+        } else {
+          console.error("Invalid --shard; use --shard=INDEX/TOTAL (e.g. --shard=0/2)");
+          process.exitCode = 1;
+          break;
+        }
+      }
+      const res = await recoverPlayerCareers({
+        limit: limitArg ? Number(limitArg.split("=").slice(1).join("=")) : undefined,
+        delayMs: delayArg ? Number(delayArg.split("=").slice(1).join("=")) : undefined,
+        cricinfoId: idArg?.split("=").slice(1).join("="),
+        concurrency: concArg ? Number(concArg.split("=").slice(1).join("=")) : undefined,
+        internationalOnly: rest.includes("--international-only"),
+        shard,
+        force: rest.includes("--force"),
+        dryRun: rest.includes("--dry-run"),
+      });
+      console.log(res);
+      break;
+    }
+    case "import-bulk-innings": {
+      const path = rest.find((a) => !a.startsWith("--"));
+      if (!path) {
+        console.error("Usage: tsx src/cli.ts import-bulk-innings <csv-path> [--dry-run]");
+        process.exitCode = 1;
+        break;
+      }
+      const res = await importBulkInnings({ path, dryRun: rest.includes("--dry-run") });
+      console.log(res);
+      break;
+    }
+    case "import-kaggle-innings": {
+      const dir = rest.find((a) => !a.startsWith("--"));
+      if (!dir) {
+        console.error("Usage: tsx src/cli.ts import-kaggle-innings <archive-folder> [--dry-run]");
+        process.exitCode = 1;
+        break;
+      }
+      const res = await importKaggleInnings({ dir, dryRun: rest.includes("--dry-run") });
+      console.log(res);
+      break;
+    }
+    case "historical-export-silver": {
+      await historicalExportSilver();
+      break;
+    }
+    case "build-ml-features": {
+      const outArg = rest.find((a) => a.startsWith("--out-dir="));
+      await buildMlFeaturesTask({ outDir: outArg?.split("=").slice(1).join("=") });
+      break;
+    }
+    case "coverage-audit": {
+      const res = await coverageAudit();
+      console.log(JSON.stringify(res, null, 2));
+      break;
+    }
     default:
       console.log("Usage:");
       console.log("  tsx src/cli.ts probe <slug> <objectId>            # fetch+parse only, no DB");
@@ -145,6 +310,11 @@ async function main(): Promise<void> {
       console.log("  tsx src/cli.ts build-overs                        # per-innings over rollup → InningsOvers (charts)");
       console.log("  tsx src/cli.ts enrich-logos [--force] [--comp-limit=N] [--team-limit=N]");
       console.log("                                                    # real league/franchise logos from Wikipedia → CompetitionProfile + TeamProfile");
+      console.log("  tsx src/cli.ts recover-player-careers [--limit=N] [--delay-ms=4000] [--cricinfo-id=ID] [--force] [--dry-run]");
+      console.log("                                                    # drip-fetch per-player innings history (incl. pre-2000) from Statsguru → PlayerInningsHistory");
+      console.log("  tsx src/cli.ts historical-export-silver           # PlayerInningsHistory (Neon) → silver/player_innings.parquet (tier=scorecard)");
+      console.log("  tsx src/cli.ts build-ml-features [--out-dir=PATH] # silver ball-by-ball → versioned ML training Parquet (local, partitioned by class)");
+      console.log("  tsx src/cli.ts coverage-audit                     # report lakehouse coverage vs official/historical/gap + recovery progress");
   }
 }
 

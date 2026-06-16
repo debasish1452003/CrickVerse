@@ -2,12 +2,15 @@ import { cache } from "react";
 import { EloLeague, type EloRankingRow } from "@/domain/ranking/elo-league";
 import type { PlayerLeaderRow } from "@/dto/stats-dto";
 import type { PlayerRepository } from "@/repositories/player-repository";
-import type { CareerStatLeaderRow, RankingRepository } from "@/repositories/ranking-repository";
+import type {
+  CareerStatLeaderRow,
+  RankingRepository,
+} from "@/repositories/ranking-repository";
 
 const fmt1 = (n: number) => n.toFixed(1);
 const fmt2 = (n: number) => n.toFixed(2);
 
-/** Rankings application service — Elo team ratings + per-format leaderboards. */
+/** Rankings application service: Elo team ratings plus per-format leaderboards. */
 export class RankingService {
   constructor(
     private readonly rankings: RankingRepository,
@@ -16,13 +19,12 @@ export class RankingService {
 
   /**
    * Per-format Elo team rankings. Matches are replayed in date order through one
-   * {@link EloLeague} per class. Wrapped in React `cache()` since the rankings
-   * page asks for several classes at once.
+   * EloLeague per class. Wrapped in React cache since the rankings page asks for
+   * several classes at once.
    */
   teamEloRankings = cache(
     async (classes: string[], minMatches = 15): Promise<Record<string, EloRankingRow[]>> => {
       const matches = await this.rankings.eloMatches(classes);
-      // Chronological replay (nulls sort first — rare and harmless).
       matches.sort((a, b) => {
         const da = a.matchDate ?? "";
         const db = b.matchDate ?? "";
@@ -45,7 +47,7 @@ export class RankingService {
     },
   );
 
-  /** Top run-scorers and wicket-takers in a format (with photos). */
+  /** Career leaderboards from the ingested gold corpus. */
   async playerLeaders(
     matchClass: string,
     limit = 10,
@@ -57,29 +59,46 @@ export class RankingService {
     const ids = [...new Set([...batStats, ...bowlStats].map((s) => s.cricsheetId))];
     const photos = await this.players.photosByIds(ids);
 
-    const batters: PlayerLeaderRow[] = batStats.map((s) => this.batterRow(s, photos));
-    const bowlers: PlayerLeaderRow[] = bowlStats.map((s) => this.bowlerRow(s, photos));
-    return { batters, bowlers };
+    return {
+      batters: batStats.map((s) => this.batterRow(s, photos)),
+      bowlers: bowlStats.map((s) => this.bowlerRow(s, photos)),
+    };
   }
 
-  private batterRow(s: CareerStatLeaderRow, photos: Map<string, string | null>): PlayerLeaderRow {
+  private batterRow(
+    s: CareerStatLeaderRow,
+    photos: Map<string, string | null>,
+  ): PlayerLeaderRow {
+    const matches = s.matches ?? 0;
+    const runs = s.runs ?? 0;
     return {
       cricsheetId: s.cricsheetId,
       name: s.player.name,
-      matches: s.matches,
-      value: s.runs.toLocaleString(),
-      detail: `${s.matches} M · avg ${s.battingAvg != null ? fmt1(s.battingAvg) : "—"}`,
+      matches,
+      value: runs.toLocaleString(),
+      detail: `${matches || "-"} M - avg ${s.battingAvg != null ? fmt1(s.battingAvg) : "-"}`,
       photoUrl: photos.get(s.cricsheetId) ?? null,
     };
   }
 
-  private bowlerRow(s: CareerStatLeaderRow, photos: Map<string, string | null>): PlayerLeaderRow {
+  private bowlerRow(
+    s: CareerStatLeaderRow,
+    photos: Map<string, string | null>,
+  ): PlayerLeaderRow {
+    const matches = s.matches ?? 0;
+    const wickets = s.wickets ?? 0;
+    const secondary =
+      s.bowlingAvg != null
+        ? `avg ${fmt2(s.bowlingAvg)}`
+        : s.economy != null
+          ? `econ ${fmt2(s.economy)}`
+          : "avg -";
     return {
       cricsheetId: s.cricsheetId,
       name: s.player.name,
-      matches: s.matches,
-      value: String(s.wickets),
-      detail: `${s.matches} M · econ ${s.economy != null ? fmt2(s.economy) : "—"}`,
+      matches,
+      value: String(wickets),
+      detail: `${matches || "-"} M - ${secondary}`,
       photoUrl: photos.get(s.cricsheetId) ?? null,
     };
   }

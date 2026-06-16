@@ -1,7 +1,0 @@
-# CrickVerse ML — reads the silver Parquet corpus via DuckDB. No DB/server needed.
-duckdb>=1.1
-pandas>=2.0
-pyarrow>=16
-scikit-learn>=1.4
-polars>=1.0        # optional, faster than pandas for big pulls
-# torch>=2.2       # uncomment for deep models

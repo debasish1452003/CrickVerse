@@ -7,10 +7,12 @@ export function StatBoard({
   title,
   leaders,
   metricLabel,
+  emptyMessage = "No data.",
 }: {
   title: string;
   leaders: (StatLeader & { photoUrl?: string | null })[];
   metricLabel: string;
+  emptyMessage?: string;
 }) {
   return (
     <section className="panel overflow-hidden">
@@ -19,7 +21,7 @@ export function StatBoard({
         <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">{metricLabel}</span>
       </div>
       {leaders.length === 0 ? (
-        <p className="px-4 py-6 text-center text-xs text-muted">No data.</p>
+        <p className="px-4 py-6 text-center text-xs text-muted">{emptyMessage}</p>
       ) : (
         <ol>
           {leaders.map((p, i) => {

@@ -16,10 +16,15 @@
     "postinstall": "pnpm --filter @crickverse/db run generate:ci",
     "db:generate": "pnpm --filter @crickverse/db run generate",
     "db:generate:ci": "pnpm --filter @crickverse/db run generate:ci",
+    "db:push": "pnpm --filter @crickverse/db run push",
     "db:migrate": "pnpm --filter @crickverse/db run migrate",
     "db:studio": "pnpm --filter @crickverse/db run studio",
     "db:seed": "pnpm --filter @crickverse/db run seed",
-    "worker:seed": "pnpm --filter @crickverse/worker run seed"
+    "worker:seed": "pnpm --filter @crickverse/worker run seed",
+    "worker:cricsheet:missing": "pnpm --filter @crickverse/worker run cricsheet:missing",
+    "worker:cricinfo:discover": "pnpm --filter @crickverse/worker run cricinfo:discover",
+    "worker:cricinfo:sync": "pnpm --filter @crickverse/worker run cricinfo:sync",
+    "worker:coverage:audit": "pnpm --filter @crickverse/worker run coverage:audit"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

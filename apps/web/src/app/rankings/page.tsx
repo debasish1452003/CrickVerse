@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { StatBoard } from "@/components/StatBoard";
 import { MatchClasses } from "@/core/match-class";
 import { normalizeName } from "@/core/naming";
+import type { PlayerLeaderRow } from "@/dto/stats-dto";
 import type { EloRankingRow } from "@/domain/ranking/elo-league";
 import { TeamBadgeIndex } from "@/domain/team/team-profile";
 import { services } from "@/services";
@@ -56,8 +57,10 @@ function TeamRankBoard({ rows, teams }: { rows: EloRankingRow[]; teams: TeamBadg
 }
 
 export default async function RankingsPage() {
-  const elo = await services.rankings.teamEloRankings([...FORMATS]);
-  const leaders = await Promise.all(FORMATS.map((f) => services.rankings.playerLeaders(f, TOP_N)));
+  const [elo, leaders] = await Promise.all([
+    services.rankings.teamEloRankings([...FORMATS]),
+    Promise.all(FORMATS.map((f) => services.rankings.playerLeaders(f, TOP_N))),
+  ]);
   const names = FORMATS.flatMap((f) => (elo[f] ?? []).slice(0, TOP_N).map((r) => r.team));
   const teams = await services.teams.badgeIndex(names);
 
@@ -69,8 +72,7 @@ export default async function RankingsPage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Rankings</h1>
           <p className="mt-2 max-w-2xl text-muted">
             Team, batting and bowling rankings for Tests, ODIs and T20Is. Teams use an Elo rating
-            (opponent-strength weighted) computed from every international result; players are ranked
-            by career runs and wickets in each format.
+            computed from the Cricsheet match corpus; player boards use the ingested gold career stats.
           </p>
         </section>
 
@@ -84,16 +86,25 @@ export default async function RankingsPage() {
             </div>
             <div className="grid gap-5 lg:grid-cols-3">
               <TeamRankBoard rows={elo[f] ?? []} teams={teams} />
-              <StatBoard title="Top Run-Scorers" leaders={leaders[idx]!.batters} metricLabel="Runs" />
-              <StatBoard title="Top Wicket-Takers" leaders={leaders[idx]!.bowlers} metricLabel="Wkts" />
+              <StatBoard
+                title="Top Run-Scorers"
+                leaders={leaders[idx]!.batters}
+                metricLabel="Runs"
+                emptyMessage="Career stats not built yet."
+              />
+              <StatBoard
+                title="Top Wicket-Takers"
+                leaders={leaders[idx]!.bowlers}
+                metricLabel="Wkts"
+                emptyMessage="Career stats not built yet."
+              />
             </div>
           </section>
         ))}
 
         <p className="mt-10 rounded-lg border border-line bg-black/[0.02] px-4 py-2.5 text-xs text-muted">
-          Note: these are computed from the match corpus (ball-by-ball data from ~2002), not the
-          official ICC ranking points. They approximate the same ordering but won&apos;t match the
-          ICC table exactly.
+          Note: team ratings are computed from the open Cricsheet match corpus, not official ICC points.
+          Player leaderboards rank every player present in the gold career tables built from the ingested corpus.
         </p>
       </main>
     </>

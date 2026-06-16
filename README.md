@@ -88,6 +88,41 @@ Cricsheet coverage window per format and do not present those analytics as offic
 totals. Optional official totals can be imported into `OfficialCareerStat` and displayed separately
 from ball-by-ball-derived `CareerStat` rows.
 
+For enterprise-scale historical backfills, use a local Postgres database plus `data/lakehouse`
+Parquet. Keep the raw ball-by-ball corpus in Parquet and put only compact gold summaries,
+coverage audits, source manifests, and official totals in Postgres. The Next.js app should use the
+pooled `DATABASE_URL`; long-running worker backfills, migrations, and bulk rebuilds should use a
+direct/local database connection to avoid serverless pooler resets.
+
+Legal/manual official totals can be imported from CSV or JSON:
+
+```bash
+pnpm --filter @crickverse/worker exec tsx src/cli.ts official-stats-import ./data/imports/official-careers.csv --source=MANUAL --license="Your source/license note" --dry-run
+pnpm --filter @crickverse/worker exec tsx src/cli.ts official-stats-import ./data/imports/official-careers.csv --source=MANUAL --license="Your source/license note"
+pnpm --filter @crickverse/worker exec tsx src/cli.ts coverage-audit
+```
+
+Importer columns: `cricsheetId` or `cricinfoId`, `matchClass`, `matches`, `runs`, `wickets`,
+`battingAvg`, `bowlingAvg`, and optional `sourceUrl`. Every non-dry run records a `SourceImport`
+manifest with file path, checksum, source, license/notes, row counts, and coverage metadata.
+
+ESPNcricinfo historical recovery is available for public scorecards only. It stores raw HTML and
+metadata under `data/recovery/cricinfo/` and parsed scorecard-level facts in `HistoricalScorecard`.
+It does not create ball-by-ball data.
+
+```bash
+tsx apps/worker/src/cli.ts cricinfo-historical-discover --from-cricsheet-missing
+tsx apps/worker/src/cli.ts cricinfo-historical-discover --format=TEST --from-year=1877 --to-year=1999
+tsx apps/worker/src/cli.ts cricinfo-historical-discover --format=ODI --from-year=1971 --to-year=1999
+tsx apps/worker/src/cli.ts cricinfo-historical-discover --format=ODI --wikipedia-title="List of highest individual scores in One Day International cricket"
+tsx apps/worker/src/cli.ts cricinfo-historical-discover --format=ODI --seed-url=https://en.wikipedia.org/wiki/List_of_One_Day_International_cricket_records
+tsx apps/worker/src/cli.ts cricinfo-historical-sync --manifest=data/recovery/cricinfo/manifests/MANIFEST.json --limit=3 --dry-run
+tsx apps/worker/src/cli.ts cricinfo-historical-sync --manifest=data/recovery/cricinfo/manifests/MANIFEST.json --limit=25 --delay-ms=3000
+```
+
+The recovery scraper stops or backs off on blocked responses such as `403`, `429`, captcha, or
+access-denied pages. Remaining gaps are reported instead of silently treated as complete.
+
 ## Adding a series to scrape
 
 1. Find it on espncricinfo.com; the URL is `/series/<slug>-<objectId>/...`.

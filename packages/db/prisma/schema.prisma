@@ -422,6 +422,7 @@ model CareerPlayer {
 
   stats CareerStat[]
   coverage CareerCoverage[]
+  officialStats OfficialCareerStat[]
 
   @@index([name])
   @@index([cricinfoId])
@@ -491,6 +492,7 @@ model OfficialCareerStat {
   matchClass  String
 
   source       String
+  sourceImportId String?
   matches      Int?
   runs         Int?
   wickets      Int?
@@ -498,9 +500,189 @@ model OfficialCareerStat {
   bowlingAvg   Float?
   sourceUrl    String?
   importedAt   DateTime @default(now())
+  player       CareerPlayer @relation(fields: [cricsheetId], references: [cricsheetId], onDelete: Cascade)
+  sourceImport SourceImport? @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
 
   @@id([cricsheetId, matchClass, source])
   @@index([cricsheetId])
+  @@index([sourceImportId])
+}
+
+// Provenance manifest for legal/manual datasets imported into compact gold
+// tables. Raw provider files stay outside Postgres; this records the audit trail.
+model SourceImport {
+  id          String   @id @default(cuid())
+  source      String
+  kind        String
+  filePath    String?
+  sourceUrl   String?
+  license     String?
+  notes       String?
+  checksum    String?
+  coverage    Json?
+  rowsRead    Int      @default(0)
+  rowsImported Int     @default(0)
+  importedAt  DateTime @default(now())
+
+  officialCareerStats OfficialCareerStat[]
+  coverageGaps CoverageGap[]
+  historicalScorecards HistoricalScorecard[]
+  playerInnings PlayerInningsHistory[]
+
+  @@index([source, kind])
+  @@index([importedAt])
+}
+
+// Matches known to be absent from the open ball-by-ball corpus. Cricsheet's
+// public missing page feeds this table; pre-coverage-era gaps can be imported
+// from legal/manual source manifests.
+model CoverageGap {
+  id             String   @id @default(cuid())
+  source         String
+  sourceImportId String?
+  matchClass     String
+  gender         String   @default("unknown")
+  matchDate      String?
+  teamHome       String?
+  teamAway       String?
+  teams          String
+  reason         String?
+  status         String   @default("MISSING")
+  sourceUrl      String?
+  importedAt     DateTime @default(now())
+
+  sourceImport SourceImport? @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
+
+  @@unique([source, matchClass, gender, matchDate, teams])
+  @@index([matchClass])
+  @@index([matchDate])
+  @@index([sourceImportId])
+}
+
+// Scorecard-only historical corpus for legal pre-2000 / missing-Cricsheet data.
+// These rows are not ball-by-ball and must not be mixed into CareerStat.
+model HistoricalScorecard {
+  id             String   @id @default(cuid())
+  source         String
+  sourceImportId String?
+  externalId     String?
+  matchClass     String
+  gender         String?
+  matchDate      String?
+  season         String?
+  eventName      String?
+  venue          String?
+  city           String?
+  teamHome       String
+  teamAway       String
+  result         String?
+  sourceUrl      String?
+  importedAt     DateTime @default(now())
+
+  sourceImport SourceImport? @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
+  batting HistoricalBattingLine[]
+  bowling HistoricalBowlingLine[]
+
+  @@unique([source, externalId])
+  @@index([matchClass])
+  @@index([matchDate])
+  @@index([sourceImportId])
+}
+
+model HistoricalBattingLine {
+  id           String @id @default(cuid())
+  scorecardId  String
+  inningsNo    Int
+  battingTeam  String?
+  sourcePlayerId String?
+  playerName   String
+  battingPos   Int?
+  runs         Int?
+  balls        Int?
+  fours        Int?
+  sixes        Int?
+  dismissal    String?
+
+  scorecard HistoricalScorecard @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+
+  @@index([scorecardId])
+  @@index([sourcePlayerId])
+  @@index([playerName])
+}
+
+model HistoricalBowlingLine {
+  id           String @id @default(cuid())
+  scorecardId  String
+  inningsNo    Int
+  bowlingTeam  String?
+  sourcePlayerId String?
+  playerName   String
+  bowlingPos   Int?
+  balls        Int?
+  maidens      Int?
+  runs         Int?
+  wickets      Int?
+  economy      Float?
+
+  scorecard HistoricalScorecard @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+
+  @@index([scorecardId])
+  @@index([sourcePlayerId])
+  @@index([playerName])
+}
+
+// Player-centric innings-by-innings history scraped from the ESPNcricinfo
+// Statsguru "print" endpoint — ONE row per innings a player batted/bowled in,
+// across their WHOLE career, including the pre-2002 years absent from the
+// Cricsheet ball-by-ball corpus. This is what makes old careers (e.g. Tendulkar
+// 1989→) complete at the scorecard level. Keyed by ESPNcricinfo id (joins
+// CareerPlayer.cricinfoId by value, no FK — mirrors the enrichment layer so a
+// gold rebuild can't cascade-delete it). Scorecard/innings-level ONLY: it must
+// never be mixed into ball-by-ball ML features (Delivery). The merge layer
+// prefers Cricsheet where ball-by-ball exists and fills the rest from here.
+model PlayerInningsHistory {
+  id         String  @id @default(cuid())
+  cricinfoId String
+  matchClass String // TEST | ODI | T20I (Statsguru "class")
+  discipline String // "batting" | "bowling"
+
+  matchDate  String? // ISO yyyy-mm-dd parsed from "18 Dec 1989"
+  rawDate    String? // original Statsguru date string (audit)
+  opposition String? // e.g. "Pakistan" (stripped of leading "v ")
+  ground     String?
+  inningsNo  Int? // Statsguru "Inns" — team innings within the match
+
+  // Batting (null when discipline = "bowling")
+  didBat     Boolean @default(true) // false for DNB / TDNB / absent
+  runs       Int?
+  notOut     Boolean @default(false)
+  minutes    Int?
+  ballsFaced Int?
+  fours      Int?
+  sixes      Int?
+  strikeRate Float?
+  battingPos Int?
+  dismissal  String?
+
+  // Bowling (null when discipline = "batting")
+  oversText    String?
+  ballsBowled  Int?
+  maidens      Int?
+  runsConceded Int?
+  wickets      Int?
+  economy      Float?
+  bowlingPos   Int?
+
+  source         String   @default("CRICINFO_STATSGURU")
+  sourceUrl      String?
+  sourceImportId String?
+  sourceImport   SourceImport? @relation(fields: [sourceImportId], references: [id], onDelete: SetNull)
+  importedAt     DateTime @default(now())
+
+  @@index([cricinfoId])
+  @@index([cricinfoId, matchClass])
+  @@index([matchDate])
+  @@index([sourceImportId])
 }
 
 // Gold match + scorecard (one set of rows per Cricsheet match), bulk-written by
