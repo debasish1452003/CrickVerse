@@ -60,3 +60,6 @@ data/
 machine learning/.venv/
 __pycache__/
 *.pyc
+
+# Local transfer/backup bundle (DB dump + lakehouse data) - not for git
+CrickVerse-Transfer/
