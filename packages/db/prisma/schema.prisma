@@ -685,6 +685,49 @@ model PlayerInningsHistory {
   @@index([sourceImportId])
 }
 
+// Compact per-(player, format, source) recovered-career aggregate. This is the
+// space-efficient replacement for storing every recovered innings: one row per
+// format holds the complete-career totals (incl. pre-2000) the player page and
+// leaderboards need, so we don't duplicate the ~500k post-2000 innings that
+// Cricsheet already has. Precedence on read: CRICINFO_STATSGURU (scrape) beats
+// CRICINFO_BULK; sources are never summed.
+model RecoveredCareerStat {
+  id         String @id @default(cuid())
+  cricinfoId String
+  matchClass String // TEST | ODI | T20I
+  source     String // CRICINFO_STATSGURU | CRICINFO_BULK
+
+  // Batting
+  matches         Int     @default(0)
+  batInnings      Int     @default(0)
+  notOuts         Int     @default(0)
+  runs            Int     @default(0)
+  ballsFaced      Int     @default(0)
+  highScore       Int     @default(0)
+  highScoreNotOut Boolean @default(false)
+  fifties         Int     @default(0)
+  hundreds        Int     @default(0)
+  ducks           Int     @default(0)
+  fours           Int     @default(0)
+  sixes           Int     @default(0)
+
+  // Bowling
+  bowlInnings     Int @default(0)
+  ballsBowled     Int @default(0)
+  runsConceded    Int @default(0)
+  wickets         Int @default(0)
+  fiveWickets     Int @default(0)
+  bestBowlingWkts Int @default(0)
+  bestBowlingRuns Int @default(0)
+
+  spanFirst String? // earliest innings date (yyyy-mm-dd)
+  spanLast  String? // latest innings date
+  updatedAt DateTime @default(now())
+
+  @@unique([cricinfoId, matchClass, source])
+  @@index([cricinfoId])
+}
+
 // Gold match + scorecard (one set of rows per Cricsheet match), bulk-written by
 // DuckDB from the silver Parquet. Powers the matches browser + scorecard pages.
 

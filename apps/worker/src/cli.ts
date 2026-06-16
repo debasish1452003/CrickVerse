@@ -21,6 +21,7 @@ import { discoverCricinfoHistorical, syncCricinfoHistorical } from "./tasks/cric
 import { recoverPlayerCareers } from "./tasks/recover-player-careers";
 import { importBulkInnings } from "./tasks/import-bulk-innings";
 import { importKaggleInnings } from "./tasks/import-kaggle-innings";
+import { migrateRecoveredAggregate } from "./tasks/migrate-recovered";
 import { buildMlFeaturesTask } from "./tasks/build-ml-features";
 import { historicalExportSilver } from "./tasks/historical-export-silver";
 
@@ -263,6 +264,10 @@ async function main(): Promise<void> {
       }
       const res = await importBulkInnings({ path, dryRun: rest.includes("--dry-run") });
       console.log(res);
+      break;
+    }
+    case "migrate-recovered": {
+      await migrateRecoveredAggregate();
       break;
     }
     case "import-kaggle-innings": {
