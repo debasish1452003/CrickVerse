@@ -34,6 +34,16 @@ export interface RecoverPlayerCareersInput {
   /** Skip players with no international evidence (Cricsheet TEST/ODI/T20I stat or
    *  bulk innings) — they return ~0 and only waste requests. Default false. */
   internationalOnly?: boolean;
+  /** Only scrape players who might have a PRE-Cricsheet (pre-2000) career — i.e.
+   *  whose earliest Cricsheet international match is on/before `preCricsheetCutoff`
+   *  (default 2007-12-31), or who have no Cricsheet match at all. Players who
+   *  debuted later are already fully covered by Cricsheet ball-by-ball, so
+   *  scraping them only duplicates data and wastes requests. Default false. */
+  preCricsheetOnly?: boolean;
+  /** Debut cutoff for `preCricsheetOnly` (ISO yyyy-mm-dd). Conservative on
+   *  purpose: early Cricsheet coverage is sparse, so a genuine pre-2000 player
+   *  can first surface in Cricsheet a few years late. Default "2007-12-31". */
+  preCricsheetCutoff?: string;
   /** Split the queue across machines: this machine handles candidates whose
    *  position mod `total` equals `index`. Run `0/2` on one PC and `1/2` on
    *  another (different IPs) for ~2× throughput with zero overlap. */
@@ -269,6 +279,27 @@ async function selectCandidates(
     pending = pending.filter(
       (p) => intlByCricsheet.has(p.cricsheetId) || bulkSet.has(p.cricinfoId ?? ""),
     );
+  }
+
+  if (input.preCricsheetOnly) {
+    // Keep only players who might have a pre-Cricsheet (pre-2000) career: their
+    // earliest Cricsheet international match is on/before the cutoff, OR they have
+    // no Cricsheet match at all (unknown — keep to be safe). Players whose
+    // Cricsheet debut is after the cutoff are already fully covered by Cricsheet
+    // ball-by-ball, so scraping them only duplicates data and wastes requests.
+    const cutoff = input.preCricsheetCutoff ?? "2007-12-31";
+    const debutRows = await prisma.$queryRawUnsafe<Array<{ id: string; first_date: string | null }>>(`
+      SELECT b."cricsheetId" AS id, min(m."matchDate") AS first_date
+      FROM "ScorecardBatting" b
+      JOIN "CareerMatch" m ON m."matchId" = b."matchId"
+      WHERE m."matchClass" IN ('TEST','ODI','T20I') AND m."matchDate" IS NOT NULL
+      GROUP BY b."cricsheetId"
+    `);
+    const firstByCricsheet = new Map(debutRows.map((r) => [r.id, r.first_date]));
+    pending = pending.filter((p) => {
+      const first = firstByCricsheet.get(p.cricsheetId);
+      return first == null || first <= cutoff; // null = no Cricsheet match (keep); else compare debut
+    });
   }
 
   pending = pending.sort((a, b) => priority(b) - priority(a));

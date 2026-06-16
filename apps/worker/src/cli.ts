@@ -230,6 +230,7 @@ async function main(): Promise<void> {
       const delayArg = rest.find((a) => a.startsWith("--delay-ms="));
       const idArg = rest.find((a) => a.startsWith("--cricinfo-id="));
       const concArg = rest.find((a) => a.startsWith("--concurrency="));
+      const cutoffArg = rest.find((a) => a.startsWith("--pre-cricsheet-cutoff="));
       const shardArg = rest.find((a) => a.startsWith("--shard="));
       let shard: { index: number; total: number } | undefined;
       if (shardArg) {
@@ -248,6 +249,8 @@ async function main(): Promise<void> {
         cricinfoId: idArg?.split("=").slice(1).join("="),
         concurrency: concArg ? Number(concArg.split("=").slice(1).join("=")) : undefined,
         internationalOnly: rest.includes("--international-only"),
+        preCricsheetOnly: rest.includes("--pre-cricsheet-only"),
+        preCricsheetCutoff: cutoffArg?.split("=").slice(1).join("="),
         shard,
         force: rest.includes("--force"),
         dryRun: rest.includes("--dry-run"),
