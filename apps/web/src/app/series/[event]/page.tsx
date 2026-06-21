@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CompetitionBadge } from "@/components/CompetitionBadge";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { Navbar } from "@/components/Navbar";
-import { Competition } from "@/domain/competition/competition";
+import { Competition } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,10 @@ export default async function CompetitionPage({
               {comp.seasons.length} season{comp.seasons.length === 1 ? "" : "s"} ·{" "}
               {comp.totalMatches.toLocaleString()} match{comp.totalMatches === 1 ? "" : "es"}
             </p>
+            <DataScopeNote className="mt-3">
+              Seasons and matches shown here are the editions currently indexed in CrickVerse, not necessarily the
+              competition&apos;s official complete history.
+            </DataScopeNote>
           </div>
         </section>
 

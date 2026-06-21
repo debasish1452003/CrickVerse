@@ -1,6 +1,6 @@
 import type { Prisma } from "@crickverse/db";
-import type { CanonicalMatchRow } from "@/domain/match/canonical-match";
-import type { GoldMatchRow } from "@/domain/match/gold-match";
+import type { CanonicalMatchRow } from "@crickverse/domain";
+import type { GoldMatchRow } from "@crickverse/domain";
 import type { GoldMatchListItem, InningsOversData, MatchListRow, OverPoint } from "@/dto/match-dto";
 import { BaseRepository } from "./base-repository";
 
@@ -131,18 +131,22 @@ export class MatchRepository extends BaseRepository {
     );
   }
 
-  private static teamWhere(displayName: string): Prisma.CareerMatchWhereInput {
-    return { OR: [{ teamHome: displayName }, { teamAway: displayName }] };
+  private static teamWhere(teamId: string, gender?: string): Prisma.CareerMatchWhereInput {
+    const and: Prisma.CareerMatchWhereInput[] = [
+      { OR: [{ teamHomeId: teamId }, { teamAwayId: teamId }] },
+    ];
+    if (gender) and.push({ gender });
+    return { AND: and };
   }
 
-  countTeamMatches(displayName: string): Promise<number> {
-    return this.retryRead(() => this.prisma.careerMatch.count({ where: MatchRepository.teamWhere(displayName) }));
+  countTeamMatches(teamId: string, gender?: string): Promise<number> {
+    return this.retryRead(() => this.prisma.careerMatch.count({ where: MatchRepository.teamWhere(teamId, gender) }));
   }
 
-  pageTeamMatches(displayName: string, skip: number, take: number): Promise<GoldMatchListItem[]> {
+  pageTeamMatches(teamId: string, skip: number, take: number, gender?: string): Promise<GoldMatchListItem[]> {
     return this.retryRead(() =>
       this.prisma.careerMatch.findMany({
-        where: MatchRepository.teamWhere(displayName),
+        where: MatchRepository.teamWhere(teamId, gender),
         orderBy: [{ matchDate: "desc" }, { matchId: "asc" }],
         skip,
         take,

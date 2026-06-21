@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PlayerAvatar } from "@/components/Crest";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { Navbar } from "@/components/Navbar";
 import type { CareerPlayerListItem } from "@/dto/player-dto";
 import { services } from "@/services";
@@ -58,8 +59,12 @@ export default async function PlayersPage({
         <section className="pt-10">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Players</h1>
           <p className="mt-2 text-muted">
-            Search and browse every player in the database, with full career stats by format.
+            Search and browse players present in the indexed CrickVerse career corpus.
           </p>
+          <DataScopeNote className="mt-4 max-w-2xl">
+            Player totals come from local gold/recovered career tables. Older or missing-source careers may be
+            partial unless a complete recovered or official source is shown on the player page.
+          </DataScopeNote>
 
           <form action="/players" method="get" className="mt-6 flex max-w-xl gap-2">
             <input

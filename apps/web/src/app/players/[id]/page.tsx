@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PlayerAvatar } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
-import { FormatCareer } from "@/domain/player/format-career";
-import { MatchClasses } from "@/core/match-class";
+import { FormatCareer } from "@crickverse/domain";
+import { MatchClasses } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";

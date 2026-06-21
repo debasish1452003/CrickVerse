@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { Navbar } from "@/components/Navbar";
-import { TeamProfile } from "@/domain/team/team-profile";
+import { TeamProfile } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
@@ -56,8 +57,11 @@ export default async function TeamsPage({
         <section className="pt-10">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Teams</h1>
           <p className="mt-2 text-muted">
-            Every international side and franchise in the database — national flags, franchise crests, full match history.
+            International sides and franchises present in the indexed CrickVerse corpus.
           </p>
+          <DataScopeNote className="mt-4 max-w-2xl">
+            Team match counts are indexed Cricsheet/gold matches available locally, not official all-time totals.
+          </DataScopeNote>
           <form action="/teams" method="get" className="mt-6 flex max-w-xl gap-2">
             <input
               type="search"

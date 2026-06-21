@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@crickverse/db": "workspace:*",
+    "@crickverse/domain": "workspace:*",
     "@crickverse/lakehouse": "workspace:^",
     "@crickverse/scraper-core": "workspace:*",
     "@crickverse/types": "workspace:*",

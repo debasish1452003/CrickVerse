@@ -1,16 +1,19 @@
 import { prisma } from "@/infrastructure/prisma";
+import { cache } from "react";
+import {
+  CompetitionService,
+  MatchService,
+  PlayerService,
+  RankingService,
+  StatsService,
+  TeamService,
+} from "@crickverse/application";
 import { CompetitionRepository } from "@/repositories/competition-repository";
 import { MatchRepository } from "@/repositories/match-repository";
 import { PlayerRepository } from "@/repositories/player-repository";
 import { RankingRepository } from "@/repositories/ranking-repository";
 import { StatsRepository } from "@/repositories/stats-repository";
 import { TeamRepository } from "@/repositories/team-repository";
-import { CompetitionService } from "./competition-service";
-import { MatchService } from "./match-service";
-import { PlayerService } from "./player-service";
-import { RankingService } from "./ranking-service";
-import { StatsService } from "./stats-service";
-import { TeamService } from "./team-service";
 
 /**
  * Composition root. Wires the Prisma-backed repositories into the application
@@ -25,19 +28,24 @@ function build() {
   const competitions = new CompetitionRepository(prisma);
   const rankings = new RankingRepository(prisma);
   const stats = new StatsRepository(prisma);
+  const competitionService = new CompetitionService(competitions);
+  const rankingService = new RankingService(rankings, players);
+
+  competitionService.list = cache(competitionService.list.bind(competitionService));
+  rankingService.teamEloRankings = cache(rankingService.teamEloRankings.bind(rankingService));
 
   return {
     players: new PlayerService(players),
     matches: new MatchService(matches),
     teams: new TeamService(teams),
-    competitions: new CompetitionService(competitions),
-    rankings: new RankingService(rankings, players),
+    competitions: competitionService,
+    rankings: rankingService,
     stats: new StatsService(stats),
   } as const;
 }
 
-// Reuse one container across hot-reloads (Next.js dev) so the React cache()
-// wrappers inside cacheable services keep a stable identity.
+// Reuse one container across hot-reloads (Next.js dev) so cached service methods
+// keep a stable identity.
 const globalForServices = globalThis as unknown as { crickverseServices?: ReturnType<typeof build> };
 
 export const services: ReturnType<typeof build> =

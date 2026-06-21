@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CompetitionBadge } from "@/components/CompetitionBadge";
 import { PlayerAvatar, TeamBadge } from "@/components/Crest";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
 import type { CareerPlayerListItem } from "@/dto/player-dto";
@@ -79,15 +80,19 @@ export default async function Home() {
       <main className="mx-auto max-w-6xl px-5 pb-24">
         <section className="py-12 sm:py-16">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-black/[0.03] px-3 py-1 text-xs text-muted">
-            <span className="live-dot" /> {recent.total.toLocaleString()} matches · all formats, all eras
+            <span className="live-dot" /> {recent.total.toLocaleString()} indexed matches
           </p>
           <h1 className="max-w-2xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
-            All of cricket, <span className="text-accent">beautifully</span> organized.
+            Cricket data, <span className="text-accent">beautifully</span> organized.
           </h1>
           <p className="mt-4 max-w-xl text-muted">
-            Full scorecards, ball-by-ball charts, and deep player & team analytics across the entire
-            Cricsheet corpus — structured into a clean model and served fast.
+            Scorecards, ball-by-ball charts, and player and team analytics across the CrickVerse indexed corpus,
+            structured into a clean model and served fast.
           </p>
+          <DataScopeNote className="mt-5 max-w-xl">
+            Counts and leaderboards reflect the data currently ingested into CrickVerse. They are not official
+            all-time cricket records unless marked as official or complete on a detail page.
+          </DataScopeNote>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link href="/matches" className="rounded-xl bg-accent px-4 py-2.5 font-medium text-white transition-opacity hover:opacity-90">
               Browse matches

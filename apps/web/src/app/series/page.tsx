@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { CompetitionBadge } from "@/components/CompetitionBadge";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { Navbar } from "@/components/Navbar";
-import { Competition } from "@/domain/competition/competition";
+import { Competition } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
@@ -53,9 +54,11 @@ export default async function SeriesPage({
         <section className="pt-10">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Series &amp; Tournaments</h1>
           <p className="mt-2 text-muted">
-            Every competition in the database — leagues, world cups, and bilateral series. Pick one
-            to browse its seasons and matches.
+            Competitions present in the indexed match corpus. Pick one to browse its available seasons and matches.
           </p>
+          <DataScopeNote className="mt-4 max-w-2xl">
+            Season and match counts are based on ingested Cricsheet/gold data currently available in this database.
+          </DataScopeNote>
 
           <form action="/series" method="get" className="mt-6 flex max-w-xl gap-2">
             <input

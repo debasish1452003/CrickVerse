@@ -23,9 +23,15 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.11.2
         version: 2.11.2(@prisma/client@6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3))
+      '@crickverse/application':
+        specifier: workspace:*
+        version: link:../../packages/application
       '@crickverse/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@crickverse/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@crickverse/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -72,6 +78,9 @@ importers:
       '@crickverse/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@crickverse/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@crickverse/lakehouse':
         specifier: workspace:^
         version: link:../../packages/lakehouse
@@ -107,6 +116,19 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  packages/application:
+    dependencies:
+      '@crickverse/domain':
+        specifier: workspace:*
+        version: link:../domain
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.19.20)(lightningcss@1.32.0)
+
   packages/db:
     dependencies:
       '@crickverse/types':
@@ -131,6 +153,15 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  packages/domain:
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.19.20)(lightningcss@1.32.0)
 
   packages/lakehouse:
     dependencies:

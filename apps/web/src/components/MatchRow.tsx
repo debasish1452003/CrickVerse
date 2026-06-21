@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { MatchClasses } from "@/core/match-class";
-import { TeamBadgeIndex } from "@/domain/team/team-profile";
+import { MatchClasses } from "@crickverse/domain";
+import { TeamBadgeIndex } from "@crickverse/domain";
 import type { GoldMatchListItem } from "@/dto/match-dto";
 import { TeamBadge } from "./Crest";
 

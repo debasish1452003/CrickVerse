@@ -744,6 +744,9 @@ model CareerMatch {
   matchDate        String? // yyyy-mm-dd (kept as-is from Cricsheet)
   teamHome         String?
   teamAway         String?
+  teamHomeId       String? // canonical TeamProfile.id for teamHome (alias-collapsed)
+  teamAwayId       String? // canonical TeamProfile.id for teamAway
+  winnerId         String? // canonical TeamProfile.id for winner
   tossWinner       String?
   tossDecision     String?
   winner           String?
@@ -758,6 +761,8 @@ model CareerMatch {
   @@index([season])
   @@index([eventName])
   @@index([matchDate])
+  @@index([teamHomeId])
+  @@index([teamAwayId])
 }
 
 model ScorecardInnings {

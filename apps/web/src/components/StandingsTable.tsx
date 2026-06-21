@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
-import type { StandingRow } from "@/domain/competition/standings";
-import { TeamBadgeIndex } from "@/domain/team/team-profile";
+import type { StandingRow } from "@crickverse/domain";
+import { TeamBadgeIndex } from "@crickverse/domain";
 
 const nrrText = (n: number) => `${n > 0 ? "+" : ""}${n.toFixed(3)}`;
 

@@ -7,8 +7,8 @@ import { Navbar } from "@/components/Navbar";
 import { SeriesTabs, type SeriesTab, type SeriesTabKey } from "@/components/SeriesTabs";
 import { StandingsTable } from "@/components/StandingsTable";
 import { StatBoard } from "@/components/StatBoard";
-import { MatchClasses } from "@/core/match-class";
-import { Competition } from "@/domain/competition/competition";
+import { MatchClasses } from "@crickverse/domain";
+import { Competition } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";

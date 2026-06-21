@@ -2,11 +2,11 @@ import Link from "next/link";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { StatBoard } from "@/components/StatBoard";
-import { MatchClasses } from "@/core/match-class";
-import { normalizeName } from "@/core/naming";
+import { MatchClasses } from "@crickverse/domain";
+import { normalizeName } from "@crickverse/domain";
 import type { PlayerLeaderRow } from "@/dto/stats-dto";
-import type { EloRankingRow } from "@/domain/ranking/elo-league";
-import { TeamBadgeIndex } from "@/domain/team/team-profile";
+import type { EloRankingRow } from "@crickverse/domain";
+import { TeamBadgeIndex } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
@@ -72,7 +72,7 @@ export default async function RankingsPage() {
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Rankings</h1>
           <p className="mt-2 max-w-2xl text-muted">
             Team, batting and bowling rankings for Tests, ODIs and T20Is. Teams use an Elo rating
-            computed from the Cricsheet match corpus; player boards use the ingested gold career stats.
+            computed from indexed Cricsheet matches; player boards use the indexed gold career tables.
           </p>
         </section>
 
@@ -104,7 +104,7 @@ export default async function RankingsPage() {
 
         <p className="mt-10 rounded-lg border border-line bg-black/[0.02] px-4 py-2.5 text-xs text-muted">
           Note: team ratings are computed from the open Cricsheet match corpus, not official ICC points.
-          Player leaderboards rank every player present in the gold career tables built from the ingested corpus.
+          Player leaderboards rank players present in the gold career tables built from the ingested corpus.
         </p>
       </main>
     </>

@@ -1,4 +1,4 @@
-import { normalizeName } from "@/core/naming";
+import { normalizeName } from "@crickverse/domain";
 import { BaseRepository } from "./base-repository";
 
 /** A distinct (eventName, season) pair with its match count. */

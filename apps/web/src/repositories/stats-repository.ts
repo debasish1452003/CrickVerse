@@ -1,4 +1,4 @@
-import type { StandingsInnings, StandingsMatch } from "@/domain/competition/standings";
+import type { StandingsInnings, StandingsMatch } from "@crickverse/domain";
 import { BaseRepository } from "./base-repository";
 
 export interface EditionBattingRow {
@@ -69,6 +69,16 @@ export class StatsRepository extends BaseRepository {
       where: { matchId: { in: matchIds } },
       select: { cricsheetId: true, name: true, balls: true, runs: true, wickets: true },
     });
+  }
+
+  /** Player portrait lookup for edition leaderboards, keyed by Cricsheet id. */
+  async playerPhotosByIds(ids: string[]): Promise<Map<string, string | null>> {
+    if (ids.length === 0) return new Map();
+    const rows = await this.prisma.playerProfile.findMany({
+      where: { cricsheetId: { in: ids } },
+      select: { cricsheetId: true, photoUrl: true },
+    });
+    return new Map(rows.map((p) => [p.cricsheetId, p.photoUrl]));
   }
 
   /** Match rows (with result + class) for the points-table calculation. */

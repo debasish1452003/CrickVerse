@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
+    "@crickverse/application": "workspace:*",
     "@crickverse/db": "workspace:*",
+    "@crickverse/domain": "workspace:*",
     "@crickverse/types": "workspace:*",
     "@tailwindcss/postcss": "^4.3.0",
     "geist": "^1.7.2",

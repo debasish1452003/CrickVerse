@@ -1,6 +1,6 @@
 import type { Prisma } from "@crickverse/db";
-import type { CareerPlayerRow } from "@/domain/player/career-player";
-import type { CanonicalPlayerRow } from "@/domain/player/player";
+import type { CareerPlayerRow } from "@crickverse/domain";
+import type { CanonicalPlayerRow } from "@crickverse/domain";
 import { BaseRepository } from "./base-repository";
 
 /** Narrow per-row selection for career-player browse cards. */

@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { DataScopeNote } from "@/components/DataScopeNote";
 import { MatchRow } from "@/components/MatchRow";
 import { Navbar } from "@/components/Navbar";
-import { MatchClasses } from "@/core/match-class";
+import { MatchClasses } from "@crickverse/domain";
 import { services } from "@/services";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +36,10 @@ export default async function MatchesPage({
       <main className="mx-auto max-w-6xl px-5 pb-24">
         <section className="pt-10">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Matches</h1>
-          <p className="mt-2 text-muted">Browse and search every match in the database — full scorecards inside.</p>
+          <p className="mt-2 text-muted">Browse and search indexed matches with scorecards where available.</p>
+          <DataScopeNote className="mt-4 max-w-2xl">
+            This is the local CrickVerse indexed corpus, not a guarantee of every official match ever played.
+          </DataScopeNote>
 
           <form action="/matches" method="get" className="mt-6 flex max-w-xl gap-2">
             {cls && <input type="hidden" name="class" value={cls} />}

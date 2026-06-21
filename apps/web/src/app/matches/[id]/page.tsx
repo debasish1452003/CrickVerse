@@ -4,22 +4,22 @@ import { notFound } from "next/navigation";
 import { TeamBadge } from "@/components/Crest";
 import { Navbar } from "@/components/Navbar";
 import { OverCharts } from "@/components/OverCharts";
-import { MatchClasses } from "@/core/match-class";
+import { MatchClasses } from "@crickverse/domain";
 import {
   CanonicalMatch,
   type CanonicalBattingPerfRow,
   type CanonicalBowlingPerfRow,
   type CanonicalInningsRow,
   type MatchTeamLine,
-} from "@/domain/match/canonical-match";
+} from "@crickverse/domain";
 import {
   GoldMatch,
   oversText,
   type GoldBattingRow,
   type GoldBowlingRow,
   type GoldInningsRow,
-} from "@/domain/match/gold-match";
-import { TeamBadgeIndex } from "@/domain/team/team-profile";
+} from "@crickverse/domain";
+import { TeamBadgeIndex } from "@crickverse/domain";
 import type { InningsOversData } from "@/dto/match-dto";
 import { services } from "@/services";
 

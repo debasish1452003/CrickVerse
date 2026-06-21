@@ -1,4 +1,5 @@
 import { prisma } from "@crickverse/db";
+import { canonicalTeamId } from "@crickverse/domain";
 import { createLogger } from "../logger";
 import { NATIONAL_TEAMS, flagUrl, normalizeTeamName } from "../enrich/national-teams";
 import { queryTeamLogosByLabel, sleep } from "../enrich/wikidata";
@@ -28,13 +29,24 @@ export async function enrichTeams(opts: { dryRun?: boolean; force?: boolean } = 
     prisma.careerMatch.groupBy({ by: ["teamHome"], _count: { _all: true } }),
     prisma.careerMatch.groupBy({ by: ["teamAway"], _count: { _all: true } }),
   ]);
+  // Aggregate by CANONICAL id so renamed franchises (e.g. Royal Challengers
+  // Bangalore → Bengaluru) collapse into a single profile. The display name is
+  // the current/canonical variant — the one whose normalized form is the id.
   const counts = new Map<string, { displayName: string; count: number }>();
+  // Every distinct raw name → its canonical id, for the CareerMatch backfill.
+  const rawNameToId = new Map<string, string>();
   const add = (name: string | null, c: number): void => {
     if (!name) return;
-    const key = normalizeTeamName(name);
+    const key = canonicalTeamId(name);
+    rawNameToId.set(name, key);
     const cur = counts.get(key);
-    if (cur) cur.count += c;
-    else counts.set(key, { displayName: name, count: c });
+    if (cur) {
+      cur.count += c;
+      // Prefer the canonical (current) name as displayName when we meet it.
+      if (normalizeTeamName(name) === key) cur.displayName = name;
+    } else {
+      counts.set(key, { displayName: name, count: c });
+    }
   };
   for (const g of home) add(g.teamHome, g._count._all);
   for (const g of away) add(g.teamAway, g._count._all);
@@ -60,7 +72,7 @@ export async function enrichTeams(opts: { dryRun?: boolean; force?: boolean } = 
     const chunk = franchiseNames.slice(i, i + LABEL_BATCH);
     try {
       const found = await queryTeamLogosByLabel(chunk);
-      for (const [label, v] of found) logos.set(normalizeTeamName(label), v);
+      for (const [label, v] of found) logos.set(canonicalTeamId(label), v);
     } catch (err) {
       log.warn("team-logo batch failed", { from: i, err: (err as Error).message });
     }
@@ -97,6 +109,31 @@ export async function enrichTeams(opts: { dryRun?: boolean; force?: boolean } = 
       update: payload,
     });
     result.written += 1;
+  }
+
+  if (!opts.dryRun) {
+    // Drop stale profiles left behind by a rename (retired-name ids that no
+    // longer head a canonical group), so each franchise has exactly one row.
+    const canonicalIds = [...counts.keys()];
+    const removed = await prisma.teamProfile.deleteMany({ where: { id: { notIn: canonicalIds } } });
+    if (removed.count) log.info("removed stale team profiles", { count: removed.count });
+
+    // Backfill CareerMatch.team{Home,Away,winner}Id from the canonical mapping,
+    // one UPDATE per canonical id (covering all of its raw name variants).
+    const namesById = new Map<string, string[]>();
+    for (const [name, id] of rawNameToId) {
+      const arr = namesById.get(id);
+      if (arr) arr.push(name);
+      else namesById.set(id, [name]);
+    }
+    for (const [id, names] of namesById) {
+      await prisma.$transaction([
+        prisma.careerMatch.updateMany({ where: { teamHome: { in: names } }, data: { teamHomeId: id } }),
+        prisma.careerMatch.updateMany({ where: { teamAway: { in: names } }, data: { teamAwayId: id } }),
+        prisma.careerMatch.updateMany({ where: { winner: { in: names } }, data: { winnerId: id } }),
+      ]);
+    }
+    log.info("backfilled CareerMatch team ids", { canonicalTeams: namesById.size });
   }
 
   log.info("✅ team enrichment complete", result);
